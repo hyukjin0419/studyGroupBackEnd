@@ -18,6 +18,26 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String userName;
 
+    @Column(nullable = false)
+    private String password;
+
+
     @Column(nullable = false, unique = true)
     private String email;
+
+    private Member(String userName, String password, String email) {
+        this.password = password;
+        this.userName = userName;
+        this.email = email;
+    }
+
+    public static Member of(String userName, String password, String email) {
+        return new Member(userName, password, email);
+    }
+
+    /*
+    Setter 사용하지 말고 필요하면 명확한 비지니스 메서드를 생성하여 관리
+    setPassword() -> x
+    changePassword() -> o
+     */
 }
