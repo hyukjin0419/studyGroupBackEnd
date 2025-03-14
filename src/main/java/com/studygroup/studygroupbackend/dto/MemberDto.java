@@ -6,7 +6,7 @@ import lombok.Getter;
 
 public class MemberDto {
 
-    // 회원 가입 요청
+    // 회원 가입 요청 DTO
     @Getter
     @Builder
     public static class CreateReqDto {
@@ -19,7 +19,14 @@ public class MemberDto {
         }
     }
 
-    //로그인 요청
+    //회원 가입 응답 DTO
+    @Getter
+    @Builder
+    public static class CreateResDto{
+        private final Long id;
+    }
+
+    //로그인 요청 DTO
     @Getter
     @Builder
     public static class LoginReqDto {
@@ -27,7 +34,15 @@ public class MemberDto {
         private final String password;
     }
 
-    //회원 상세 조회
+    //로그인 응답 DTO
+    @Getter
+    @Builder
+    public static class LoginResDto {
+        private final Long id;
+        private final String userName;
+    }
+
+    //회원 상세 조회 응답 DTO
     @Getter
     @Builder
     public static class DetailResDto {
@@ -61,6 +76,13 @@ public class MemberDto {
         }
     }
 
+    //회원 정보 수정 요청 DTO
+    @Getter
+    @Builder
+    public static class UpdateReqDto{
+        private final Long id;
+        private final String email;
+    }
 
 
 }

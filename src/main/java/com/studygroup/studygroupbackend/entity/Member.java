@@ -40,4 +40,7 @@ public class Member extends BaseEntity {
     setPassword() -> x
     changePassword() -> o
      */
+    public void updateProfile(String password) {
+        this.email = email;
+    }
 }
