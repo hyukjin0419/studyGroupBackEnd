@@ -81,7 +81,39 @@ public class MemberDto {
     @Builder
     public static class UpdateReqDto{
         private final Long id;
+        private final String userName;
         private final String email;
+    }
+
+    //회원 정보 수정 응답 DTO
+    @Getter
+    @Builder
+    public static class UpdateResDto{
+        private final Long id;
+        private final String userName;
+        private final String email;
+
+        public static UpdateResDto fromEntity(Member member) {
+            return UpdateResDto.builder()
+                    .id(member.getId())
+                    .userName(member.getUserName())
+                    .email(member.getEmail())
+                    .build();
+        }
+    }
+
+    //회원 삭제 응답 DTO
+    @Getter
+    @Builder
+    public static class DeleteResDto{
+        private final String message;
+
+
+        public static DeleteResDto success() {
+            return DeleteResDto.builder()
+                    .message("회원 삭제 완료")
+                    .build();
+        }
     }
 
 
