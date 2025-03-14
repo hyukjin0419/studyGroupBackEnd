@@ -64,17 +64,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMember(MemberDto.UpdateReqDto params) {
-        Member member = memberRepository.findById(params.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
-        member.updateProfile(params.getEmail());
+    public MemberDto.UpdateResDto updateMember(MemberDto.UpdateReqDto request) {
+        Member member = memberRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+        member.updateProfile(request.getUserName(),request.getEmail());
+
+        return MemberDto.UpdateResDto.fromEntity(member);
     }
 
     @Override
-    public void deleteMember(Long id) {
+    public MemberDto.DeleteResDto deleteMember(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
 
         memberRepository.delete(member);
+
+        return MemberDto.DeleteResDto.success();
     }
 
 
