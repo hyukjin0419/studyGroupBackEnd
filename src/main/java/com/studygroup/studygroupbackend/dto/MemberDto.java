@@ -1,20 +1,88 @@
 package com.studygroup.studygroupbackend.dto;
 
 import com.studygroup.studygroupbackend.entity.Member;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class MemberDto {
 
-    private Long id;
-    private String uesrName;
-    private String email;
+    // 회원 가입 요청 DTO
+    @Getter
+    @Builder
+    public static class CreateReqDto {
+        private final String userName;
+        private final String password;
+        private final String email;
 
-    public static MemberDto formEntity(Member member) {
-        return new MemberDto(member.getId(), member.getUserName(), member.getEmail());
+        public Member toEntity(){
+            return Member.of(userName, password, email);
+        }
     }
+
+    //회원 가입 응답 DTO
+    @Getter
+    @Builder
+    public static class CreateResDto{
+        private final Long id;
+    }
+
+    //로그인 요청 DTO
+    @Getter
+    @Builder
+    public static class LoginReqDto {
+        private final String userName;
+        private final String password;
+    }
+
+    //로그인 응답 DTO
+    @Getter
+    @Builder
+    public static class LoginResDto {
+        private final Long id;
+        private final String userName;
+    }
+
+    //회원 상세 조회 응답 DTO
+    @Getter
+    @Builder
+    public static class DetailResDto {
+        private final Long id;
+        private final String userName;
+        private final String email;
+
+        public static DetailResDto fromEntity(Member member) {
+            return DetailResDto.builder()
+                    .id(member.getId())
+                    .userName(member.getUserName())
+                    .email(member.getEmail())
+                    .build();
+        }
+    }
+
+    //회원 목록 조회 응답 DTO
+    @Getter
+    @Builder
+    public static class ListResDto{
+        private final Long id;
+        private final String userName;
+        private final String email;
+
+        public static ListResDto fromEntity(Member member) {
+            return ListResDto.builder()
+                    .id(member.getId())
+                    .userName(member.getUserName())
+                    .email(member.getEmail())
+                    .build();
+        }
+    }
+
+    //회원 정보 수정 요청 DTO
+    @Getter
+    @Builder
+    public static class UpdateReqDto{
+        private final Long id;
+        private final String email;
+    }
+
+
 }
