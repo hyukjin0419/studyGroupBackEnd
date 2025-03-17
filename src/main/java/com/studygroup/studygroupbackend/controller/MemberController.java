@@ -17,7 +17,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.creatMember(request));
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<MemberDto.LoginResDto> login(@RequestBody MemberDto.LoginReqDto request) {
         return ResponseEntity.ok(memberService.login(request));
     }

@@ -1,6 +1,5 @@
 package com.studygroup.studygroupbackend.dto;
 
-import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.entity.StudyMember;
 import lombok.AllArgsConstructor;
@@ -10,9 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class StudyDto {
 
     @Getter
