@@ -86,6 +86,26 @@ public class StudyDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class ListResDto{
+        private Long id;
+        private String name;
+        private String description;
+        private Long leaderId;
+
+        public static ListResDto fromEntity(Study study) {
+            return ListResDto.builder()
+                    .id(study.getId())
+                    .name(study.getName())
+                    .description(study.getDescription())
+                    .leaderId(study.getLeader().getId())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class MemberResDto{
         private Long id;
         private String userName;
@@ -99,5 +119,4 @@ public class StudyDto {
                     .build();
         }
     }
-
 }
