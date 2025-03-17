@@ -10,6 +10,4 @@ public interface MemberService {
     MemberDto.DetailResDto getMemberById(Long id);
     MemberDto.UpdateResDto updateMember(MemberDto.UpdateReqDto request);
     MemberDto.DeleteResDto deleteMember(Long id);
-
-
 }

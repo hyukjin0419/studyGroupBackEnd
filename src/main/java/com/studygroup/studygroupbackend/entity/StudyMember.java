@@ -16,9 +16,27 @@ public class StudyMember extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "study_id", nullable = false)
+    private Study study;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Enumerated(EnumType.STRING)
-    private StudyRole role;
+    private StudyRole studyRole;
+
+    private StudyMember(Study study, Member member, StudyRole studyRole) {
+        this.study = study;
+        this.member = member;
+        this.studyRole = studyRole;
+    }
+
+    public static StudyMember of(Study study, Member member, StudyRole role) {
+        return new StudyMember(study, member, role);
+    }
+
+    public void changeRole(StudyRole newRole) {
+        this.studyRole = newRole;
+    }
 }

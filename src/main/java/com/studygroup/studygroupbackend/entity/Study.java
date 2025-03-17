@@ -40,4 +40,8 @@ public class Study extends BaseEntity {
         this.leader = newLeader;
     }
 
+    public static Study of(String name, String description, Member leader) {
+        return new Study(name, description, leader);
+    }
+
 }

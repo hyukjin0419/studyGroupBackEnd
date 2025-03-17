@@ -64,6 +64,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberDto.UpdateResDto updateMember(MemberDto.UpdateReqDto request) {
         Member member = memberRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
         member.updateProfile(request.getUserName(),request.getEmail());
@@ -72,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberDto.DeleteResDto deleteMember(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
