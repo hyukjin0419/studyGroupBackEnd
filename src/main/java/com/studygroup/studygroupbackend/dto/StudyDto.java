@@ -22,11 +22,7 @@ public class StudyDto {
     public static class CreateReqDto{
         private String name;
         private String description;
-        private Member leader;
-
-        public Study toEntity(){
-            return Study.of(name, description, leader);
-        }
+        private Long leaderId;
     }
 
     @Getter
