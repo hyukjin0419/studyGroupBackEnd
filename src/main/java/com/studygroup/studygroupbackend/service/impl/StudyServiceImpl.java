@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class StudyServiceImpl implements StudyService {
-
     private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
@@ -78,6 +77,7 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
+    @Transactional
     public StudyDto.DeleteResDto deleteStudy(Long studyId, Long leaderId) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
