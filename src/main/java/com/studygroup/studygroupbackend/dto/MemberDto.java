@@ -128,7 +128,6 @@ public class MemberDto {
     public static class DeleteResDto{
         private String message;
 
-
         public static DeleteResDto success() {
             return DeleteResDto.builder()
                     .message("회원 삭제 완료")

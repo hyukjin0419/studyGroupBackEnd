@@ -77,15 +77,6 @@ public class StudyDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UpdateReqDto{
-        private String name;
-        private String description;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class ListResDto{
         private Long id;
         private String name;
@@ -116,6 +107,51 @@ public class StudyDto {
                     .id(studyMember.getMember().getId())
                     .userName(studyMember.getMember().getUserName())
                     .role(studyMember.getStudyRole().name())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateReqDto{
+        private String name;
+        private String description;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateResDto{
+        private Long id;
+        private String name;
+        private String description;
+        private Long leaderId;
+        private String leaderName;
+
+        public static UpdateResDto fromEntity(Study study) {
+            return UpdateResDto.builder()
+                    .id(study.getId())
+                    .name(study.getName())
+                    .description(study.getDescription())
+                    .leaderId(study.getLeader().getId())
+                    .leaderName(study.getLeader().getUserName())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DeleteResDto{
+        private String message;
+
+        public static DeleteResDto successDelete(){
+            return DeleteResDto.builder()
+                    .message("스터디 삭제 완료")
                     .build();
         }
     }
