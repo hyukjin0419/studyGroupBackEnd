@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "checklist")
+@Table(name = "checklists")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Checklist extends BaseEntity {
@@ -23,17 +23,31 @@ public class Checklist extends BaseEntity {
     private Study study;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_Id", nullable = true)
-    private Member member;
-
-    @Column(nullable = false)
-    private LocalDate date;
+    @JoinColumn(name = "creator_id", nullable = false)
+    private Member creator;
 
     @Column(nullable = false, length = 500)
     private String content;
 
-    @Column(nullable = false)
-    private boolean isChecked;
+    @Column
+    private LocalDateTime dueDate;
 
-    private LocalDateTime checkedAt;
+    private Checklist(Study study, Member creator, String content, LocalDateTime dueDate){
+        this.study = study;
+        this.creator = creator;
+        this.content = content;
+        this.dueDate = dueDate;
+    }
+
+    public static Checklist of(Study study, Member creator, String content, LocalDateTime dueDate) {
+        return new Checklist(study, creator, content, dueDate);
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
 }
