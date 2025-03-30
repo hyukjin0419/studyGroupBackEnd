@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping
+    @PostMapping//signin으로 바꾸고 회원 목록 조회를 기본 으로 매핑해야하나? 회원 목록 조회가 필요한가? admin에서는 maybe.
+    //일단 회원 목록 조회는 Getmapping 때문에 해당 메소드를 바꿀 이유는 없다. 다만 clear할 수 있도록 signin으로 바꾸는 건 좋은 수 있다.
     public ResponseEntity<MemberDto.CreateResDto> createMember(@RequestBody MemberDto.CreateReqDto request) {
         return ResponseEntity.ok(memberService.creatMember(request));
     }
@@ -27,7 +28,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
     public ResponseEntity<MemberDto.UpdateResDto> updateMember(@RequestBody MemberDto.UpdateReqDto request) {
         return ResponseEntity.ok(memberService.updateMember(request));
     }
