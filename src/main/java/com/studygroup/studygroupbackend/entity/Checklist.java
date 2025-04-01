@@ -30,13 +30,21 @@ public class Checklist extends BaseEntity {
     private String content;
 
     @Column
-    private LocalDateTime dueDate;
+    private LocalDateTime dueDate; //null이 기본값
+
+    private Checklist(Study study, Member creator, String content){
+        this(study, creator, content, null);
+    }
 
     private Checklist(Study study, Member creator, String content, LocalDateTime dueDate){
         this.study = study;
         this.creator = creator;
         this.content = content;
         this.dueDate = dueDate;
+    }
+
+    public static Checklist of(Study study, Member creator, String content) {
+        return new Checklist(study, creator, content);
     }
 
     public static Checklist of(Study study, Member creator, String content, LocalDateTime dueDate) {
