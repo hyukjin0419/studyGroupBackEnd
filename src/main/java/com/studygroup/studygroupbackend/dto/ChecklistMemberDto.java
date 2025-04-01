@@ -41,7 +41,7 @@ public class ChecklistMemberDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CompleteReqDto{
+    public static class ChangeStatusReqDto{
         private Long checklistId;
         private Long memberId;
     }
@@ -50,14 +50,14 @@ public class ChecklistMemberDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CompleteResDto {
+    public static class ChangeStatusResDto {
         private Long checklistId;
         private Long memberId;
         private boolean isCompleted;
         private LocalDateTime completedAt;
 
-        public static CompleteResDto fromEntity(ChecklistMember cm) {
-            return CompleteResDto.builder()
+        public static ChangeStatusResDto fromEntity(ChecklistMember cm) {
+            return ChangeStatusResDto.builder()
                     .checklistId(cm.getChecklist().getId())
                     .memberId(cm.getMember().getId())
                     .isCompleted(cm.isCompleted())

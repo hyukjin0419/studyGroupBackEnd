@@ -37,7 +37,7 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
     }
 
     @Override
-    public ChecklistMemberDto.CompleteResDto completeReqDto(ChecklistMemberDto.CompleteReqDto request) {
+    public ChecklistMemberDto.ChangeStatusResDto changeStatus(ChecklistMemberDto.ChangeStatusReqDto request) {
         ChecklistMember cm = checklistMemberRepository.findByChecklistIdAndMemberId(
                         request.getChecklistId(), request.getMemberId())
                 .orElseThrow(() -> new EntityNotFoundException("할당된 체크리스트가 없습니다."));
@@ -45,7 +45,7 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
 
         cm.changeStatus();
 
-        return ChecklistMemberDto.CompleteResDto.fromEntity(cm);
+        return ChecklistMemberDto.ChangeStatusResDto.fromEntity(cm);
     }
 
     @Override
@@ -60,6 +60,15 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
     public List<ChecklistMemberDto.StudyChecklistMemberResDto> getChecklistMembersByStudyId(Long studyId) {
         List<ChecklistMember> list = checklistMemberRepository.findAllByChecklist_Study_Id(studyId);
         return list.stream().map(ChecklistMemberDto.StudyChecklistMemberResDto::fromEntity).toList();
+    }
+
+    @Override
+    public ChecklistMemberDto.UnassignResDto unassignChecklist(Long checklistId, Long memberId){
+        ChecklistMember cm = checklistMemberRepository.findByChecklistIdAndMemberId(
+                        checklistId, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("할당된 체크리스트가 없습니다."));
+
+        return ChecklistMemberDto.UnassignResDto.success(checklistId, memberId);
     }
 
 }

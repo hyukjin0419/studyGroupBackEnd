@@ -15,4 +15,6 @@ public interface ChecklistMemberRepository extends JpaRepository<ChecklistMember
     List<ChecklistMember> findAllByChecklist_Study_Id(Long studyId);
 
 
+
+
 }

@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface ChecklistMemberService {
     public ChecklistMemberDto.AssignResDto assignChecklist(ChecklistMemberDto.AssignReqDto request);
-    public ChecklistMemberDto.CompleteResDto completeReqDto(ChecklistMemberDto.CompleteReqDto request);
+    public ChecklistMemberDto.ChangeStatusResDto changeStatus(ChecklistMemberDto.ChangeStatusReqDto request);
     public List<ChecklistMemberDto.MemberChecklistResDto> getMemberChecklists(Long memberId);
     public List<ChecklistMemberDto.StudyChecklistMemberResDto> getChecklistMembersByStudyId(Long studyId);
+    public ChecklistMemberDto.UnassignResDto unassignChecklist(Long checklistId, Long memberId);
 }
