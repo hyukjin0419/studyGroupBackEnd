@@ -10,9 +10,6 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ChecklistDto {
 
     @Getter
