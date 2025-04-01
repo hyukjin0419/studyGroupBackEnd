@@ -83,4 +83,19 @@ public class ChecklistDto {
     }
 
     //삭제 추가
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeleteResDto{
+        private Long checklistId;
+        private String message;
+
+        public static DeleteResDto success(Long checklistId) {
+            return DeleteResDto.builder()
+                    .checklistId(checklistId)
+                    .message("체크리스트 삭제 완료")
+                    .build();
+        }
+    }
 }
