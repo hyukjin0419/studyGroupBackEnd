@@ -19,7 +19,7 @@ public class ChecklistDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateReqDto{
+    public static class CreateReqDto {
         private Long studyId; //null -> 개인용
         private String content;
         private LocalDateTime dueDate; //null이 기본값
@@ -29,7 +29,7 @@ public class ChecklistDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateResDto{
+    public static class CreateResDto {
         private Long checklistId;
 
         public static CreateResDto fromEntity(Checklist checklist) {
@@ -43,7 +43,7 @@ public class ChecklistDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateContentReqDto{
+    public static class UpdateContentReqDto {
         private String content;
     }
 
@@ -51,7 +51,7 @@ public class ChecklistDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateDueDateReqDto{
+    public static class UpdateDueDateReqDto {
         private LocalDateTime dueDate;
     }
 
@@ -60,7 +60,7 @@ public class ChecklistDto {
     @NoArgsConstructor
     @AllArgsConstructor
     //여기에는 왜 createdAt하고 modifiedAt이 있찌?
-    public static class DetailResDto{
+    public static class DetailResDto {
         private Long id;
         private Long creatorId;
         private Long studyId;
@@ -82,5 +82,5 @@ public class ChecklistDto {
         }
     }
 
-
+    //삭제 추가
 }
