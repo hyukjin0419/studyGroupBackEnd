@@ -62,7 +62,7 @@ public class ChecklistServiceImpl implements ChecklistService {
     }
 
     @Override
-    public ChecklistDto.DeleteResDto deleteResDto(Long checklistId) {
+    public ChecklistDto.DeleteResDto deleteChecklist(Long checklistId) {
         checklistRepository.deleteById(checklistId);
         return ChecklistDto.DeleteResDto.success(checklistId);
     }

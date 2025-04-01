@@ -7,5 +7,5 @@ public interface ChecklistService {
     public void updateContent(Long checklistId, String content);
     public void updateDueDate(Long checklistId, java.time.LocalDateTime dueDate);
     public ChecklistDto.DetailResDto getChecklistDetail(Long checklistId) ;
-    public ChecklistDto.DeleteResDto deleteResDto(Long checklistId);
+    public ChecklistDto.DeleteResDto deleteChecklist(Long checklistId);
 }
