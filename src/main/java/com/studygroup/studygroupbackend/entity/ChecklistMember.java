@@ -43,14 +43,9 @@ public class ChecklistMember {
         return new ChecklistMember(checklist, member, LocalDateTime.now());
     }
 
-    public void complete() {
-        this.isCompleted = true;
-        this.completedAt = LocalDateTime.now();
-    }
-
-    public void undo(){
-        this.isCompleted = false;
-        this.completedAt = null;
+    public void changeStatus() {
+        this.isCompleted = !this.isCompleted;
+        this.completedAt = this.isCompleted ? LocalDateTime.now() : null;
     }
 
 }

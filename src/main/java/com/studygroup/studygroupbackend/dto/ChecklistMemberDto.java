@@ -70,6 +70,7 @@ public class ChecklistMemberDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    //본인 체크리스트 조회용
     public static class MemberChecklistResDto {
         private Long checklistId;
         private String content;
@@ -83,6 +84,35 @@ public class ChecklistMemberDto {
                     .checklistId(cm.getChecklist().getId())
                     .content(cm.getChecklist().getContent())
                     .isCompleted(cm.isCompleted())
+                    .dueDate(cm.getChecklist().getDueDate())
+                    .completedAt(cm.getCompletedAt())
+                    .assignedAt(cm.getAssignedAt())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudyChecklistMemberResDto {
+        private Long checklistId;
+        private String content;
+        private Long memberId;
+        private String memberName;
+        private boolean isCompleted;
+        private LocalDateTime dueDate;
+        private LocalDateTime completedAt;
+        private LocalDateTime assignedAt;
+
+        public static StudyChecklistMemberResDto fromEntity(ChecklistMember cm) {
+            return StudyChecklistMemberResDto.builder()
+                    .checklistId(cm.getChecklist().getId())
+                    .content(cm.getChecklist().getContent())
+                    .memberId(cm.getMember().getId())
+                    .memberName(cm.getMember().getUserName())
+                    .isCompleted(cm.isCompleted())
+                    .dueDate(cm.getChecklist().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
                     .build();
