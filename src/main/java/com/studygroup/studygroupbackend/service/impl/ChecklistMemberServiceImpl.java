@@ -10,6 +10,7 @@ import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.service.ChecklistMemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Check;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,11 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new EntityNotFoundException("멤버가 존재하지 않습니다"));
 
-        ChecklistMember cm = ChecklistMember.assign(checklist, member);
+        int studyOrder = checklistMemberRepository.findMaxStudyOrderIndex(checklist.getStudy().getId()).orElse(0)+1;
+        int personalOrder = checklistMemberRepository.findMaxPersonalOrderIndex(member.getId()).orElse(0)+1;
+
+
+        ChecklistMember cm = ChecklistMember.assign(checklist, member,studyOrder,personalOrder);
         checklistMemberRepository.save(cm);
         return ChecklistMemberDto.AssignResDto.fromEntity(cm);
     }
@@ -51,14 +56,14 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
     @Override
     @Transactional(readOnly = true)//본인 체크리스트 조회용
     public List<ChecklistMemberDto.MemberChecklistResDto> getMemberChecklists(Long memberId) {
-        List<ChecklistMember> list = checklistMemberRepository.findAllByMemberId(memberId);
+        List<ChecklistMember> list = checklistMemberRepository.findAllByMemberIdOrderByPersonalOrderIndexAsc(memberId);
         return list.stream().map(ChecklistMemberDto.MemberChecklistResDto::fromEntity).toList();
     }
 
     @Override
     @Transactional(readOnly = true)//스터디별 체크리스트 조회용
     public List<ChecklistMemberDto.StudyChecklistMemberResDto> getChecklistMembersByStudyId(Long studyId) {
-        List<ChecklistMember> list = checklistMemberRepository.findAllByChecklist_Study_Id(studyId);
+        List<ChecklistMember> list = checklistMemberRepository.findAllByChecklist_Study_IdOrderByStudyOrderIndexAsc(studyId);
         return list.stream().map(ChecklistMemberDto.StudyChecklistMemberResDto::fromEntity).toList();
     }
 
@@ -71,4 +76,17 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
         return ChecklistMemberDto.UnassignResDto.success(checklistId, memberId);
     }
 
+    @Override
+    public void updateStudyOrderIndex(Long checklistMemberId, int newIndex) {
+        ChecklistMember cm = checklistMemberRepository.findById(checklistMemberId)
+                .orElseThrow(() -> new EntityNotFoundException("ChecklistMember not found"));
+        cm.updateStudyOrderIndex(newIndex);
+    }
+
+    @Override
+    public void updatePersonalOrderIndex(Long checklistMemberId, int newIndex) {
+        ChecklistMember cm = checklistMemberRepository.findById(checklistMemberId)
+                .orElseThrow(() -> new EntityNotFoundException("ChecklistMember not found"));
+        cm.updatePersonalOrderIndex(newIndex);
+    }
 }

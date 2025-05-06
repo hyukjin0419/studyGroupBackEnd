@@ -83,6 +83,7 @@ public class ChecklistMemberDto {
         private LocalDateTime dueDate;
         private LocalDateTime completedAt;
         private LocalDateTime assignedAt;
+        private Integer personalOrderIndex;
 
         public static MemberChecklistResDto fromEntity(ChecklistMember cm) {
             return MemberChecklistResDto.builder()
@@ -92,6 +93,7 @@ public class ChecklistMemberDto {
                     .dueDate(cm.getChecklist().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
+                    .personalOrderIndex(cm.getPersonalOrderIndex())
                     .createdAt(cm.getCompletedAt())
                     .modifiedAt(cm.getModifiedAt())
                     .build();
@@ -111,6 +113,7 @@ public class ChecklistMemberDto {
         private LocalDateTime dueDate;
         private LocalDateTime completedAt;
         private LocalDateTime assignedAt;
+        private Integer studyOrderIndex;
 
         public static StudyChecklistMemberResDto fromEntity(ChecklistMember cm) {
             return StudyChecklistMemberResDto.builder()
@@ -122,6 +125,7 @@ public class ChecklistMemberDto {
                     .dueDate(cm.getChecklist().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
+                    .studyOrderIndex(cm.getStudyOrderIndex())
                     .createdAt(cm.getCompletedAt())
                     .modifiedAt(cm.getModifiedAt())
                     .build();

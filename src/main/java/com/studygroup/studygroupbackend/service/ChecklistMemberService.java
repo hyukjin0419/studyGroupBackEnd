@@ -10,4 +10,6 @@ public interface ChecklistMemberService {
     public List<ChecklistMemberDto.MemberChecklistResDto> getMemberChecklists(Long memberId);
     public List<ChecklistMemberDto.StudyChecklistMemberResDto> getChecklistMembersByStudyId(Long studyId);
     public ChecklistMemberDto.UnassignResDto unassignChecklist(Long checklistId, Long memberId);
+    public void updateStudyOrderIndex(Long checklistMemberId, int newIndex);
+    public void updatePersonalOrderIndex(Long checklistMemberId, int newIndex);
 }
