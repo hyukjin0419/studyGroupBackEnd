@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Member", description = "Member 관련 API")
 @RestController
 @RequestMapping("/members")
@@ -37,7 +39,7 @@ public class MemberController {
 
     @Operation(summary = "회원 업데이트 API")
     @PutMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
-    public ResponseEntity<MemberDto.UpdateResDto> updateMember(@RequestBody MemberDto.UpdateReqDto request) {
+    public ResponseEntity<MemberDto.DetailResDto> updateMember(@RequestBody MemberDto.UpdateReqDto request) {
         return ResponseEntity.ok(memberService.updateMember(request));
     }
 
@@ -46,4 +48,11 @@ public class MemberController {
     public ResponseEntity<MemberDto.DeleteResDto> deleteMember(@PathVariable Long id) {
         return ResponseEntity.ok(memberService.deleteMember(id));
     }
+
+    @Operation(summary = "전체 회원 목록 조회 API")
+    @GetMapping
+    public ResponseEntity<List<MemberDto.DetailResDto>> getAllMembers(){
+        return ResponseEntity.ok(memberService.getAllMembers());
+    }
+
 }

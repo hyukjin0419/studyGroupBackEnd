@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -65,11 +68,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDto.UpdateResDto updateMember(MemberDto.UpdateReqDto request) {
+    public MemberDto.DetailResDto updateMember(MemberDto.UpdateReqDto request) {
         Member member = memberRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
         member.updateProfile(request.getUserName(),request.getEmail());
 
-        return MemberDto.UpdateResDto.fromEntity(member);
+        return MemberDto.DetailResDto.fromEntity(member);
     }
 
     @Override
@@ -83,5 +86,10 @@ public class MemberServiceImpl implements MemberService {
         return MemberDto.DeleteResDto.success();
     }
 
-
+    @Override
+    public List<MemberDto.DetailResDto> getAllMembers() {
+        return memberRepository.findAll().stream()
+                .map(MemberDto.DetailResDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
