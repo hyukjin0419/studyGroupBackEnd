@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -22,10 +23,10 @@ public class StudyDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CreateResDto{
+    public static class CreateResDto extends BaseResDto{
         private Long id;
         private String name;
         private String description;
@@ -39,15 +40,17 @@ public class StudyDto {
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
                     .leaderName(study.getLeader().getUserName())
+                    .createdAt(study.getCreateAt())
+                    .modifiedAt(study.getModifiedAt())
                     .build();
         }
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class DetailResDto {
+    public static class DetailResDto extends BaseResDto{
         private Long id;
         private String name;
         private String description;
@@ -61,15 +64,17 @@ public class StudyDto {
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
                     .members(members)
+                    .createdAt(study.getCreateAt())
+                    .modifiedAt(study.getModifiedAt())
                     .build();
         }
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ListResDto{
+    public static class ListResDto extends BaseResDto{
         private Long id;
         private String name;
         private String description;
@@ -81,6 +86,8 @@ public class StudyDto {
                     .name(study.getName())
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
+                    .createdAt(study.getCreateAt())
+                    .modifiedAt(study.getModifiedAt())
                     .build();
         }
     }
@@ -113,10 +120,10 @@ public class StudyDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UpdateResDto{
+    public static class UpdateResDto extends BaseResDto{
         private Long id;
         private String name;
         private String description;
@@ -130,6 +137,8 @@ public class StudyDto {
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
                     .leaderName(study.getLeader().getUserName())
+                    .createdAt(study.getCreateAt())
+                    .modifiedAt(study.getModifiedAt())
                     .build();
         }
     }

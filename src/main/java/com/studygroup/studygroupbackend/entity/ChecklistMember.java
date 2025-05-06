@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "checklist_members")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistMember {
+public class ChecklistMember extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -20,10 +21,10 @@ public class ChecklistMemberDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AssignResDto {
+    public static class AssignResDto extends BaseResDto{
         private Long checklistId;
         private Long memberId;
         private LocalDateTime assignedAt;
@@ -33,6 +34,8 @@ public class ChecklistMemberDto {
                     .checklistId(cm.getChecklist().getId())
                     .memberId(cm.getMember().getId())
                     .assignedAt(cm.getAssignedAt())
+                    .createdAt(cm.getCompletedAt())
+                    .modifiedAt(cm.getModifiedAt())
                     .build();
         }
     }
@@ -47,10 +50,10 @@ public class ChecklistMemberDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ChangeStatusResDto {
+    public static class ChangeStatusResDto extends BaseResDto{
         private Long checklistId;
         private Long memberId;
         private boolean isCompleted;
@@ -62,16 +65,18 @@ public class ChecklistMemberDto {
                     .memberId(cm.getMember().getId())
                     .isCompleted(cm.isCompleted())
                     .completedAt(cm.getCompletedAt())
+                    .createdAt(cm.getCompletedAt())
+                    .modifiedAt(cm.getModifiedAt())
                     .build();
         }
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
     //본인 체크리스트 조회용
-    public static class MemberChecklistResDto {
+    public static class MemberChecklistResDto extends BaseResDto{
         private Long checklistId;
         private String content;
         private boolean isCompleted;
@@ -87,15 +92,17 @@ public class ChecklistMemberDto {
                     .dueDate(cm.getChecklist().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
+                    .createdAt(cm.getCompletedAt())
+                    .modifiedAt(cm.getModifiedAt())
                     .build();
         }
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class StudyChecklistMemberResDto {
+    public static class StudyChecklistMemberResDto extends BaseResDto{
         private Long checklistId;
         private String content;
         private Long memberId;
@@ -115,6 +122,8 @@ public class ChecklistMemberDto {
                     .dueDate(cm.getChecklist().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
+                    .createdAt(cm.getCompletedAt())
+                    .modifiedAt(cm.getModifiedAt())
                     .build();
         }
     }

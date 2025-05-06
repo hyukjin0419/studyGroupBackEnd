@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 public class MemberDto {
 
@@ -25,11 +26,19 @@ public class MemberDto {
 
     //회원 가입 응답 DTO
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateResDto{
+    public static class CreateResDto extends BaseResDto{
         private Long id;
+
+        public static CreateResDto fromEntity(Member member) {
+            return CreateResDto.builder()
+                    .id(member.getId())
+                    .createdAt(member.getCreateAt())
+                    .modifiedAt(member.getModifiedAt())
+                    .build();
+        }
     }
 
     //로그인 요청 DTO
@@ -54,10 +63,10 @@ public class MemberDto {
 
     //회원 상세 조회 응답 DTO
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DetailResDto {
+    public static class DetailResDto extends BaseResDto{
         private Long id;
         private String userName;
         private String email;
@@ -67,16 +76,18 @@ public class MemberDto {
                     .id(member.getId())
                     .userName(member.getUserName())
                     .email(member.getEmail())
+                    .createdAt(member.getCreateAt())
+                    .modifiedAt(member.getModifiedAt())
                     .build();
         }
     }
 
     //회원 목록 조회 응답 DTO
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ListResDto{
+    public static class ListResDto extends BaseResDto{
         private Long id;
         private String userName;
         private String email;
@@ -86,6 +97,8 @@ public class MemberDto {
                     .id(member.getId())
                     .userName(member.getUserName())
                     .email(member.getEmail())
+                    .createdAt(member.getCreateAt())
+                    .modifiedAt(member.getModifiedAt())
                     .build();
         }
     }
@@ -103,10 +116,10 @@ public class MemberDto {
 
     //회원 정보 수정 응답 DTO
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateResDto{
+    public static class UpdateResDto extends BaseResDto{
         private Long id;
         private String userName;
         private String email;
@@ -116,6 +129,8 @@ public class MemberDto {
                     .id(member.getId())
                     .userName(member.getUserName())
                     .email(member.getEmail())
+                    .createdAt(member.getCreateAt())
+                    .modifiedAt(member.getModifiedAt())
                     .build();
         }
     }

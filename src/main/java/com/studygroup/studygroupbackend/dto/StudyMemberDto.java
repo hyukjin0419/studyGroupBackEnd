@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 public class StudyMemberDto {
 
@@ -17,19 +20,23 @@ public class StudyMemberDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class InviteResDto{
+    public static class InviteResDto extends BaseResDto{
         private Long studyId;
         private Long memberId;
         private String role;
+        private LocalDateTime joinedAt;
 
         public static InviteResDto fromEntity(StudyMember studyMember) {
             return InviteResDto.builder()
                     .studyId(studyMember.getStudy().getId())
                     .memberId(studyMember.getMember().getId())
                     .role(studyMember.getStudyRole().name())
+                    .joinedAt(studyMember.getJoinedAt())
+                    .createdAt(studyMember.getCreateAt())
+                    .modifiedAt(studyMember.getModifiedAt())
                     .build();
         }
     }
@@ -38,7 +45,7 @@ public class StudyMemberDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RemoveResDto{
+    public static class RemoveResDto {
         private Long studyId;
         private Long memberId;
         private String message;

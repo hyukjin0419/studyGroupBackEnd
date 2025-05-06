@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
@@ -23,15 +24,17 @@ public class ChecklistDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateResDto {
+    public static class CreateResDto extends BaseResDto{
         private Long checklistId;
 
         public static CreateResDto fromEntity(Checklist checklist) {
             return CreateResDto.builder()
                     .checklistId(checklist.getId())
+                    .createdAt(checklist.getCreateAt())
+                    .modifiedAt(checklist.getModifiedAt())
                     .build();
         }
     }
@@ -53,18 +56,15 @@ public class ChecklistDto {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    //여기에는 왜 createdAt하고 modifiedAt이 있찌?
-    public static class DetailResDto {
+    public static class DetailResDto extends BaseResDto{
         private Long id;
         private Long creatorId;
-        private Long studyId;
+        private Long studyId; //null 이면 개인용
         private String content;
         private LocalDateTime dueDate;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
 
         public static DetailResDto fromEntity(Checklist checklist) {
             return DetailResDto.builder()
