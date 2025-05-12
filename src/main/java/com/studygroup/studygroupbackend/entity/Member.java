@@ -24,15 +24,33 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String email;
+    
+    /**
+     * 사용자 역할 (기본값: 일반 사용자)
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role = UserRole.USER;
 
-    private Member(String userName, String password, String email) {
+    private Member(String userName, String password, String email, UserRole role) {
         this.userName = userName;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
+    /**
+     * 기본 사용자(USER 역할) 생성
+     */
     public static Member of(String userName, String password, String email) {
-        return new Member(userName, password, email);
+        return new Member(userName, password, email, UserRole.USER);
+    }
+    
+    /**
+     * 지정된 역할을 가진 사용자 생성
+     */
+    public static Member of(String userName, String password, String email, UserRole role) {
+        return new Member(userName, password, email, role);
     }
 
     /*
@@ -43,5 +61,13 @@ public class Member extends BaseEntity {
     public void updateProfile(String userName,String email) {
         this.userName = userName;
         this.email = email;
+    }
+    
+    /**
+     * 비밀번호 변경
+     * @param newPassword 새 비밀번호 (암호화된 비밀번호를 전달해야함)
+     */
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }
