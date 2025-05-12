@@ -65,6 +65,7 @@ public class AdminRole extends BaseEntity {
         Set<AdminPermission> allPermissions = Set.of(
             AdminPermission.VIEW_ALL_MEMBERS,
             AdminPermission.FORCE_DELETE_STUDY,
+            AdminPermission.FORCE_DELETE_MEMBER,
             AdminPermission.MANAGE_ANNOUNCEMENTS,
             AdminPermission.MANAGE_USER_ROLES,
             AdminPermission.VIEW_SYSTEM_LOGS

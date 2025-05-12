@@ -33,8 +33,8 @@ public class ChecklistDto {
         public static CreateResDto fromEntity(Checklist checklist) {
             return CreateResDto.builder()
                     .checklistId(checklist.getId())
-                    .createdAt(checklist.getCreateAt())
-                    .modifiedAt(checklist.getModifiedAt())
+                    .createdAt(checklist.getCreatedAt())
+                    .updatedAt(checklist.getUpdatedAt())
                     .build();
         }
     }
@@ -73,8 +73,8 @@ public class ChecklistDto {
                     .studyId(checklist.getStudy() != null ? checklist.getStudy().getId() : null)
                     .content(checklist.getContent())
                     .dueDate(checklist.getDueDate() != null ? checklist.getDueDate() : null)
-                    .createdAt(checklist.getCreateAt())
-                    .modifiedAt(checklist.getModifiedAt())
+                    .createdAt(checklist.getCreatedAt())
+                    .updatedAt(checklist.getUpdatedAt())
                     .build();
         }
     }

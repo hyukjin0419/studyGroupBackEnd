@@ -34,8 +34,8 @@ public class ChecklistMemberDto {
                     .checklistId(cm.getChecklist().getId())
                     .memberId(cm.getMember().getId())
                     .assignedAt(cm.getAssignedAt())
-                    .createdAt(cm.getCompletedAt())
-                    .modifiedAt(cm.getModifiedAt())
+                    .createdAt(cm.getCreatedAt())
+                    .updatedAt(cm.getUpdatedAt())
                     .build();
         }
     }
@@ -65,8 +65,8 @@ public class ChecklistMemberDto {
                     .memberId(cm.getMember().getId())
                     .isCompleted(cm.isCompleted())
                     .completedAt(cm.getCompletedAt())
-                    .createdAt(cm.getCompletedAt())
-                    .modifiedAt(cm.getModifiedAt())
+                    .createdAt(cm.getCreatedAt())
+                    .updatedAt(cm.getUpdatedAt())
                     .build();
         }
     }
@@ -94,8 +94,8 @@ public class ChecklistMemberDto {
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
                     .personalOrderIndex(cm.getPersonalOrderIndex())
-                    .createdAt(cm.getCompletedAt())
-                    .modifiedAt(cm.getModifiedAt())
+                    .createdAt(cm.getCreatedAt())
+                    .updatedAt(cm.getUpdatedAt())
                     .build();
         }
     }
@@ -126,8 +126,8 @@ public class ChecklistMemberDto {
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
                     .studyOrderIndex(cm.getStudyOrderIndex())
-                    .createdAt(cm.getCompletedAt())
-                    .modifiedAt(cm.getModifiedAt())
+                    .createdAt(cm.getCreatedAt())
+                    .updatedAt(cm.getUpdatedAt())
                     .build();
         }
     }

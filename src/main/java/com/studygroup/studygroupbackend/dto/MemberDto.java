@@ -35,8 +35,8 @@ public class MemberDto {
         public static CreateResDto fromEntity(Member member) {
             return CreateResDto.builder()
                     .id(member.getId())
-                    .createdAt(member.getCreateAt())
-                    .modifiedAt(member.getModifiedAt())
+                    .createdAt(member.getCreatedAt())
+                    .updatedAt(member.getUpdatedAt())
                     .build();
         }
     }
@@ -76,8 +76,8 @@ public class MemberDto {
                     .id(member.getId())
                     .userName(member.getUserName())
                     .email(member.getEmail())
-                    .createdAt(member.getCreateAt())
-                    .modifiedAt(member.getModifiedAt())
+                    .createdAt(member.getCreatedAt())
+                    .updatedAt(member.getUpdatedAt())
                     .build();
         }
     }
@@ -97,8 +97,8 @@ public class MemberDto {
 //                    .id(member.getId())
 //                    .userName(member.getUserName())
 //                    .email(member.getEmail())
-//                    .createdAt(member.getCreateAt())
-//                    .modifiedAt(member.getModifiedAt())
+//                    .createdAt(member.getCreatedAt())
+//                    .updatedAt(member.getUpdatedAt())
 //                    .build();
 //        }
 //    }
@@ -129,8 +129,8 @@ public class MemberDto {
 //                    .id(member.getId())
 //                    .userName(member.getUserName())
 //                    .email(member.getEmail())
-//                    .createdAt(member.getCreateAt())
-//                    .modifiedAt(member.getModifiedAt())
+//                    .createdAt(member.getCreatedAt())
+//                    .updatedAt(member.getUpdatedAt())
 //                    .build();
 //        }
 //    }

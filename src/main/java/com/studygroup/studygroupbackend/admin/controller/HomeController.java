@@ -17,4 +17,12 @@ public class HomeController {
     public String home() {
         return "redirect:/login";
     }
+    
+    /**
+     * 관리자 대시보드 페이지 엔드포인트
+     */
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "admin";
+    }
 }

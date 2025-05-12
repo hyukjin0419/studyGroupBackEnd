@@ -17,6 +17,6 @@ public class LoginController {
      */
     @GetMapping("/login")
     public String loginPage() {
-        return "login.html";
+        return "login"; // .html 확장자 제거 - Thymeleaf가 자동으로 확장자를 추가
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,14 +34,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((requests) -> requests
-                // 관리자 페이지 및 API는 인증 필요
-                .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                // 정적 리소스에 대한 접근 허용 (관리자 페이지 리소스 포함)
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/admin/js/**", "/admin/css/**", "/admin/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                // API CSRF 토큰 가져오기 엔드포인트 허용
+                .requestMatchers("/api/admin/get-csrf", "/api/admin/current-user").permitAll()
+                // 로그인 페이지 접근 허용
+                .requestMatchers("/login", "/login/**").permitAll()
+                // 관리자 페이지 허용 (HTML 페이지)
+                .requestMatchers("/admin").hasRole("ADMIN")
+                // 관리자 API 허용 (비관리자 허용 경로 제외)
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 그 외 경로는 모두 허용
                 .anyRequest().permitAll()
             )
             .formLogin((form) -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/admin/dashboard.html", true)
+                .defaultSuccessUrl("/admin", true)
                 .permitAll()
             )
             .logout((logout) -> logout
@@ -51,9 +60,17 @@ public class SecurityConfig {
                 .permitAll()
             )
             .csrf((csrf) -> csrf
-                .ignoringRequestMatchers(
-                    "/api/admin/**"
-                ));
+                // REST API 호출은 CSRF 보호 변경
+                .ignoringRequestMatchers("/api/admin/**")
+            )
+            // 세션 관리 설정
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .invalidSessionUrl("/login?invalid-session")
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+                .expiredUrl("/login?expired-session")
+            );
         
         return http.build();
     }

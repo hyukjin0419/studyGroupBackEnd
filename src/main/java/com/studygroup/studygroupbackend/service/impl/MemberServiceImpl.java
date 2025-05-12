@@ -7,6 +7,7 @@ import com.studygroup.studygroupbackend.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -27,8 +29,8 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
 
-        //비밀번호 검증 (단순 비교, 보안 없음)
-        if (!request.getPassword().equals(member.getPassword())) {
+        //비밀번호 검증 (PasswordEncoder 사용)
+        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         return MemberDto.LoginResDto.builder()
@@ -41,7 +43,16 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberDto.CreateResDto creatMember(MemberDto.CreateReqDto request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
-        Member member = request.toEntity();
+        
+        // 비밀번호 암호화 처리
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        
+        // toEntity 메서드는 평문 비밀번호를 그대로 사용하므로 수정된 비밀번호로 Member 생성
+        Member member = Member.of(
+            request.getUserName(),
+            encodedPassword,
+            request.getEmail()
+        );
 
         memberRepository.save(member);
 

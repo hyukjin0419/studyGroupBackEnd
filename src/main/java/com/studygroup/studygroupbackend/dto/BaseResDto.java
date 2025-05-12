@@ -13,5 +13,5 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public abstract class BaseResDto {
     protected LocalDateTime createdAt;
-    protected LocalDateTime modifiedAt;
+    protected LocalDateTime updatedAt; // modifiedAt에서 이름 변경
 }

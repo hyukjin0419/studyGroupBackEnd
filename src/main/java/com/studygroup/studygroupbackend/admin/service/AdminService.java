@@ -78,6 +78,16 @@ public interface AdminService {
     List<AdminDto.AnnouncementResponse> getAllAnnouncements(Long adminId);
     
     /**
+     * Creates a new member.
+     * Requires admin privileges.
+     *
+     * @param adminId The ID of the admin making the request
+     * @param request The member creation request
+     * @return The created member as a DTO
+     */
+    AdminDto.MemberResponse createMember(Long adminId, AdminDto.MemberRequest request);
+
+    /**
      * Updates a member's information.
      * Requires admin privileges.
      *
@@ -87,4 +97,28 @@ public interface AdminService {
      * @return The updated member as a DTO
      */
     AdminDto.MemberResponse updateMember(Long adminId, Long memberId, AdminDto.MemberRequest request);
+    
+    /**
+     * 회원을 강제로 삭제하는 메소드
+     * @param adminId 관리자 ID
+     * @param memberId 삭제할 회원 ID
+     */
+    void forceDeleteMember(Long adminId, Long memberId);
+    
+    /**
+     * 회원이 리더인 스터디 목록을 조회하는 메소드
+     * @param adminId 관리자 ID
+     * @param memberId 조회할 회원 ID
+     * @return 해당 회원이 리더인 스터디 목록
+     */
+    List<AdminDto.StudyResponse> getMemberLedStudies(Long adminId, Long memberId);
+    
+    /**
+     * 회원의 비밀번호를 강제로 초기화하는 메소드
+     * @param adminId 관리자 ID
+     * @param memberId 초기화할 회원 ID
+     * @param tempPassword 임시 비밀번호
+     * @return 초기화 결과
+     */
+    AdminDto.PasswordResetResponse resetMemberPassword(Long adminId, Long memberId, String tempPassword);
 }

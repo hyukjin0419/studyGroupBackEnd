@@ -12,6 +12,18 @@ import java.time.LocalDateTime;
 
 
 public class AdminDto {
+    
+    // DTO for password reset response
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PasswordResetResponse {
+        private Long memberId;
+        private String userName;
+        private String tempPassword;
+        private LocalDateTime resetTime;
+    }
 
     /**
      * Request and response DTOs for admin operations
@@ -83,6 +95,7 @@ public class AdminDto {
     public static class AnnouncementRequest {
         private String title;
         private String content;
+        private LocalDateTime publishDate; // 게시일: 경과된 날짜는 바로 게시, 미래 날짜는 임시저장 상태
         private LocalDateTime expiryDate; // Optional, can be null
         private boolean important;
     }

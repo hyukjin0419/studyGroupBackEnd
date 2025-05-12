@@ -40,8 +40,8 @@ public class StudyDto {
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
                     .leaderName(study.getLeader().getUserName())
-                    .createdAt(study.getCreateAt())
-                    .modifiedAt(study.getModifiedAt())
+                    .createdAt(study.getCreatedAt())
+                    .updatedAt(study.getUpdatedAt())
                     .build();
         }
     }
@@ -64,8 +64,8 @@ public class StudyDto {
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
                     .members(members)
-                    .createdAt(study.getCreateAt())
-                    .modifiedAt(study.getModifiedAt())
+                    .createdAt(study.getCreatedAt())
+                    .updatedAt(study.getUpdatedAt())
                     .build();
         }
     }
@@ -86,8 +86,8 @@ public class StudyDto {
                     .name(study.getName())
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
-                    .createdAt(study.getCreateAt())
-                    .modifiedAt(study.getModifiedAt())
+                    .createdAt(study.getCreatedAt())
+                    .updatedAt(study.getUpdatedAt())
                     .build();
         }
     }
@@ -137,8 +137,8 @@ public class StudyDto {
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
                     .leaderName(study.getLeader().getUserName())
-                    .createdAt(study.getCreateAt())
-                    .modifiedAt(study.getModifiedAt())
+                    .createdAt(study.getCreatedAt())
+                    .updatedAt(study.getUpdatedAt())
                     .build();
         }
     }

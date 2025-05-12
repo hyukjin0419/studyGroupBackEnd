@@ -35,8 +35,8 @@ public class StudyMemberDto {
                     .memberId(studyMember.getMember().getId())
                     .role(studyMember.getStudyRole().name())
                     .joinedAt(studyMember.getJoinedAt())
-                    .createdAt(studyMember.getCreateAt())
-                    .modifiedAt(studyMember.getModifiedAt())
+                    .createdAt(studyMember.getCreatedAt())
+                    .updatedAt(studyMember.getUpdatedAt())
                     .build();
         }
     }

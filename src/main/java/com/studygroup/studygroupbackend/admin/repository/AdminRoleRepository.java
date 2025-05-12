@@ -20,10 +20,10 @@ public interface AdminRoleRepository extends JpaRepository<AdminRole, Long> {
     Optional<AdminRole> findByMember(Member member);
     
     /**
-     * 특정 멤버 ID에 대한 관리자 권한 정보 조회
+     * 멤버 ID로 관리자 권한 정보 조회
      * 
-     * @param memberId 조회할 멤버 ID
+     * @param id 조회할 멤버 ID
      * @return 멤버의 관리자 권한 정보
      */
-    Optional<AdminRole> findByMemberId(Long memberId);
+    Optional<AdminRole> findByMember_Id(Long id);
 }

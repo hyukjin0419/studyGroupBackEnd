@@ -51,9 +51,12 @@ public class Announcement extends BaseEntity {
         return new Announcement(title, content, author, publishDate, expiryDate, important);
     }
 
-    public void update(String title, String content, LocalDateTime expiryDate, boolean important) {
+    public void update(String title, String content, LocalDateTime publishDate, LocalDateTime expiryDate, boolean important) {
         this.title = title;
         this.content = content;
+        if (publishDate != null) {
+            this.publishDate = publishDate;
+        }
         this.expiryDate = expiryDate;
         this.important = important;
     }

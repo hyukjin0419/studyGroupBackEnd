@@ -18,5 +18,8 @@ public enum AdminPermission {
     MANAGE_USER_ROLES,
     
     // Permission to view system logs
-    VIEW_SYSTEM_LOGS
+    VIEW_SYSTEM_LOGS,
+    
+    // Permission to force delete members
+    FORCE_DELETE_MEMBER
 }

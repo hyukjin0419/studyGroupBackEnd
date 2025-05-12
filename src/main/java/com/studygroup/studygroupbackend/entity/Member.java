@@ -62,4 +62,12 @@ public class Member extends BaseEntity {
         this.userName = userName;
         this.email = email;
     }
+    
+    /**
+     * 비밀번호 변경
+     * @param newPassword 새 비밀번호 (암호화된 비밀번호를 전달해야함)
+     */
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
