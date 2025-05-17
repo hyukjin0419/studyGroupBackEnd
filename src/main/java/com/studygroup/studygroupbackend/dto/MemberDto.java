@@ -35,7 +35,7 @@ public class MemberDto {
         public static CreateResDto fromEntity(Member member) {
             return CreateResDto.builder()
                     .id(member.getId())
-                    .createdAt(member.getCreateAt())
+                    .createdAt(member.getCreatedAt())
                     .modifiedAt(member.getModifiedAt())
                     .build();
         }
@@ -76,7 +76,7 @@ public class MemberDto {
                     .id(member.getId())
                     .userName(member.getUserName())
                     .email(member.getEmail())
-                    .createdAt(member.getCreateAt())
+                    .createdAt(member.getCreatedAt())
                     .modifiedAt(member.getModifiedAt())
                     .build();
         }
