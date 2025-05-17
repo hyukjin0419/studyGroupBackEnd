@@ -41,17 +41,17 @@ public class ChecklistMemberController {
         return ResponseEntity.ok(checklistMemberService.unassignChecklist(checklistId, memberId));
     }
 
-    @Operation(summary = "체크리스트 멤버 아이디로 전체 조회 API", description = "특정 멤버에게 할당된 모든 체크리스트를 조회합니다.")
+    @Operation(summary = "체크리스트 멤버 아이디로 전체 조회 API (인증 필요 예정)", description = "personalOrderIndex 기준 오름차순 정렬.")
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<ChecklistMemberDto.MemberChecklistResDto>> getChecklistMember(
+    public ResponseEntity<List<ChecklistMemberDto.MemberChecklistResDto>> getChecklistByMemberId(
             @PathVariable Long memberId
     ) {
         return ResponseEntity.ok(checklistMemberService.getMemberChecklists(memberId));
     }
 
-    @Operation(summary = "체크리스트 스터디 아이디로 전체 조회 API", description = "특정 스터디에 할당된 모든 체크리스트를 조회합니다.")
+    @Operation(summary = "체크리스트 스터디 아이디로 전체 조회 API", description = "personalOrderIndex 기준 오름차순 정렬.")
     @GetMapping("/study/{studyId}")
-    public ResponseEntity<List<ChecklistMemberDto.StudyChecklistMemberResDto>> getChecklistByStudy(
+    public ResponseEntity<List<ChecklistMemberDto.StudyChecklistMemberResDto>> getChecklistByStudyId(
             @PathVariable Long studyId
     ) {
         return ResponseEntity.ok(checklistMemberService.getChecklistMembersByStudyId(studyId));
