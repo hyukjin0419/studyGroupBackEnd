@@ -26,7 +26,7 @@ public class ChecklistMemberController {
     }
 
     @Operation(summary = "체크리스트 체크/언체크 API", description = "체크리스트 체크박스의 값을 변경합니다.")
-    @PatchMapping("/change-status")
+    @PostMapping("/change-status")
     public ResponseEntity<ChecklistMemberDto.ChangeStatusResDto> changeStatus(
             @RequestBody ChecklistMemberDto.ChangeStatusReqDto request) {
         return ResponseEntity.ok(checklistMemberService.changeStatus(request));
