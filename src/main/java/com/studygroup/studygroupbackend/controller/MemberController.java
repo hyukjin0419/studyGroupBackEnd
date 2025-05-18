@@ -38,7 +38,7 @@ public class MemberController {
     }
 
     @Operation(summary = "회원 업데이트 API")
-    @PutMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
+    @PostMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
     public ResponseEntity<MemberDto.DetailResDto> updateMember(@RequestBody MemberDto.UpdateReqDto request) {
         return ResponseEntity.ok(memberService.updateMember(request));
     }

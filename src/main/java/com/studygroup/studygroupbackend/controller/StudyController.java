@@ -36,7 +36,7 @@ public class StudyController {
     }
 
     @Operation(summary = "스터디 업데이트 API", description = "스터디를 업데이트 합니다.")
-    @PutMapping("/{studyId}")
+    @PostMapping("/{studyId}")
     public ResponseEntity<StudyDto.UpdateResDto> updateStudy(
             @PathVariable Long studyId,
             @RequestHeader("X-Leader_Id") Long leaderId,
