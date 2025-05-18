@@ -25,7 +25,7 @@ public class ChecklistController {
     }
 
     @Operation(summary = "체크리스트 컨텐츠 업데이트 API", description = "체크리스트의 컨텐츠를 업데이트 합니다.")
-    @PatchMapping("/{id}/content")
+    @PostMapping("/{id}/content")
     public ResponseEntity<Void> updateContent(
             @PathVariable Long id,
             @RequestBody ChecklistDto.UpdateContentReqDto request) {
@@ -34,7 +34,7 @@ public class ChecklistController {
     }
 
     @Operation(summary = "체크리스트 날짜 업데이트 API", description = "체크리스트 날짜를 업데이트 합니다.")
-    @PatchMapping("/{id}/duedate")
+    @PostMapping("/{id}/duedate")
     public ResponseEntity<Void> updateDueDate(
             @PathVariable Long id,
             @RequestBody ChecklistDto.UpdateDueDateReqDto request) {
