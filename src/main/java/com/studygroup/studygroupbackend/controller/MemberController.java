@@ -1,7 +1,10 @@
 package com.studygroup.studygroupbackend.controller;
 
 import com.studygroup.studygroupbackend.dto.MemberDto;
+import com.studygroup.studygroupbackend.dto.StudyDto;
+import com.studygroup.studygroupbackend.entity.StudyMember;
 import com.studygroup.studygroupbackend.service.MemberService;
+import com.studygroup.studygroupbackend.service.StudyMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final StudyMemberService studyMemberService;
 
     @Operation(summary = "회원가입 API")
     @PostMapping//signin으로 바꾸고 회원 목록 조회를 기본 으로 매핑해야하나? 회원 목록 조회가 필요한가? admin에서는 maybe.
     //일단 회원 목록 조회는 Getmapping 때문에 해당 메소드를 바꿀 이유는 없다. 다만 clear할 수 있도록 signin으로 바꾸는 건 좋은 수 있다.
-
     public ResponseEntity<MemberDto.CreateResDto> createMember(@RequestBody MemberDto.CreateReqDto request) {
         return ResponseEntity.ok(memberService.creatMember(request));
     }
@@ -55,4 +58,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getAllMembers());
     }
 
+    @GetMapping("/{memberId}/studies")
+    public ResponseEntity<List<StudyDto.ListResDto>> getStudiesByMemberId(@PathVariable Long memberId) {
+        return ResponseEntity.ok(studyMemberService.findStudiesByMemberId(memberId));
+    }
 }
+
+

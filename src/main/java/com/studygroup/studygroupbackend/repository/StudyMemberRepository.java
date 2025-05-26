@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> {
     List<StudyMember> findByStudy(Study study);
+    List<StudyMember> findByMemberId(Long memberId);
 
     void deleteByStudy(Study study);
 
