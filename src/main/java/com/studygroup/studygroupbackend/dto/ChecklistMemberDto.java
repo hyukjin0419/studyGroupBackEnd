@@ -18,6 +18,7 @@ public class ChecklistMemberDto {
     public static class AssignReqDto {
         private Long checklistId;
         private Long memberId;
+        private Long studyId;
     }
 
     @Getter
@@ -34,7 +35,7 @@ public class ChecklistMemberDto {
                     .checklistId(cm.getChecklist().getId())
                     .memberId(cm.getMember().getId())
                     .assignedAt(cm.getAssignedAt())
-                    .createdAt(cm.getCompletedAt())
+                    .createdAt(cm.getCreatedAt())
                     .modifiedAt(cm.getModifiedAt())
                     .build();
         }

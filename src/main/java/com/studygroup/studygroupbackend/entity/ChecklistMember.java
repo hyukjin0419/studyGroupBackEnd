@@ -39,7 +39,7 @@ public class ChecklistMember extends BaseEntity{
     @Column(nullable = false)
     private int personalOrderIndex;
 
-    private ChecklistMember(Checklist checklist, Member member, LocalDateTime assignedAt,
+    private ChecklistMember(Checklist checklist, Member member, Study study, LocalDateTime assignedAt,
                             int studyOrderIndex, int personalOrderIndex) {
         this.checklist = checklist;
         this.member = member;
@@ -48,11 +48,12 @@ public class ChecklistMember extends BaseEntity{
         this.personalOrderIndex = personalOrderIndex;
     }
 
-    public static ChecklistMember assign(Checklist checklist, Member member,
+    public static ChecklistMember assign(Checklist checklist, Member member, Study study,
                                          int studyOrderIndex, int personalOrderIndex) {
         return new ChecklistMember(
                 checklist,
                 member,
+                study,
                 LocalDateTime.now(),
                 studyOrderIndex,
                 personalOrderIndex

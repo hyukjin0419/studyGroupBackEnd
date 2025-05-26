@@ -26,6 +26,7 @@ public class StudyMemberDto {
     public static class InviteResDto extends BaseResDto{
         private Long studyId;
         private Long memberId;
+        private String userName;
         private String role;
         private LocalDateTime joinedAt;
 
@@ -33,6 +34,7 @@ public class StudyMemberDto {
             return InviteResDto.builder()
                     .studyId(studyMember.getStudy().getId())
                     .memberId(studyMember.getMember().getId())
+                    .userName(studyMember.getMember().getUserName())
                     .role(studyMember.getStudyRole().name())
                     .joinedAt(studyMember.getJoinedAt())
                     .createdAt(studyMember.getCreatedAt())

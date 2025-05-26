@@ -4,9 +4,11 @@ import com.studygroup.studygroupbackend.dto.ChecklistMemberDto;
 import com.studygroup.studygroupbackend.entity.Checklist;
 import com.studygroup.studygroupbackend.entity.ChecklistMember;
 import com.studygroup.studygroupbackend.entity.Member;
+import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.repository.ChecklistMemberRepository;
 import com.studygroup.studygroupbackend.repository.ChecklistRepository;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
+import com.studygroup.studygroupbackend.repository.StudyRepository;
 import com.studygroup.studygroupbackend.service.ChecklistMemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +26,23 @@ public class ChecklistMemberServiceImpl implements ChecklistMemberService {
     private final ChecklistMemberRepository checklistMemberRepository;
     private final ChecklistRepository checklistRepository;
     private final MemberRepository memberRepository;
+    private final StudyRepository studyRepository;
 
     @Override
     public ChecklistMemberDto.AssignResDto assignChecklist(ChecklistMemberDto.AssignReqDto request) {
         Checklist checklist = checklistRepository.findById(request.getChecklistId())
                 .orElseThrow(() -> new EntityNotFoundException("체크리스트가 존재하지 않습니다"));
+        Study study = studyRepository.findById(request.getStudyId())
+                .orElseThrow(() -> new EntityNotFoundException("스터디가 존재하지 않습니다"));
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new EntityNotFoundException("멤버가 존재하지 않습니다"));
+
 
         int studyOrder = checklistMemberRepository.findMaxStudyOrderIndex(checklist.getStudy().getId()).orElse(0)+1;
         int personalOrder = checklistMemberRepository.findMaxPersonalOrderIndex(member.getId()).orElse(0)+1;
 
 
-        ChecklistMember cm = ChecklistMember.assign(checklist, member,studyOrder,personalOrder);
+        ChecklistMember cm = ChecklistMember.assign(checklist, member, study, studyOrder,personalOrder);
         checklistMemberRepository.save(cm);
         return ChecklistMemberDto.AssignResDto.fromEntity(cm);
     }
