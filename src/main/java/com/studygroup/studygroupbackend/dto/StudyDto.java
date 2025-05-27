@@ -55,6 +55,7 @@ public class StudyDto {
         private String name;
         private String description;
         private Long leaderId;
+        private String leaderName;
         private List<MemberResDto> members;
 
         public static DetailResDto fromEntity(Study study, List<MemberResDto> members) {
@@ -63,6 +64,7 @@ public class StudyDto {
                     .name(study.getName())
                     .description(study.getDescription())
                     .leaderId(study.getLeader().getId())
+                    .leaderName(study.getLeader().getUserName())
                     .members(members)
                     .createdAt(study.getCreatedAt())
                     .modifiedAt(study.getModifiedAt())
