@@ -37,7 +37,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
             throw new IllegalStateException("스터디장만 멤버를 초대할 수 있습니다");
         }
 
-        Member member = memberRepository.findById(request.getMemberId())
+        Member member = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("멤버를 찾을 수 없습니다."));
 
         if (studyMemberRepository.existsByStudyAndMember(study, member)) {

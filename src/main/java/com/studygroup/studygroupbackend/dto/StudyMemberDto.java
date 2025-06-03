@@ -16,7 +16,7 @@ public class StudyMemberDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class InviteReqDto{
-        private Long memberId;
+        private String email;
     }
 
     @Getter
