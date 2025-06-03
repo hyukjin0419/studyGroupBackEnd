@@ -32,13 +32,20 @@ public class StudyServiceImpl implements StudyService {
         Member leader = memberRepository.findById(request.getLeaderId())
                 .orElseThrow(() -> new EntityNotFoundException("스터디 장을 찾을 수 없습니다."));
 
-        Study study = Study.of(request.getName(),request.getDescription(), leader);
+        Study study = Study.of(request.getName(),request.getDescription());
         studyRepository.save(study);
 
         StudyMember leaderMember = StudyMember.of(study, leader, StudyRole.Leader);
         studyMemberRepository.save(leaderMember);
 
-        return StudyDto.CreateResDto.fromEntity(study);
+        StudyDto.MemberResDto leaderDto = StudyDto.MemberResDto.fromEntity(leaderMember);
+
+        /*
+        여기서 memberList넘길건지? -> 화면 생성 후 바로 상세페이지로 들어갈 것이면 필요함
+        +
+        팀 만들때 초대 가능하면 필요함 -> qr로 하는거면 굳이..?
+        */
+        return StudyDto.CreateResDto.fromEntity(study, leaderDto);
     }
 
     @Override
@@ -51,7 +58,12 @@ public class StudyServiceImpl implements StudyService {
                 .map(StudyDto.MemberResDto::fromEntity)
                 .toList();
 
-        return StudyDto.DetailResDto.fromEntity(study, memberDtos);
+        StudyDto.MemberResDto leaderDto = memberDtos.stream()
+                .filter(m->m.getRole().equals("Leader"))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("리더가 존재하지 않습니다."));
+
+        return StudyDto.DetailResDto.fromEntity(study, leaderDto, memberDtos);
     }
 
     @Override
@@ -67,13 +79,16 @@ public class StudyServiceImpl implements StudyService {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
-        if (!study.getLeader().getId().equals(leaderId)) {
-            throw new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다.");
-        }
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+                .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
+
+        StudyDto.MemberResDto leaderDto = StudyDto.MemberResDto.fromEntity(leaderMember);
 
         study.updateStudyInfo(request.getName(), request.getDescription());
 
-        return StudyDto.UpdateResDto.fromEntity(study);
+
+
+        return StudyDto.UpdateResDto.fromEntity(study, leaderDto);
     }
 
     @Override
@@ -82,9 +97,8 @@ public class StudyServiceImpl implements StudyService {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
-        if (!study.getLeader().getId().equals(leaderId)) {
-            throw new IllegalStateException("스터디장만 스터디를 삭제할 수 있습니다.");
-        }
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+                .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
         studyMemberRepository.deleteByStudy(study);
         studyRepository.delete(study);

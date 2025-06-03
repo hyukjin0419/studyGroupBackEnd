@@ -33,13 +33,13 @@ public class StudyDto {
         private Long leaderId;
         private String leaderName;
 
-        public static CreateResDto fromEntity(Study study) {
+        public static CreateResDto fromEntity(Study study, MemberResDto leaderDto) {
             return CreateResDto.builder()
                     .id(study.getId())
                     .name(study.getName())
                     .description(study.getDescription())
-                    .leaderId(study.getLeader().getId())
-                    .leaderName(study.getLeader().getUserName())
+                    .leaderId(leaderDto.getId())
+                    .leaderName(leaderDto.getUserName())
                     .createdAt(study.getCreatedAt())
                     .modifiedAt(study.getModifiedAt())
                     .build();
@@ -58,13 +58,13 @@ public class StudyDto {
         private String leaderName;
         private List<MemberResDto> members;
 
-        public static DetailResDto fromEntity(Study study, List<MemberResDto> members) {
+        public static DetailResDto fromEntity(Study study, MemberResDto leaderDto, List<MemberResDto> members) {
             return DetailResDto.builder()
                     .id(study.getId())
                     .name(study.getName())
                     .description(study.getDescription())
-                    .leaderId(study.getLeader().getId())
-                    .leaderName(study.getLeader().getUserName())
+                    .leaderId(leaderDto.getId())
+                    .leaderName(leaderDto.getUserName())
                     .members(members)
                     .createdAt(study.getCreatedAt())
                     .modifiedAt(study.getModifiedAt())
@@ -80,14 +80,12 @@ public class StudyDto {
         private Long id;
         private String name;
         private String description;
-        private Long leaderId;
 
         public static ListResDto fromEntity(Study study) {
             return ListResDto.builder()
                     .id(study.getId())
                     .name(study.getName())
                     .description(study.getDescription())
-                    .leaderId(study.getLeader().getId())
                     .createdAt(study.getCreatedAt())
                     .modifiedAt(study.getModifiedAt())
                     .build();
@@ -132,13 +130,13 @@ public class StudyDto {
         private Long leaderId;
         private String leaderName;
 
-        public static UpdateResDto fromEntity(Study study) {
+        public static UpdateResDto fromEntity(Study study, MemberResDto leaderDto) {
             return UpdateResDto.builder()
                     .id(study.getId())
                     .name(study.getName())
                     .description(study.getDescription())
-                    .leaderId(study.getLeader().getId())
-                    .leaderName(study.getLeader().getUserName())
+                    .leaderId(leaderDto.getId())
+                    .leaderName(leaderDto.getUserName())
                     .createdAt(study.getCreatedAt())
                     .modifiedAt(study.getModifiedAt())
                     .build();
