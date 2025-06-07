@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.MemberDto;
+import com.studygroup.studygroupbackend.dto.member.MemberDto;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.service.MemberService;

@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.service;
 
-import com.studygroup.studygroupbackend.dto.MemberDto;
+import com.studygroup.studygroupbackend.dto.member.MemberDto;
 
 import java.util.List;
 

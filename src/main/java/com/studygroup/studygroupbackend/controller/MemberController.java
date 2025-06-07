@@ -1,8 +1,7 @@
 package com.studygroup.studygroupbackend.controller;
 
-import com.studygroup.studygroupbackend.dto.MemberDto;
+import com.studygroup.studygroupbackend.dto.member.MemberDto;
 import com.studygroup.studygroupbackend.dto.StudyDto;
-import com.studygroup.studygroupbackend.entity.StudyMember;
 import com.studygroup.studygroupbackend.service.MemberService;
 import com.studygroup.studygroupbackend.service.StudyMemberService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,5 +1,6 @@
-package com.studygroup.studygroupbackend.dto;
+package com.studygroup.studygroupbackend.dto.member;
 
+import com.studygroup.studygroupbackend.dto.BaseResDto;
 import com.studygroup.studygroupbackend.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,7 @@ public class MemberDto {
     @SuperBuilder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateResDto extends BaseResDto{
+    public static class CreateResDto extends BaseResDto {
         private Long id;
 
         public static CreateResDto fromEntity(Member member) {
