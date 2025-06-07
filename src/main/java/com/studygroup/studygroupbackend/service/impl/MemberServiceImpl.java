@@ -1,6 +1,13 @@
 package com.studygroup.studygroupbackend.service.impl;
 
 import com.studygroup.studygroupbackend.dto.member.MemberDto;
+import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
+import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
+import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
+import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
+import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
+import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
+import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.service.MemberService;
@@ -23,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDto.LoginResDto login(MemberDto.LoginReqDto request) {
+    public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
 
@@ -31,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
         if (!request.getPassword().equals(member.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        return MemberDto.LoginResDto.builder()
+        return MemberLoginResponse.builder()
                 .id(member.getId())
                 .userName(member.getUserName())
                 .build();
@@ -39,14 +46,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDto.CreateResDto creatMember(MemberDto.CreateReqDto request) {
+    public MemberCreateResponse creatMember(MemberCreateRequest request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
         Member member = request.toEntity();
 
         memberRepository.save(member);
 
-        return MemberDto.CreateResDto
-                .builder()
+        return MemberCreateResponse.builder()
                 .id(member.getId())
                 .build();
     }
@@ -59,37 +65,37 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto.DetailResDto getMemberById(Long id) {
+    public MemberDetailResponse getMemberById(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
-        return MemberDto.DetailResDto.fromEntity(member);
+        return MemberDetailResponse.fromEntity(member);
     }
 
     @Override
     @Transactional
-    public MemberDto.DetailResDto updateMember(MemberDto.UpdateReqDto request) {
+    public MemberDetailResponse updateMember(MemberUpdateRequest request) {
         Member member = memberRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
         member.updateProfile(request.getUserName(),request.getEmail());
 
-        return MemberDto.DetailResDto.fromEntity(member);
+        return MemberDetailResponse.fromEntity(member);
     }
 
     @Override
     @Transactional
-    public MemberDto.DeleteResDto deleteMember(Long id) {
+    public MemberDeleteResponse deleteMember(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
 
         memberRepository.delete(member);
 
-        return MemberDto.DeleteResDto.success();
+        return MemberDeleteResponse.success();
     }
 
     @Override
-    public List<MemberDto.DetailResDto> getAllMembers() {
+    public List<MemberDetailResponse> getAllMembers() {
         return memberRepository.findAll().stream()
-                .map(MemberDto.DetailResDto::fromEntity)
+                .map(MemberDetailResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 }

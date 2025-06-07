@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.dto.member;
+package com.studygroup.studygroupbackend.dto.member.signup;
 
 import com.studygroup.studygroupbackend.entity.Member;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateReqDto {
+
+// 회원 가입 요청 DT
+
+public class MemberCreateRequest {
     private String userName;
     private String password;
     private String email;
