@@ -1,7 +1,7 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.StudyDto;
 import com.studygroup.studygroupbackend.dto.StudyMemberDto;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.entity.StudyMember;
@@ -69,11 +69,11 @@ public class StudyMemberServiceImpl implements StudyMemberService{
     }
 
     @Override
-    public List<StudyDto.ListResDto> findStudiesByMemberId(Long memberId) {
+    public List<StudyListResponse> findStudiesByMemberId(Long memberId) {
         List<StudyMember> memberships = studyMemberRepository.findByMemberId(memberId);
 
         return memberships.stream()
-                .map(sm -> StudyDto.ListResDto.fromEntity(sm.getStudy()))
+                .map(sm -> StudyListResponse.fromEntity(sm.getStudy()))
                 .collect(Collectors.toList());
     }
 }

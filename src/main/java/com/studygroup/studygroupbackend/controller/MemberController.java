@@ -1,7 +1,5 @@
 package com.studygroup.studygroupbackend.controller;
 
-import com.studygroup.studygroupbackend.dto.member.MemberDto;
-import com.studygroup.studygroupbackend.dto.StudyDto;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
@@ -9,6 +7,7 @@ import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.service.MemberService;
 import com.studygroup.studygroupbackend.service.StudyMemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,7 +64,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/studies")
-    public ResponseEntity<List<StudyDto.ListResDto>> getStudiesByMemberId(@PathVariable Long memberId) {
+    public ResponseEntity<List<StudyListResponse>> getStudiesByMemberId(@PathVariable Long memberId) {
         return ResponseEntity.ok(studyMemberService.findStudiesByMemberId(memberId));
     }
 }

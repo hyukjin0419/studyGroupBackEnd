@@ -1,6 +1,13 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.StudyDto;
+import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
+import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
+import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
+import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
+import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateResponse;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.entity.StudyMember;
@@ -28,7 +35,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyDto.CreateResDto createStudy(StudyDto.CreateReqDto request) {
+    public StudyCreateResponse createStudy(StudyCreateRequest request) {
         Member leader = memberRepository.findById(request.getLeaderId())
                 .orElseThrow(() -> new EntityNotFoundException("스터디 장을 찾을 수 없습니다."));
 
@@ -38,62 +45,60 @@ public class StudyServiceImpl implements StudyService {
         StudyMember leaderMember = StudyMember.of(study, leader, StudyRole.Leader);
         studyMemberRepository.save(leaderMember);
 
-        StudyDto.MemberResDto leaderDto = StudyDto.MemberResDto.fromEntity(leaderMember);
+        StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
 
         /*
         여기서 memberList넘길건지? -> 화면 생성 후 바로 상세페이지로 들어갈 것이면 필요함
         +
         팀 만들때 초대 가능하면 필요함 -> qr로 하는거면 굳이..?
         */
-        return StudyDto.CreateResDto.fromEntity(study, leaderDto);
+        return StudyCreateResponse.fromEntity(study, leaderDto);
     }
 
     @Override
-    public StudyDto.DetailResDto getStudyById(Long studyId) {
+    public StudyDetailResponse getStudyById(Long studyId) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
         List<StudyMember> studyMembers = studyMemberRepository.findByStudy(study);
-        List<StudyDto.MemberResDto> memberDtos = studyMembers.stream()
-                .map(StudyDto.MemberResDto::fromEntity)
+        List<StudyMemberSummaryResponse> memberDtos = studyMembers.stream()
+                .map(StudyMemberSummaryResponse::fromEntity)
                 .toList();
 
-        StudyDto.MemberResDto leaderDto = memberDtos.stream()
+        StudyMemberSummaryResponse leaderDto = memberDtos.stream()
                 .filter(m->m.getRole().equals("Leader"))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("리더가 존재하지 않습니다."));
 
-        return StudyDto.DetailResDto.fromEntity(study, leaderDto, memberDtos);
+        return StudyDetailResponse.fromEntity(study, leaderDto, memberDtos);
     }
 
     @Override
-    public List<StudyDto.ListResDto> getAllStudies() {
+    public List<StudyListResponse> getAllStudies() {
         return studyRepository.findAll().stream()
-                .map(StudyDto.ListResDto::fromEntity)
+                .map(StudyListResponse::fromEntity)
                 .toList();
     }
 
     @Override
     @Transactional
-    public StudyDto.UpdateResDto updateStudy(Long studyId, Long leaderId, StudyDto.UpdateReqDto request) {
+    public StudyUpdateResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
         StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
-        StudyDto.MemberResDto leaderDto = StudyDto.MemberResDto.fromEntity(leaderMember);
+        StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
 
         study.updateStudyInfo(request.getName(), request.getDescription());
 
-
-
-        return StudyDto.UpdateResDto.fromEntity(study, leaderDto);
+        return StudyUpdateResponse.fromEntity(study, leaderDto);
     }
 
     @Override
     @Transactional
-    public StudyDto.DeleteResDto deleteStudy(Long studyId, Long leaderId) {
+    public StudyDeleteResponse deleteStudy(Long studyId, Long leaderId) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
@@ -103,6 +108,6 @@ public class StudyServiceImpl implements StudyService {
         studyMemberRepository.deleteByStudy(study);
         studyRepository.delete(study);
 
-        return StudyDto.DeleteResDto.successDelete();
+        return StudyDeleteResponse.successDelete();
     }
 }
