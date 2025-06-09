@@ -30,7 +30,7 @@ public class MemberController {
     @PostMapping//signin으로 바꾸고 회원 목록 조회를 기본 으로 매핑해야하나? 회원 목록 조회가 필요한가? admin에서는 maybe.
     //일단 회원 목록 조회는 Getmapping 때문에 해당 메소드를 바꿀 이유는 없다. 다만 clear할 수 있도록 signin으로 바꾸는 건 좋은 수 있다.
     public ResponseEntity<MemberCreateResponse> createMember(@RequestBody MemberCreateRequest request) {
-        return ResponseEntity.ok(memberService.creatMember(request));
+        return ResponseEntity.ok(memberService.createMember(request));
     }
 
     @Operation(summary = "로그인 API")
@@ -65,7 +65,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}/studies")
     public ResponseEntity<List<StudyListResponse>> getStudiesByMemberId(@PathVariable Long memberId) {
-        return ResponseEntity.ok(studyMemberService.findStudiesByMemberId(memberId));
+        return ResponseEntity.ok(studyMemberService.getStudiesByMemberId(memberId));
     }
 }
 

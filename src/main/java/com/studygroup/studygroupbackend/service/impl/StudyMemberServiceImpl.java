@@ -71,7 +71,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
     }
 
     @Override
-    public List<StudyListResponse> findStudiesByMemberId(Long memberId) {
+    public List<StudyListResponse> getStudiesByMemberId(Long memberId) {
         List<StudyMember> memberships = studyMemberRepository.findByMemberId(memberId);
 
         return memberships.stream()

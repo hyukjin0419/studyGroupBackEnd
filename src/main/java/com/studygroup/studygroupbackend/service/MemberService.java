@@ -1,6 +1,5 @@
 package com.studygroup.studygroupbackend.service;
 
-import com.studygroup.studygroupbackend.dto.member.MemberDto;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public interface MemberService {
     MemberLoginResponse login(MemberLoginRequest request);
-    MemberCreateResponse creatMember(MemberCreateRequest request);
+    MemberCreateResponse createMember(MemberCreateRequest request);
     MemberDetailResponse getMemberById(Long id);
     MemberDetailResponse updateMember(MemberUpdateRequest request);
     MemberDeleteResponse deleteMember(Long id);

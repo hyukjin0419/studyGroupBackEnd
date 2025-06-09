@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChecklistItemUpdateDueDateRequest {
+public class ChecklistItemUpdateRequest {
+    private String content;
     private LocalDateTime dueDate;
 }

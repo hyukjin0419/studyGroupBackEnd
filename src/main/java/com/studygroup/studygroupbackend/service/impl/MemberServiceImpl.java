@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberCreateResponse creatMember(MemberCreateRequest request) {
+    public MemberCreateResponse createMember(MemberCreateRequest request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
         Member member = request.toEntity();
 

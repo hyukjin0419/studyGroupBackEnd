@@ -10,5 +10,5 @@ import java.util.List;
 public interface StudyMemberService {
     StudyMemberInviteResponse inviteMember(Long studyId, Long leaderId, StudyMemberInviteRequest request);
     StudyMemberRemoveResponse removeMember(Long studyId, Long leaderId, Long memberId);
-    List<StudyListResponse> findStudiesByMemberId(Long memberId);
+    List<StudyListResponse> getStudiesByMemberId(Long memberId);
 }

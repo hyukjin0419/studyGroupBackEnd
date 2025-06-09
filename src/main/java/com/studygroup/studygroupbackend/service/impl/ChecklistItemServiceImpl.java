@@ -4,6 +4,7 @@ import com.studygroup.studygroupbackend.dto.checklistitem.create.ChecklistItemCr
 import com.studygroup.studygroupbackend.dto.checklistitem.create.ChecklistItemCreateResponse;
 import com.studygroup.studygroupbackend.dto.checklistitem.delete.ChecklistItemDeleteResponse;
 import com.studygroup.studygroupbackend.dto.checklistitem.detail.ChecklistItemDetailResponse;
+import com.studygroup.studygroupbackend.dto.checklistitem.update.ChecklistItemUpdateRequest;
 import com.studygroup.studygroupbackend.entity.ChecklistItem;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
@@ -19,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ChecklistItemItemServiceImpl implements ChecklistItemService {
+public class ChecklistItemServiceImpl implements ChecklistItemService {
     private final ChecklistItemRepository checklistItemRepository;
     private final StudyRepository studyRepository;
     private final MemberRepository memberRepository;
 
     @Override
-    public ChecklistItemCreateResponse createChecklist(Long createdId, ChecklistItemCreateRequest request) {
+    public ChecklistItemCreateResponse createChecklistItem(Long createdId, ChecklistItemCreateRequest request) {
         Member creator = memberRepository.findById(createdId)
                 .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다."));
 
@@ -41,23 +42,23 @@ public class ChecklistItemItemServiceImpl implements ChecklistItemService {
     }
 
     @Override
-    public void updateContent(Long checklistId, String content) {
-        ChecklistItem checklistItem = checklistItemRepository.findById(checklistId)
-                .orElseThrow(() -> new EntityNotFoundException("체크리스트가 존재하지 않습니다."));
-        checklistItem.updateContent(content);
+    public void updateChecklistItem(Long id, ChecklistItemUpdateRequest request) {
+        ChecklistItem item = checklistItemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("체크리스트 항목이 존재하지 않습니다."));
+
+        if (request.getContent() != null) {
+            item.updateContent(request.getContent());
+        }
+
+        if (request.getDueDate() != null) {
+            item.updateDueDate(request.getDueDate());
+        }
     }
 
-    @Override
-    public void updateDueDate(Long checklistId, java.time.LocalDateTime dueDate) {
-        ChecklistItem checklistItem = checklistItemRepository.findById(checklistId)
-                .orElseThrow(() -> new EntityNotFoundException("체크리스트가 존재하지 않습니다."));
-
-        checklistItem.updateDueDate(dueDate);
-    }
 
     @Override
     @Transactional(readOnly = true)
-    public ChecklistItemDetailResponse getChecklistDetail(Long checklistId) {
+    public ChecklistItemDetailResponse getChecklistItemDetail(Long checklistId) {
         ChecklistItem checklistItem = checklistItemRepository.findById(checklistId)
                 .orElseThrow(() -> new EntityNotFoundException("체크리스트가 존재하지 않습니다."));
 
@@ -65,7 +66,7 @@ public class ChecklistItemItemServiceImpl implements ChecklistItemService {
     }
 
     @Override
-    public ChecklistItemDeleteResponse deleteChecklist(Long checklistId) {
+    public ChecklistItemDeleteResponse deleteChecklistItem(Long checklistId) {
         checklistItemRepository.deleteById(checklistId);
         return ChecklistItemDeleteResponse.success(checklistId);
     }

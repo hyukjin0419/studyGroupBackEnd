@@ -7,7 +7,6 @@ import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
-import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateResponse;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.entity.StudyMember;
@@ -82,7 +81,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyUpdateResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request) {
+    public StudyDetailResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
@@ -93,7 +92,7 @@ public class StudyServiceImpl implements StudyService {
 
         study.updateStudyInfo(request.getName(), request.getDescription());
 
-        return StudyUpdateResponse.fromEntity(study, leaderDto);
+        return StudyDetailResponse.fromEntity(study, leaderDto, null);
     }
 
     @Override

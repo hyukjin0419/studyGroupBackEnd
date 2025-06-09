@@ -4,11 +4,11 @@ import com.studygroup.studygroupbackend.dto.checklistitem.create.ChecklistItemCr
 import com.studygroup.studygroupbackend.dto.checklistitem.create.ChecklistItemCreateResponse;
 import com.studygroup.studygroupbackend.dto.checklistitem.delete.ChecklistItemDeleteResponse;
 import com.studygroup.studygroupbackend.dto.checklistitem.detail.ChecklistItemDetailResponse;
+import com.studygroup.studygroupbackend.dto.checklistitem.update.ChecklistItemUpdateRequest;
 
 public interface ChecklistItemService {
-    public ChecklistItemCreateResponse createChecklist(Long createdId, ChecklistItemCreateRequest request);
-    public void updateContent(Long checklistId, String content);
-    public void updateDueDate(Long checklistId, java.time.LocalDateTime dueDate);
-    public ChecklistItemDetailResponse getChecklistDetail(Long checklistId) ;
-    public ChecklistItemDeleteResponse deleteChecklist(Long checklistId);
+    public ChecklistItemCreateResponse createChecklistItem(Long createdId, ChecklistItemCreateRequest request);
+    public void updateChecklistItem(Long id, ChecklistItemUpdateRequest request);
+    public ChecklistItemDetailResponse getChecklistItemDetail(Long checklistId) ;
+    public ChecklistItemDeleteResponse deleteChecklistItem(Long checklistId);
 }
