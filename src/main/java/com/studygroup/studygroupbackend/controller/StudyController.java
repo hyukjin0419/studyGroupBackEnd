@@ -6,7 +6,6 @@ import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
-import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateResponse;
 import com.studygroup.studygroupbackend.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +42,7 @@ public class StudyController {
 
     @Operation(summary = "스터디 업데이트 API", description = "스터디를 업데이트 합니다.")
     @PostMapping("/{studyId}")
-    public ResponseEntity<StudyUpdateResponse> updateStudy(
+    public ResponseEntity<StudyDetailResponse> updateStudy(
             @PathVariable Long studyId,
             @RequestHeader("X-Leader_Id") Long leaderId,
             @RequestBody StudyUpdateRequest request) {

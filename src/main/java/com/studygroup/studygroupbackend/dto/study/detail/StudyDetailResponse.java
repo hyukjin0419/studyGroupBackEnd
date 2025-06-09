@@ -28,7 +28,7 @@ public class StudyDetailResponse extends BaseResDto {
                 .description(study.getDescription())
                 .leaderId(leaderDto.getId())
                 .leaderName(leaderDto.getUserName())
-                .members(members)
+                .members(members == null ? List.of() : members)
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())
                 .build();
