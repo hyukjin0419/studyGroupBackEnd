@@ -32,7 +32,7 @@ public class ChecklistMemberDto {
 
         public static AssignResDto fromEntity(ChecklistMember cm) {
             return AssignResDto.builder()
-                    .checklistId(cm.getChecklist().getId())
+                    .checklistId(cm.getChecklistItem().getId())
                     .memberId(cm.getMember().getId())
                     .assignedAt(cm.getAssignedAt())
                     .createdAt(cm.getCreatedAt())
@@ -62,7 +62,7 @@ public class ChecklistMemberDto {
 
         public static ChangeStatusResDto fromEntity(ChecklistMember cm) {
             return ChangeStatusResDto.builder()
-                    .checklistId(cm.getChecklist().getId())
+                    .checklistId(cm.getChecklistItem().getId())
                     .memberId(cm.getMember().getId())
                     .isCompleted(cm.isCompleted())
                     .completedAt(cm.getCompletedAt())
@@ -89,10 +89,10 @@ public class ChecklistMemberDto {
 
         public static MemberChecklistResDto fromEntity(ChecklistMember cm) {
             return MemberChecklistResDto.builder()
-                    .checklistId(cm.getChecklist().getId())
-                    .content(cm.getChecklist().getContent())
+                    .checklistId(cm.getChecklistItem().getId())
+                    .content(cm.getChecklistItem().getContent())
                     .isCompleted(cm.isCompleted())
-                    .dueDate(cm.getChecklist().getDueDate())
+                    .dueDate(cm.getChecklistItem().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
                     .studyOrderIndex(cm.getStudyOrderIndex())
@@ -121,12 +121,12 @@ public class ChecklistMemberDto {
 
         public static StudyChecklistMemberResDto fromEntity(ChecklistMember cm) {
             return StudyChecklistMemberResDto.builder()
-                    .checklistId(cm.getChecklist().getId())
-                    .content(cm.getChecklist().getContent())
+                    .checklistId(cm.getChecklistItem().getId())
+                    .content(cm.getChecklistItem().getContent())
                     .memberId(cm.getMember().getId())
                     .memberName(cm.getMember().getUserName())
                     .isCompleted(cm.isCompleted())
-                    .dueDate(cm.getChecklist().getDueDate())
+                    .dueDate(cm.getChecklistItem().getDueDate())
                     .completedAt(cm.getCompletedAt())
                     .assignedAt(cm.getAssignedAt())
                     .studyOrderIndex(cm.getStudyOrderIndex())

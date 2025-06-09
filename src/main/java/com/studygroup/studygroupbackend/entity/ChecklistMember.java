@@ -18,8 +18,8 @@ public class ChecklistMember extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "checklist_id", nullable = false)
-    private Checklist checklist;
+    @JoinColumn(name = "checklistItem_id", nullable = false)
+    private ChecklistItem checklistItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -39,19 +39,19 @@ public class ChecklistMember extends BaseEntity{
     @Column(nullable = false)
     private int personalOrderIndex;
 
-    private ChecklistMember(Checklist checklist, Member member, Study study, LocalDateTime assignedAt,
+    private ChecklistMember(ChecklistItem checklistItem, Member member, Study study, LocalDateTime assignedAt,
                             int studyOrderIndex, int personalOrderIndex) {
-        this.checklist = checklist;
+        this.checklistItem = checklistItem;
         this.member = member;
         this.assignedAt = assignedAt;
         this.studyOrderIndex = studyOrderIndex;
         this.personalOrderIndex = personalOrderIndex;
     }
 
-    public static ChecklistMember assign(Checklist checklist, Member member, Study study,
+    public static ChecklistMember assign(ChecklistItem checklistItem, Member member, Study study,
                                          int studyOrderIndex, int personalOrderIndex) {
         return new ChecklistMember(
-                checklist,
+                checklistItem,
                 member,
                 study,
                 LocalDateTime.now(),

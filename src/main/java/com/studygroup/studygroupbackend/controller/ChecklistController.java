@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Checklist", description = "체크리스트 관련 API")
+@Tag(name = "ChecklistItem", description = "체크리스트 관련 API")
 @RestController
-@RequestMapping("/checklist")
+@RequestMapping("/checklistItem")
 @RequiredArgsConstructor
 public class ChecklistController {
 

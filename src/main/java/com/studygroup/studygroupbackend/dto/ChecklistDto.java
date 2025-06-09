@@ -1,14 +1,12 @@
 package com.studygroup.studygroupbackend.dto;
 
-import com.studygroup.studygroupbackend.entity.Checklist;
+import com.studygroup.studygroupbackend.entity.ChecklistItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ChecklistDto {
@@ -28,13 +26,13 @@ public class ChecklistDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateResDto extends BaseResDto{
-        private Long checklistId;
+        private Long checklistItemId;
 
-        public static CreateResDto fromEntity(Checklist checklist) {
+        public static CreateResDto fromEntity(ChecklistItem checklistItem) {
             return CreateResDto.builder()
-                    .checklistId(checklist.getId())
-                    .createdAt(checklist.getCreatedAt())
-                    .modifiedAt(checklist.getModifiedAt())
+                    .checklistItemId(checklistItem.getId())
+                    .createdAt(checklistItem.getCreatedAt())
+                    .modifiedAt(checklistItem.getModifiedAt())
                     .build();
         }
     }
@@ -66,15 +64,15 @@ public class ChecklistDto {
         private String content;
         private LocalDateTime dueDate;
 
-        public static DetailResDto fromEntity(Checklist checklist) {
+        public static DetailResDto fromEntity(ChecklistItem checklistItem) {
             return DetailResDto.builder()
-                    .id(checklist.getId())
-                    .creatorId(checklist.getCreator().getId())
-                    .studyId(checklist.getStudy() != null ? checklist.getStudy().getId() : null)
-                    .content(checklist.getContent())
-                    .dueDate(checklist.getDueDate() != null ? checklist.getDueDate() : null)
-                    .createdAt(checklist.getCreatedAt())
-                    .modifiedAt(checklist.getModifiedAt())
+                    .id(checklistItem.getId())
+                    .creatorId(checklistItem.getCreator().getId())
+                    .studyId(checklistItem.getStudy() != null ? checklistItem.getStudy().getId() : null)
+                    .content(checklistItem.getContent())
+                    .dueDate(checklistItem.getDueDate() != null ? checklistItem.getDueDate() : null)
+                    .createdAt(checklistItem.getCreatedAt())
+                    .modifiedAt(checklistItem.getModifiedAt())
                     .build();
         }
     }
@@ -85,12 +83,12 @@ public class ChecklistDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DeleteResDto{
-        private Long checklistId;
+        private Long checklistItemId;
         private String message;
 
         public static DeleteResDto success(Long checklistId) {
             return DeleteResDto.builder()
-                    .checklistId(checklistId)
+                    .checklistItemId(checklistId)
                     .message("체크리스트 삭제 완료")
                     .build();
         }

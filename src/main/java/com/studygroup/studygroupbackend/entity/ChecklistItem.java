@@ -5,14 +5,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "checklists")
+@Table(name = "checklistItems")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Checklist extends BaseEntity {
+public class ChecklistItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,23 +31,23 @@ public class Checklist extends BaseEntity {
     @Column
     private LocalDateTime dueDate; //null이 기본값
 
-    private Checklist(Study study, Member creator, String content){
+    private ChecklistItem(Study study, Member creator, String content){
         this(study, creator, content, null);
     }
 
-    private Checklist(Study study, Member creator, String content, LocalDateTime dueDate){
+    private ChecklistItem(Study study, Member creator, String content, LocalDateTime dueDate){
         this.study = study;
         this.creator = creator;
         this.content = content;
         this.dueDate = dueDate;
     }
 
-    public static Checklist of(Study study, Member creator, String content) {
-        return new Checklist(study, creator, content);
+    public static ChecklistItem of(Study study, Member creator, String content) {
+        return new ChecklistItem(study, creator, content);
     }
 
-    public static Checklist of(Study study, Member creator, String content, LocalDateTime dueDate) {
-        return new Checklist(study, creator, content, dueDate);
+    public static ChecklistItem of(Study study, Member creator, String content, LocalDateTime dueDate) {
+        return new ChecklistItem(study, creator, content, dueDate);
     }
 
     public void updateContent(String content) {
