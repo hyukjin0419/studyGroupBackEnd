@@ -1,7 +1,9 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.StudyMemberDto;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberRemoveResponse;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.entity.StudyMember;
@@ -29,7 +31,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
     private final StudyMemberRepository studyMemberRepository;
 
     @Override
-    public StudyMemberDto.InviteResDto inviteMember(Long studyId, Long leaderId, StudyMemberDto.InviteReqDto request) {
+    public StudyMemberInviteResponse inviteMember(Long studyId, Long leaderId, StudyMemberInviteRequest request) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
@@ -46,11 +48,11 @@ public class StudyMemberServiceImpl implements StudyMemberService{
         StudyMember studyMember = StudyMember.of(study, member, StudyRole.Fellow);
         studyMemberRepository.save(studyMember);
 
-        return StudyMemberDto.InviteResDto.fromEntity(studyMember);
+        return StudyMemberInviteResponse.fromEntity(studyMember);
     }
 
     @Override
-    public StudyMemberDto.RemoveResDto removeMember(Long studyId, Long leaderId, Long memberId) {
+    public StudyMemberRemoveResponse removeMember(Long studyId, Long leaderId, Long memberId) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
@@ -65,7 +67,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
 
         studyMemberRepository.delete(studyMember);
 
-        return StudyMemberDto.RemoveResDto.successDelete(studyId, memberId);
+        return StudyMemberRemoveResponse.successDelete(studyId, memberId);
     }
 
     @Override
