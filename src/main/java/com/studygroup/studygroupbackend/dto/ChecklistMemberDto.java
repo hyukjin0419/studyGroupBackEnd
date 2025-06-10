@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.dto;
 
-import com.studygroup.studygroupbackend.entity.ChecklistMember;
+import com.studygroup.studygroupbackend.entity.ChecklistItemAssignment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class ChecklistMemberDto {
         private Long memberId;
         private LocalDateTime assignedAt;
 
-        public static AssignResDto fromEntity(ChecklistMember cm) {
+        public static AssignResDto fromEntity(ChecklistItemAssignment cm) {
             return AssignResDto.builder()
                     .checklistId(cm.getChecklistItem().getId())
                     .memberId(cm.getMember().getId())
@@ -60,7 +60,7 @@ public class ChecklistMemberDto {
         private boolean isCompleted;
         private LocalDateTime completedAt;
 
-        public static ChangeStatusResDto fromEntity(ChecklistMember cm) {
+        public static ChangeStatusResDto fromEntity(ChecklistItemAssignment cm) {
             return ChangeStatusResDto.builder()
                     .checklistId(cm.getChecklistItem().getId())
                     .memberId(cm.getMember().getId())
@@ -87,7 +87,7 @@ public class ChecklistMemberDto {
         private Integer studyOrderIndex;
         private Integer personalOrderIndex;
 
-        public static MemberChecklistResDto fromEntity(ChecklistMember cm) {
+        public static MemberChecklistResDto fromEntity(ChecklistItemAssignment cm) {
             return MemberChecklistResDto.builder()
                     .checklistId(cm.getChecklistItem().getId())
                     .content(cm.getChecklistItem().getContent())
@@ -119,7 +119,7 @@ public class ChecklistMemberDto {
         private Integer studyOrderIndex;
         private Integer personalOrderIndex;
 
-        public static StudyChecklistMemberResDto fromEntity(ChecklistMember cm) {
+        public static StudyChecklistMemberResDto fromEntity(ChecklistItemAssignment cm) {
             return StudyChecklistMemberResDto.builder()
                     .checklistId(cm.getChecklistItem().getId())
                     .content(cm.getChecklistItem().getContent())

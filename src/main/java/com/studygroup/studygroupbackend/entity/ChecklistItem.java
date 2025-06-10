@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "checklistItems")
+@Table(name = "checklist_items")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChecklistItem extends BaseEntity {

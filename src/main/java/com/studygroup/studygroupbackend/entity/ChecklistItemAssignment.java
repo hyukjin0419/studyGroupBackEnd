@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "checklist_members")
+@Table(name = "checklist_item_assignments")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistMember extends BaseEntity{
+public class ChecklistItemAssignment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class ChecklistMember extends BaseEntity{
     @Column(nullable = false)
     private int personalOrderIndex;
 
-    private ChecklistMember(ChecklistItem checklistItem, Member member, Study study, LocalDateTime assignedAt,
+    private ChecklistItemAssignment(ChecklistItem checklistItem, Member member, Study study, LocalDateTime assignedAt,
                             int studyOrderIndex, int personalOrderIndex) {
         this.checklistItem = checklistItem;
         this.member = member;
@@ -48,9 +48,9 @@ public class ChecklistMember extends BaseEntity{
         this.personalOrderIndex = personalOrderIndex;
     }
 
-    public static ChecklistMember assign(ChecklistItem checklistItem, Member member, Study study,
+    public static ChecklistItemAssignment assign(ChecklistItem checklistItem, Member member, Study study,
                                          int studyOrderIndex, int personalOrderIndex) {
-        return new ChecklistMember(
+        return new ChecklistItemAssignment(
                 checklistItem,
                 member,
                 study,
