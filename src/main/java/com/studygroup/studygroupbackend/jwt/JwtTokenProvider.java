@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    @Value("${jwt.secrete}")
+    @Value("${jwt.secret}")
     private String secretKeyString;
 
     private Key secreteKey;
