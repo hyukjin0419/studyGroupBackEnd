@@ -1,6 +1,12 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.ChecklistMemberDto;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.assign.ChecklistItemAssignRequest;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.assign.ChecklistItemAssignResponse;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.changestatus.ChecklistItemChangeStatusRequest;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.changestatus.ChecklistItemChangeStatusResponse;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.detail.MemberChecklistItemDetailResponse;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.detail.StudyChecklistItemDetailResponse;
+import com.studygroup.studygroupbackend.dto.checklistItemAssignment.unassign.ChecklistItemUnassignResponse;
 import com.studygroup.studygroupbackend.entity.ChecklistItem;
 import com.studygroup.studygroupbackend.entity.ChecklistItemAssignment;
 import com.studygroup.studygroupbackend.entity.Member;
@@ -28,7 +34,7 @@ public class ChecklistItemAssignmentServiceImpl implements ChecklistItemAssignme
     private final StudyRepository studyRepository;
 
     @Override
-    public ChecklistMemberDto.AssignResDto assignChecklistItem(ChecklistMemberDto.AssignReqDto request) {
+    public ChecklistItemAssignResponse assignChecklistItem(ChecklistItemAssignRequest request) {
         ChecklistItem checklistItem = checklistItemRepository.findById(request.getChecklistId())
                 .orElseThrow(() -> new EntityNotFoundException("체크리스트가 존재하지 않습니다"));
         Study study = studyRepository.findById(request.getStudyId())
@@ -43,11 +49,11 @@ public class ChecklistItemAssignmentServiceImpl implements ChecklistItemAssignme
 
         ChecklistItemAssignment cm = ChecklistItemAssignment.assign(checklistItem, member, study, studyOrder,personalOrder);
         checklistItemAssignmentRepository.save(cm);
-        return ChecklistMemberDto.AssignResDto.fromEntity(cm);
+        return ChecklistItemAssignResponse.fromEntity(cm);
     }
 
     @Override
-    public ChecklistMemberDto.ChangeStatusResDto changeStatusOfChecklistItem(ChecklistMemberDto.ChangeStatusReqDto request) {
+    public ChecklistItemChangeStatusResponse changeStatusOfChecklistItem(ChecklistItemChangeStatusRequest request) {
         ChecklistItemAssignment cm = checklistItemAssignmentRepository.findByChecklistItemIdAndMemberId(
                         request.getChecklistId(), request.getMemberId())
                 .orElseThrow(() -> new EntityNotFoundException("할당된 체크리스트가 없습니다."));
@@ -55,30 +61,30 @@ public class ChecklistItemAssignmentServiceImpl implements ChecklistItemAssignme
 
         cm.changeStatus();
 
-        return ChecklistMemberDto.ChangeStatusResDto.fromEntity(cm);
+        return ChecklistItemChangeStatusResponse.fromEntity(cm);
     }
 
     @Override
     @Transactional(readOnly = true)//본인 체크리스트 조회용
-    public List<ChecklistMemberDto.MemberChecklistResDto> getChecklistItemByMemberId(Long memberId) {
+    public List<MemberChecklistItemDetailResponse> getChecklistItemByMemberId(Long memberId) {
         List<ChecklistItemAssignment> list = checklistItemAssignmentRepository.findAllByMemberIdOrderByPersonalOrderIndexAsc(memberId);
-        return list.stream().map(ChecklistMemberDto.MemberChecklistResDto::fromEntity).toList();
+        return list.stream().map(MemberChecklistItemDetailResponse::fromEntity).toList();
     }
 
     @Override
     @Transactional(readOnly = true)//스터디별 체크리스트 조회용
-    public List<ChecklistMemberDto.StudyChecklistMemberResDto> getChecklistMembersByStudyId(Long studyId) {
+    public List<StudyChecklistItemDetailResponse> getChecklistMembersByStudyId(Long studyId) {
         List<ChecklistItemAssignment> list = checklistItemAssignmentRepository.findAllByChecklistItem_Study_IdOrderByStudyOrderIndexAsc(studyId);
-        return list.stream().map(ChecklistMemberDto.StudyChecklistMemberResDto::fromEntity).toList();
+        return list.stream().map(StudyChecklistItemDetailResponse::fromEntity).toList();
     }
 
     @Override
-    public ChecklistMemberDto.UnassignResDto unassignChecklistItem(Long checklistId, Long memberId){
+    public ChecklistItemUnassignResponse unassignChecklistItem(Long checklistId, Long memberId){
         ChecklistItemAssignment cm = checklistItemAssignmentRepository.findByChecklistItemIdAndMemberId(
                         checklistId, memberId)
                 .orElseThrow(() -> new EntityNotFoundException("할당된 체크리스트가 없습니다."));
 
-        return ChecklistMemberDto.UnassignResDto.success(checklistId, memberId);
+        return ChecklistItemUnassignResponse.success(checklistId, memberId);
     }
 
     @Override
