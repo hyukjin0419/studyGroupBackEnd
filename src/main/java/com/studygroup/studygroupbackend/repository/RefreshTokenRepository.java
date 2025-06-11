@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.repository;
 
-import com.studygroup.studygroupbackend.entity.RefreshToken;
+import com.studygroup.studygroupbackend.jwt.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

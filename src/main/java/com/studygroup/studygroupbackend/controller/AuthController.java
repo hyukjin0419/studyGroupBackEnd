@@ -4,6 +4,8 @@ import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
+import com.studygroup.studygroupbackend.jwt.dto.RefreshTokenRequest;
+import com.studygroup.studygroupbackend.jwt.dto.RefreshTokenResponse;
 import com.studygroup.studygroupbackend.service.AuthService;
 import com.studygroup.studygroupbackend.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +13,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +40,18 @@ public class AuthController {
     public ResponseEntity<MemberLoginResponse> login(@RequestBody MemberLoginRequest request) {
         MemberLoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
+        RefreshTokenResponse response = authService.reissueAccessToken(request.getRefreshToken());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
+        authService.logout(Long.valueOf(userDetails.getUsername()));
+        return ResponseEntity.ok().build();
     }
 }

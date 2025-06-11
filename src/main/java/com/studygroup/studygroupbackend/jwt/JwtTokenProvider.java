@@ -28,62 +28,72 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKeyString;
 
-    private Key secreteKey;
+    private Key secretKey;
 
     private final long accessTokenValidTime = 1000L * 60 * 30; //30분
     private final long refreshTokenValidTime = 1000L * 60 * 60 * 24 * 7;//7일
 
     @PostConstruct
     protected void init() {
-        this.secreteKey = Keys.hmacShaKeyFor(secretKeyString.getBytes());
+        this.secretKey = Keys.hmacShaKeyFor(secretKeyString.getBytes());
         System.out.println("Loaded JWT_SECRET: " + secretKeyString.substring(0, 8) + "...");
     }
 
-    public String generateAccessToken(String userName, Role role) {
-        Claims claims = Jwts.claims().setSubject(userName);
+    public String generateAccessToken(Long memberId, String userName, Role role) {
+        Claims claims = Jwts.claims().setSubject(memberId.toString());
+        claims.put("userName", userName);
         claims.put("role",role.name());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidTime))
-                .signWith(secreteKey, SignatureAlgorithm.ES256)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public TokenWithExpiry generateRefreshToken(String userName) {
+    public TokenWithExpiry generateRefreshToken(Long memberId) {
         long now = System.currentTimeMillis();
         Date expiry = new Date(now + refreshTokenValidTime);
 
         String token = Jwts.builder()
-                .setSubject(userName)
+                .setSubject(memberId.toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
-                .signWith(secreteKey, SignatureAlgorithm.ES256)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
-        return new TokenWithExpiry(token,
+        return TokenWithExpiry.of(token,
                 expiry.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(secreteKey).build().parseClaimsJwt(token);
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    public String getUserName (String token) {
-        return Jwts.parserBuilder().setSigningKey(secreteKey).build()
+    public Long getMemberId(String token) {
+        String subject = Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+        return Long.parseLong(subject);
+    }
+
+
+    public String getUserName (String token) {
+        return (String) Jwts.parserBuilder().setSigningKey(secretKey).build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userName");
     }
 
     public String getRole(String token) {
-        return (String) Jwts.parserBuilder().setSigningKey(secreteKey).build()
+        return (String) Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role");
