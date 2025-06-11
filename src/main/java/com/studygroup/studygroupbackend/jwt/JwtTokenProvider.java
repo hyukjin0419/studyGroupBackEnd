@@ -34,6 +34,7 @@ public class JwtTokenProvider {
     @PostConstruct
     protected void init() {
         this.secreteKey = Keys.hmacShaKeyFor(secretKeyString.getBytes());
+        System.out.println("Loaded JWT_SECRET: " + secretKeyString.substring(0, 8) + "...");
     }
 
     public String generateAccessToken(String userName, Role role) {
