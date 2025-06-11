@@ -15,4 +15,6 @@ public class MemberLoginResponse {
     private Long id;
     private String userName;
     private Role role;
+    private String accessToken;
+    private String refreshToken;
 }

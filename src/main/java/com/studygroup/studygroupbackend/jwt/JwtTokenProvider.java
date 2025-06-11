@@ -1,6 +1,7 @@
 package com.studygroup.studygroupbackend.jwt;
 
 import com.studygroup.studygroupbackend.entity.Role;
+import com.studygroup.studygroupbackend.jwt.dto.TokenWithExpiry;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -49,13 +51,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(String userName) {
-        return Jwts.builder()
+    public TokenWithExpiry generateRefreshToken(String userName) {
+        long now = System.currentTimeMillis();
+        Date expiry = new Date(now + refreshTokenValidTime);
+
+        String token = Jwts.builder()
                 .setSubject(userName)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
                 .signWith(secreteKey, SignatureAlgorithm.ES256)
                 .compact();
+
+        return new TokenWithExpiry(token,
+                expiry.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
     }
 
     public boolean validateToken(String token) {

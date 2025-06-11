@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class RefreshToken {
 
     @Id
-    private String userName;
+    private Long memberId;
 
     @Column(nullable = false)
     private String token;
@@ -25,8 +25,8 @@ public class RefreshToken {
     private LocalDateTime expiresAt;
 
     @Builder
-    public RefreshToken(String userName, String token, LocalDateTime expiresAt){
-        this.userName = userName;
+    public RefreshToken(Long memberId, String token, LocalDateTime expiresAt){
+        this.memberId = memberId;
         this.token = token;
         this.expiresAt = expiresAt;
     }

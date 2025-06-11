@@ -1,6 +1,5 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.member.MemberDto;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
@@ -14,6 +13,7 @@ import com.studygroup.studygroupbackend.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,28 +26,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-
-
-    @Override
-    @Transactional
-    public MemberLoginResponse login(MemberLoginRequest request) {
-        Member member = memberRepository.findByUserName(request.getUserName())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
-
-        //비밀번호 검증 (단순 비교, 보안 없음)
-        if (!request.getPassword().equals(member.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-        return MemberLoginResponse.builder()
-                .id(member.getId())
-                .userName(member.getUserName())
-                .build();
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public MemberCreateResponse createMember(MemberCreateRequest request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
+
+        String encodedPassword = passwordEncoder.encode(request.getEmail());
+
         Member member = request.toEntity();
 
         memberRepository.save(member);
