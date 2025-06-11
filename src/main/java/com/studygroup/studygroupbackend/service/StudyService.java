@@ -1,14 +1,19 @@
 package com.studygroup.studygroupbackend.service;
 
-import com.studygroup.studygroupbackend.dto.StudyDto;
+import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
+import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
+import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
+import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
 
 import java.util.List;
 
 public interface StudyService {
-    StudyDto.CreateResDto createStudy(StudyDto.CreateReqDto request);
-    StudyDto.DetailResDto getStudyById(Long studyId);
-    List<StudyDto.ListResDto> getAllStudies();
-    StudyDto.UpdateResDto updateStudy(Long studyId, Long leaderId, StudyDto.UpdateReqDto request);
-    StudyDto.DeleteResDto deleteStudy(Long studyId, Long leaderId);
+    StudyCreateResponse createStudy(StudyCreateRequest request);
+    StudyDetailResponse getStudyById(Long studyId);
+    List<StudyListResponse> getAllStudies();
+    StudyDetailResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request);
+    StudyDeleteResponse deleteStudy(Long studyId, Long leaderId);
 
 }
