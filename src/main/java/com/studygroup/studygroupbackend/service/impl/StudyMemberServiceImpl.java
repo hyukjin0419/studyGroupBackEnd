@@ -1,6 +1,9 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.StudyMemberDto;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberRemoveResponse;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.entity.Study;
 import com.studygroup.studygroupbackend.entity.StudyMember;
@@ -15,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,15 +31,14 @@ public class StudyMemberServiceImpl implements StudyMemberService{
     private final StudyMemberRepository studyMemberRepository;
 
     @Override
-    public StudyMemberDto.InviteResDto inviteMember(Long studyId, Long leaderId, StudyMemberDto.InviteReqDto request) {
+    public StudyMemberInviteResponse inviteMember(Long studyId, Long leaderId, StudyMemberInviteRequest request) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
-        if (!study.getLeader().getId().equals(leaderId)) {
-            throw new IllegalStateException("스터디장만 멤버를 초대할 수 있습니다");
-        }
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+                .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
-        Member member = memberRepository.findById(request.getMemberId())
+        Member member = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("멤버를 찾을 수 없습니다."));
 
         if (studyMemberRepository.existsByStudyAndMember(study, member)) {
@@ -43,17 +48,16 @@ public class StudyMemberServiceImpl implements StudyMemberService{
         StudyMember studyMember = StudyMember.of(study, member, StudyRole.Fellow);
         studyMemberRepository.save(studyMember);
 
-        return StudyMemberDto.InviteResDto.fromEntity(studyMember);
+        return StudyMemberInviteResponse.fromEntity(studyMember);
     }
 
     @Override
-    public StudyMemberDto.RemoveResDto removeMember(Long studyId, Long leaderId, Long memberId) {
+    public StudyMemberRemoveResponse removeMember(Long studyId, Long leaderId, Long memberId) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
-        if (!study.getLeader().getId().equals(leaderId)) {
-            throw new IllegalStateException("스터디장만 멤버를 삭제할 수 있습니다");
-        }
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+                .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("멤버를 찾을 수 없습니다."));
@@ -63,6 +67,16 @@ public class StudyMemberServiceImpl implements StudyMemberService{
 
         studyMemberRepository.delete(studyMember);
 
-        return StudyMemberDto.RemoveResDto.successDelete(studyId, memberId);
+        return StudyMemberRemoveResponse.successDelete(studyId, memberId);
+    }
+
+    @Override
+    public List<StudyListResponse> getStudiesByMemberId(Long memberId) {
+        List<StudyMember> memberships = studyMemberRepository.findByMemberId(memberId);
+
+        return memberships.stream()
+                .map(sm -> StudyListResponse.fromEntity(sm.getStudy()))
+                .collect(Collectors.toList());
     }
 }
+

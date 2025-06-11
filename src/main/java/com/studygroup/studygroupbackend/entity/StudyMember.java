@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "study_members")
 @Getter
@@ -26,17 +28,26 @@ public class StudyMember extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StudyRole studyRole;
 
-    private StudyMember(Study study, Member member, StudyRole studyRole) {
+    private LocalDateTime joinedAt;
+
+    private LocalDateTime leftAt;
+
+    private StudyMember(Study study, Member member, StudyRole studyRole, LocalDateTime joinedAt) {
         this.study = study;
         this.member = member;
         this.studyRole = studyRole;
+        this.joinedAt = joinedAt;
     }
 
     public static StudyMember of(Study study, Member member, StudyRole role) {
-        return new StudyMember(study, member, role);
+        return new StudyMember(study, member, role, LocalDateTime.now());
     }
 
     public void changeRole(StudyRole newRole) {
         this.studyRole = newRole;
+    }
+
+    public void leaveStudy(){
+        this.leftAt = LocalDateTime.now();
     }
 }

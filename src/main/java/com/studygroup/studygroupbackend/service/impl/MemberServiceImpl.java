@@ -1,14 +1,24 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.MemberDto;
+import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
+import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
+import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
+import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
+import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
+import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
+import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
 import com.studygroup.studygroupbackend.entity.Member;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,34 +26,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-
-
-    @Override
-    @Transactional
-    public MemberDto.LoginResDto login(MemberDto.LoginReqDto request) {
-        Member member = memberRepository.findByUserName(request.getUserName())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
-
-        //비밀번호 검증 (단순 비교, 보안 없음)
-        if (!request.getPassword().equals(member.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-        return MemberDto.LoginResDto.builder()
-                .id(member.getId())
-                .userName(member.getUserName())
-                .build();
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public MemberDto.CreateResDto creatMember(MemberDto.CreateReqDto request) {
+    public MemberCreateResponse createMember(MemberCreateRequest request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
+
+        String encodedPassword = passwordEncoder.encode(request.getEmail());
+
         Member member = request.toEntity();
 
         memberRepository.save(member);
 
-        return MemberDto.CreateResDto
-                .builder()
+        return MemberCreateResponse.builder()
                 .id(member.getId())
                 .build();
     }
@@ -56,32 +52,37 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto.DetailResDto getMemberById(Long id) {
+    public MemberDetailResponse getMemberById(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
-        return MemberDto.DetailResDto.fromEntity(member);
+        return MemberDetailResponse.fromEntity(member);
     }
 
     @Override
     @Transactional
-    public MemberDto.UpdateResDto updateMember(MemberDto.UpdateReqDto request) {
+    public MemberDetailResponse updateMember(MemberUpdateRequest request) {
         Member member = memberRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
         member.updateProfile(request.getUserName(),request.getEmail());
 
-        return MemberDto.UpdateResDto.fromEntity(member);
+        return MemberDetailResponse.fromEntity(member);
     }
 
     @Override
     @Transactional
-    public MemberDto.DeleteResDto deleteMember(Long id) {
+    public MemberDeleteResponse deleteMember(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
 
         memberRepository.delete(member);
 
-        return MemberDto.DeleteResDto.success();
+        return MemberDeleteResponse.success();
     }
 
-
+    @Override
+    public List<MemberDetailResponse> getAllMembers() {
+        return memberRepository.findAll().stream()
+                .map(MemberDetailResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

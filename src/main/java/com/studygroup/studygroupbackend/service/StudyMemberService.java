@@ -1,8 +1,14 @@
 package com.studygroup.studygroupbackend.service;
 
-import com.studygroup.studygroupbackend.dto.StudyMemberDto;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
+import com.studygroup.studygroupbackend.dto.studymember.StudyMemberRemoveResponse;
+
+import java.util.List;
 
 public interface StudyMemberService {
-    StudyMemberDto.InviteResDto inviteMember(Long studyId, Long leaderId, StudyMemberDto.InviteReqDto request);
-    StudyMemberDto.RemoveResDto removeMember(Long studyId, Long leaderId, Long memberId);
+    StudyMemberInviteResponse inviteMember(Long studyId, Long leaderId, StudyMemberInviteRequest request);
+    StudyMemberRemoveResponse removeMember(Long studyId, Long leaderId, Long memberId);
+    List<StudyListResponse> getStudiesByMemberId(Long memberId);
 }

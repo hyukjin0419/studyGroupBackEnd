@@ -21,14 +21,19 @@ public class Study extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leader_id",nullable = false)
-    private Member leader;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "leader_id",nullable = false)
+//    private Member leader;
 
-    private Study(String name, String description, Member leader) {
+//    private Study(String name, String description, Member leader) {
+//        this.name = name;
+//        this.description = description;
+//        this.leader = leader;
+//    }
+
+    private Study(String name, String description) {
         this.name = name;
         this.description = description;
-        this.leader = leader;
     }
 
     public void updateStudyInfo(String name, String description) {
@@ -36,12 +41,15 @@ public class Study extends BaseEntity {
         this.description = description;
     }
 
-    public void changeLeader (Member newLeader) {
-        this.leader = newLeader;
-    }
+//    public void changeLeader (Member newLeader) {
+//        this.leader = newLeader;
+//    }
 
-    public static Study of(String name, String description, Member leader) {
-        return new Study(name, description, leader);
+//    public static Study of(String name, String description, Member leader) {
+//        return new Study(name, description, leader);
+//    }
+    public static Study of(String name, String description) {
+        return new Study(name, description);
     }
 
 }
