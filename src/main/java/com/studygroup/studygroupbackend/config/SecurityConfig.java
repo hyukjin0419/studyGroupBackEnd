@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.config;
 
+import com.studygroup.studygroupbackend.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
