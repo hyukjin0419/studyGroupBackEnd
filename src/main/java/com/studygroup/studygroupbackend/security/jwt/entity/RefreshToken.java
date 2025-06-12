@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.jwt.entity;
+package com.studygroup.studygroupbackend.security.jwt.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

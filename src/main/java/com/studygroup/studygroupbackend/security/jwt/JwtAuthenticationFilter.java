@@ -1,6 +1,5 @@
-package com.studygroup.studygroupbackend.jwt;
+package com.studygroup.studygroupbackend.security.jwt;
 
-import com.studygroup.studygroupbackend.config.SecurityConfig;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

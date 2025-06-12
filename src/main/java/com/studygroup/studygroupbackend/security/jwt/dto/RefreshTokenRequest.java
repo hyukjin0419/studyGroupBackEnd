@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.jwt.dto;
+package com.studygroup.studygroupbackend.security.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

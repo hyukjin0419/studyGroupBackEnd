@@ -1,7 +1,7 @@
-package com.studygroup.studygroupbackend.jwt;
+package com.studygroup.studygroupbackend.security.jwt;
 
 import com.studygroup.studygroupbackend.entity.Role;
-import com.studygroup.studygroupbackend.jwt.dto.TokenWithExpiry;
+import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -98,11 +98,12 @@ public class JwtTokenProvider {
                 .getBody()
                 .get("role");
     }
-
+//--------------------------------CustomUser 객체 사용 해야 합니다--------------------------------//
     public Authentication getAuthentication(String token) {
+        Long memberId = getMemberId(token);
         String username = getUserName(token);
         String role = getRole(token);
-        User userDetails = new User(username, "", List.of(() -> "ROLE_"+role));
+        User userDetails = new User(memberId.toString(), "", List.of(() -> "ROLE_"+role));
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

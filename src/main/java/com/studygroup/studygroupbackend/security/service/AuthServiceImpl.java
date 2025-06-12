@@ -1,19 +1,21 @@
-package com.studygroup.studygroupbackend.service.impl;
+package com.studygroup.studygroupbackend.security.service;
 
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
+import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
+import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.entity.Member;
-import com.studygroup.studygroupbackend.jwt.entity.RefreshToken;
-import com.studygroup.studygroupbackend.jwt.JwtTokenProvider;
-import com.studygroup.studygroupbackend.jwt.dto.RefreshTokenResponse;
-import com.studygroup.studygroupbackend.jwt.dto.TokenWithExpiry;
+import com.studygroup.studygroupbackend.security.jwt.entity.RefreshToken;
+import com.studygroup.studygroupbackend.security.jwt.JwtTokenProvider;
+import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenResponse;
+import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
-import com.studygroup.studygroupbackend.repository.RefreshTokenRepository;
-import com.studygroup.studygroupbackend.service.AuthService;
+import com.studygroup.studygroupbackend.security.repository.RefreshTokenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,30 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    @Override
+    @Transactional
+    public MemberCreateResponse createMember(MemberCreateRequest request) {
+        validateDuplicateMember(request.getUserName(), request.getEmail());
+
+        String encodedPassword = passwordEncoder.encode(request.getEmail());
+
+        Member member = request.toEntity();
+
+        memberRepository.save(member);
+
+        return MemberCreateResponse.builder()
+                .id(member.getId())
+                .build();
+    }
+
+    private void validateDuplicateMember(String userName, String email) {
+        boolean exists = memberRepository.existsByUserNameOrEmail(userName, email);
+        if (exists) {
+            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+        }
+    }
+
 
     @Override
     public MemberLoginResponse login(MemberLoginRequest request) {

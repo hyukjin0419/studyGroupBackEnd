@@ -1,16 +1,14 @@
-package com.studygroup.studygroupbackend.controller;
+package com.studygroup.studygroupbackend.security.controller;
 
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
-import com.studygroup.studygroupbackend.jwt.dto.RefreshTokenRequest;
-import com.studygroup.studygroupbackend.jwt.dto.RefreshTokenResponse;
-import com.studygroup.studygroupbackend.service.AuthService;
-import com.studygroup.studygroupbackend.service.MemberService;
+import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenRequest;
+import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenResponse;
+import com.studygroup.studygroupbackend.security.service.AuthService;;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,13 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final MemberService memberService;
     private final AuthService authService;
 
     @Operation(summary = "회원가입 API")
     @PostMapping("/create_member")
     public ResponseEntity<MemberCreateResponse> createMember(@RequestBody MemberCreateRequest request) {
-        return ResponseEntity.ok(memberService.createMember(request));
+        return ResponseEntity.ok(authService.createMember(request));
     }
 
     @PostMapping("/login")
