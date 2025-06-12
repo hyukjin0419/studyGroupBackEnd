@@ -7,10 +7,10 @@ import com.studygroup.studygroupbackend.dto.checklistItemAssignment.changestatus
 import com.studygroup.studygroupbackend.dto.checklistItemAssignment.detail.MemberChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.dto.checklistItemAssignment.detail.StudyChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.dto.checklistItemAssignment.unassign.ChecklistItemUnassignResponse;
-import com.studygroup.studygroupbackend.entity.ChecklistItem;
-import com.studygroup.studygroupbackend.entity.ChecklistItemAssignment;
-import com.studygroup.studygroupbackend.entity.Member;
-import com.studygroup.studygroupbackend.entity.Study;
+import com.studygroup.studygroupbackend.domain.ChecklistItem;
+import com.studygroup.studygroupbackend.domain.ChecklistItemAssignment;
+import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.repository.ChecklistItemAssignmentRepository;
 import com.studygroup.studygroupbackend.repository.ChecklistItemRepository;
 import com.studygroup.studygroupbackend.repository.MemberRepository;

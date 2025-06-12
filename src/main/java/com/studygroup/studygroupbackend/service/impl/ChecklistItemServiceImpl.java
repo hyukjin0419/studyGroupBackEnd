@@ -5,9 +5,9 @@ import com.studygroup.studygroupbackend.dto.checklistitem.create.ChecklistItemCr
 import com.studygroup.studygroupbackend.dto.checklistitem.delete.ChecklistItemDeleteResponse;
 import com.studygroup.studygroupbackend.dto.checklistitem.detail.ChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.dto.checklistitem.update.ChecklistItemUpdateRequest;
-import com.studygroup.studygroupbackend.entity.ChecklistItem;
-import com.studygroup.studygroupbackend.entity.Member;
-import com.studygroup.studygroupbackend.entity.Study;
+import com.studygroup.studygroupbackend.domain.ChecklistItem;
+import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.repository.ChecklistItemRepository;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyRepository;

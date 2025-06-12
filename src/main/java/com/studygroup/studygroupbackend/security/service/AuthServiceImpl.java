@@ -4,7 +4,7 @@ import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
-import com.studygroup.studygroupbackend.entity.Member;
+import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.security.jwt.entity.RefreshToken;
 import com.studygroup.studygroupbackend.security.jwt.JwtTokenProvider;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenResponse;

@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.repository;
 
-import com.studygroup.studygroupbackend.entity.Member;
+import com.studygroup.studygroupbackend.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

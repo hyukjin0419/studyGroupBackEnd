@@ -1,7 +1,7 @@
 package com.studygroup.studygroupbackend.dto.studymember;
 
 import com.studygroup.studygroupbackend.dto.BaseResDto;
-import com.studygroup.studygroupbackend.entity.StudyMember;
+import com.studygroup.studygroupbackend.domain.StudyMember;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

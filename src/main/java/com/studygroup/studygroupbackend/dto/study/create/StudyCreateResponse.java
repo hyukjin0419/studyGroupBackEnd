@@ -2,7 +2,7 @@ package com.studygroup.studygroupbackend.dto.study.create;
 
 import com.studygroup.studygroupbackend.dto.BaseResDto;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
-import com.studygroup.studygroupbackend.entity.Study;
+import com.studygroup.studygroupbackend.domain.Study;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

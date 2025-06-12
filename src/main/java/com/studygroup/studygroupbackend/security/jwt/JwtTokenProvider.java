@@ -1,6 +1,7 @@
 package com.studygroup.studygroupbackend.security.jwt;
 
-import com.studygroup.studygroupbackend.entity.Role;
+import com.studygroup.studygroupbackend.domain.Role;
+import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -103,7 +104,7 @@ public class JwtTokenProvider {
         Long memberId = getMemberId(token);
         String username = getUserName(token);
         String role = getRole(token);
-        User userDetails = new User(memberId.toString(), "", List.of(() -> "ROLE_"+role));
+        CustomUserDetails userDetails = CustomUserDetails.ofJwt(memberId, username, role);
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

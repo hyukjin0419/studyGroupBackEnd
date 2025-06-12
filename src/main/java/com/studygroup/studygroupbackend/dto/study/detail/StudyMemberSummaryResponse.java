@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.dto.study.detail;
 
-import com.studygroup.studygroupbackend.entity.StudyMember;
+import com.studygroup.studygroupbackend.domain.StudyMember;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

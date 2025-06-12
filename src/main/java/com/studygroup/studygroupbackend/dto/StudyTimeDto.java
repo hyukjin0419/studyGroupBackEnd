@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.dto;
 
-import com.studygroup.studygroupbackend.entity.StudyTime;
+import com.studygroup.studygroupbackend.domain.StudyTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

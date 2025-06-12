@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.entity;
+package com.studygroup.studygroupbackend.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
