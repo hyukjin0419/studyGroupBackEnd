@@ -26,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Override
     public MemberCreateResponse createMember(MemberCreateRequest request) {
@@ -80,8 +81,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(Long memberId) {
+    public void logout(String accessToken, Long memberId) {
         refreshTokenRepository.deleteByMemberId(memberId);
+
+        long expiration = jwtTokenProvider.getRemainingExpiration(accessToken);
+        tokenBlacklistService.blacklistToken(accessToken,expiration);
     }
 
     @Override

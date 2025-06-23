@@ -14,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Auth", description = "로그인/회원가입 관련 API")
 @RestController
@@ -45,7 +42,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/reissue/access_token")
+    @PostMapping("/reissue/refresh_token")
     public ResponseEntity<RefreshTokenResponse> reissueRefreshToken(@RequestBody RefreshTokenRequest request) {
         RefreshTokenResponse response = authService.reissueRefreshToken(request.getRefreshToken());
         return ResponseEntity.ok(response);
@@ -53,8 +50,12 @@ public class AuthController {
 
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
-        authService.logout(Long.valueOf(userDetails.getUsername()));
+    public ResponseEntity<Void> logout(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestHeader("Authorization") String authorizationHeader) {
+
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+        authService.logout(accessToken, Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok().build();
     }
 
