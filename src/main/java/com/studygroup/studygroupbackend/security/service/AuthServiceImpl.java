@@ -5,7 +5,7 @@ import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.domain.Member;
-import com.studygroup.studygroupbackend.security.jwt.entity.RefreshToken;
+import com.studygroup.studygroupbackend.security.jwt.domain.RefreshToken;
 import com.studygroup.studygroupbackend.security.jwt.JwtTokenProvider;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenResponse;
 import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
@@ -27,13 +28,12 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
-    @Transactional
     public MemberCreateResponse createMember(MemberCreateRequest request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
 
         String encodedPassword = passwordEncoder.encode(request.getEmail());
 
-        Member member = request.toEntity();
+        Member member = request.toEntity(encodedPassword);
 
         memberRepository.save(member);
 
@@ -80,32 +80,66 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public void logout(Long memberId) {
+        refreshTokenRepository.deleteByMemberId(memberId);
+    }
+
+    @Override
     public RefreshTokenResponse reissueAccessToken(String refreshToken) {
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            throw new IllegalArgumentException("만료된 리프레시 토큰입니다.");
-        }
-
+        validateRefreshToken(refreshToken);
         Long memberId = jwtTokenProvider.getMemberId(refreshToken);
-
-        RefreshToken savedToken = refreshTokenRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("저장된 리프레시 토큰이 없습니다."));
-
-        if(!savedToken.getToken().equals(refreshToken)){
-            throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
-        }
-
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("회원 없음"));
 
-        String newAccessToken = jwtTokenProvider.generateAccessToken(memberId,member.getUserName(),member.getRole());
+        String newAccessToken = jwtTokenProvider.generateAccessToken(memberId, member.getUserName(), member.getRole());
 
-        return RefreshTokenResponse.builder().
-                accessToken(newAccessToken)
+        return RefreshTokenResponse.builder()
+                .accessToken(newAccessToken)
                 .build();
     }
 
     @Override
-    public void logout(Long memberId) {
-        refreshTokenRepository.deleteByMemberId(memberId);
+    public RefreshTokenResponse reissueRefreshToken(String refreshToken) {
+        validateRefreshToken(refreshToken);
+        Long memberId = jwtTokenProvider.getMemberId(refreshToken);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 없음"));
+
+        RefreshToken oldToken = refreshTokenRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("기존 토큰 없음"));
+
+        oldToken.expire();
+
+        TokenWithExpiry newRefresh = jwtTokenProvider.generateRefreshToken(memberId);
+        RefreshToken newRefreshEntity = RefreshToken.builder()
+                .memberId(memberId)
+                .token(newRefresh.getToken())
+                .expiresAt(newRefresh.getExpiresAt())
+                .build();
+
+        refreshTokenRepository.save(newRefreshEntity);
+
+        return RefreshTokenResponse.builder()
+                .accessToken(jwtTokenProvider.generateAccessToken(memberId, member.getUserName(), member.getRole()))
+                .refreshToken(newRefresh.getToken())
+                .build();
+    }
+
+    private void validateRefreshToken(String refreshToken) {
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            throw new IllegalArgumentException("유효하지 않거나 만료된 토큰입니다.");
+        }
+
+        Long memberId = jwtTokenProvider.getMemberId(refreshToken);
+        RefreshToken tokenEntity = refreshTokenRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("토큰 엔티티 없음"));
+
+        if (!tokenEntity.getToken().equals(refreshToken)) {
+            throw new IllegalArgumentException("일치하지 않는 토큰입니다");
+        }
+
+        if (tokenEntity.isExpired()) {
+            throw new IllegalArgumentException("이미 만료된 토큰입니다.");
+        }
     }
 }

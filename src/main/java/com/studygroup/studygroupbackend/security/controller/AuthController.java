@@ -39,9 +39,15 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
+    @PostMapping("/reissue/access_token")
+    public ResponseEntity<RefreshTokenResponse> reissueAccessToken(@RequestBody RefreshTokenRequest request) {
         RefreshTokenResponse response = authService.reissueAccessToken(request.getRefreshToken());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reissue/access_token")
+    public ResponseEntity<RefreshTokenResponse> reissueRefreshToken(@RequestBody RefreshTokenRequest request) {
+        RefreshTokenResponse response = authService.reissueRefreshToken(request.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
@@ -51,4 +57,6 @@ public class AuthController {
         authService.logout(Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok().build();
     }
+
+
 }

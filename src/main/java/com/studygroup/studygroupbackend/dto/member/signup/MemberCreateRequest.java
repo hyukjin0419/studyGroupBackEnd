@@ -18,7 +18,7 @@ public class MemberCreateRequest {
     private String password;
     private String email;
 
-    public Member toEntity(){
-        return Member.of(userName, password, email);
+    public Member toEntity(String encodedPassword){
+        return Member.of(userName, encodedPassword, email);
     }
 }
