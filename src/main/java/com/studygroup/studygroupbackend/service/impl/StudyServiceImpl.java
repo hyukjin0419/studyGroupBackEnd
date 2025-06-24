@@ -7,10 +7,10 @@ import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
-import com.studygroup.studygroupbackend.entity.Member;
-import com.studygroup.studygroupbackend.entity.Study;
-import com.studygroup.studygroupbackend.entity.StudyMember;
-import com.studygroup.studygroupbackend.entity.StudyRole;
+import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.domain.Study;
+import com.studygroup.studygroupbackend.domain.StudyMember;
+import com.studygroup.studygroupbackend.domain.StudyRole;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyRepository;
@@ -41,7 +41,7 @@ public class StudyServiceImpl implements StudyService {
         Study study = Study.of(request.getName(),request.getDescription());
         studyRepository.save(study);
 
-        StudyMember leaderMember = StudyMember.of(study, leader, StudyRole.Leader);
+        StudyMember leaderMember = StudyMember.of(study, leader, StudyRole.LEADER);
         studyMemberRepository.save(leaderMember);
 
         StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
@@ -85,7 +85,7 @@ public class StudyServiceImpl implements StudyService {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
-        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
         StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
@@ -101,7 +101,7 @@ public class StudyServiceImpl implements StudyService {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
-        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
         studyMemberRepository.deleteByStudy(study);

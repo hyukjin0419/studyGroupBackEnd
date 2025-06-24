@@ -1,13 +1,5 @@
 package com.studygroup.studygroupbackend.dto.member;
 
-import com.studygroup.studygroupbackend.dto.BaseResDto;
-import com.studygroup.studygroupbackend.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
 public class MemberDto {
 
 

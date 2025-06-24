@@ -1,8 +1,6 @@
-package com.studygroup.studygroupbackend.jwt.entity;
+package com.studygroup.studygroupbackend.security.jwt.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
 
-    @Id
-    private Long memberId;
+    @Id @GeneratedValue
+    private Long id;
 
     @Column(nullable = false)
+    private Long memberId;
+
+    @Column(nullable = false,unique = true)
     private String token;
+
+    @Column(nullable = false)
+    private boolean expired = false;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
@@ -29,10 +36,22 @@ public class RefreshToken {
         this.memberId = memberId;
         this.token = token;
         this.expiresAt = expiresAt;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public void updateToken(String newToken, LocalDateTime newExpiry) {
         this.token = newToken;
         this.expiresAt = newExpiry;
+        this.expired = false;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void expire() {
+        this.expired = true;
     }
 }

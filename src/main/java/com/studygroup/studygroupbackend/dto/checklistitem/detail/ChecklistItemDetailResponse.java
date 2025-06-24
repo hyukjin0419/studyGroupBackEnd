@@ -1,7 +1,7 @@
 package com.studygroup.studygroupbackend.dto.checklistitem.detail;
 
 import com.studygroup.studygroupbackend.dto.BaseResDto;
-import com.studygroup.studygroupbackend.entity.ChecklistItem;
+import com.studygroup.studygroupbackend.domain.ChecklistItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

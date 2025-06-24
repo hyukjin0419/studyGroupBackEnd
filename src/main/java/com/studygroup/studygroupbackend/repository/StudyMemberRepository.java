@@ -1,9 +1,9 @@
 package com.studygroup.studygroupbackend.repository;
 
-import com.studygroup.studygroupbackend.entity.Member;
-import com.studygroup.studygroupbackend.entity.Study;
-import com.studygroup.studygroupbackend.entity.StudyMember;
-import com.studygroup.studygroupbackend.entity.StudyRole;
+import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.domain.Study;
+import com.studygroup.studygroupbackend.domain.StudyMember;
+import com.studygroup.studygroupbackend.domain.StudyRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

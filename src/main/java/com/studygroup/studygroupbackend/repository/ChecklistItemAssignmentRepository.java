@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.repository;
 
-import com.studygroup.studygroupbackend.entity.ChecklistItemAssignment;
+import com.studygroup.studygroupbackend.domain.ChecklistItemAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

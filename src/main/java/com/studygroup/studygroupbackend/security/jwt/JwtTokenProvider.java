@@ -1,7 +1,9 @@
-package com.studygroup.studygroupbackend.jwt;
+package com.studygroup.studygroupbackend.security.jwt;
 
-import com.studygroup.studygroupbackend.entity.Role;
-import com.studygroup.studygroupbackend.jwt.dto.TokenWithExpiry;
+import com.studygroup.studygroupbackend.domain.Role;
+import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
+import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
+import com.studygroup.studygroupbackend.security.service.TokenBlacklistService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +27,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
+
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Value("${jwt.secret}")
     private String secretKeyString;
@@ -69,6 +74,10 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
+            if (tokenBlacklistService.isBlacklisted(token)) {
+                return false;
+            }
+
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
@@ -99,10 +108,23 @@ public class JwtTokenProvider {
                 .get("role");
     }
 
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+    public long getRemainingExpiration(String token) {
+        Claims claims = getClaims(token);
+        return claims.getExpiration().toInstant().getEpochSecond() - Instant.now().getEpochSecond();
+    }
+//--------------------------------CustomUser 객체 사용 해야 합니다--------------------------------//
     public Authentication getAuthentication(String token) {
+        Long memberId = getMemberId(token);
         String username = getUserName(token);
         String role = getRole(token);
-        User userDetails = new User(username, "", List.of(() -> "ROLE_"+role));
+        CustomUserDetails userDetails = CustomUserDetails.ofJwt(memberId, username, role);
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

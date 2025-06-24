@@ -11,7 +11,6 @@ import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
 import java.util.List;
 
 public interface MemberService {
-    MemberCreateResponse createMember(MemberCreateRequest request);
     MemberDetailResponse getMemberById(Long id);
     MemberDetailResponse updateMember(MemberUpdateRequest request);
     MemberDeleteResponse deleteMember(Long id);

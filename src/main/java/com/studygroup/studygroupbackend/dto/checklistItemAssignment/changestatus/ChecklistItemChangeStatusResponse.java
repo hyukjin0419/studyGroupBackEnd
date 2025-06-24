@@ -1,7 +1,7 @@
 package com.studygroup.studygroupbackend.dto.checklistItemAssignment.changestatus;
 
 import com.studygroup.studygroupbackend.dto.BaseResDto;
-import com.studygroup.studygroupbackend.entity.ChecklistItemAssignment;
+import com.studygroup.studygroupbackend.domain.ChecklistItemAssignment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
