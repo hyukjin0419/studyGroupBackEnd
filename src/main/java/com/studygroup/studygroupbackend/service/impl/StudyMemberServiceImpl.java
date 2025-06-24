@@ -35,7 +35,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
-        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
         Member member = memberRepository.findByEmail(request.getEmail())
@@ -45,7 +45,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
             throw new IllegalStateException("이미 스터디에 가입된 멤버입니다.");
         }
 
-        StudyMember studyMember = StudyMember.of(study, member, StudyRole.Fellow);
+        StudyMember studyMember = StudyMember.of(study, member, StudyRole.FELLOW);
         studyMemberRepository.save(studyMember);
 
         return StudyMemberInviteResponse.fromEntity(studyMember);
@@ -56,7 +56,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
-        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.Leader)
+        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
         Member member = memberRepository.findById(memberId)
