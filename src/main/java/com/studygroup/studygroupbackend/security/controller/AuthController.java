@@ -42,11 +42,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/reissue/refresh_token")
-    public ResponseEntity<RefreshTokenResponse> reissueRefreshToken(@RequestBody RefreshTokenRequest request) {
-        RefreshTokenResponse response = authService.reissueRefreshToken(request.getRefreshToken());
-        return ResponseEntity.ok(response);
-    }
+//
 
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")

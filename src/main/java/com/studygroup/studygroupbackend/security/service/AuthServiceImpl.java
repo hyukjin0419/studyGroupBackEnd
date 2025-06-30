@@ -102,32 +102,32 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    @Override
-    public RefreshTokenResponse reissueRefreshToken(String refreshToken) {
-        validateRefreshToken(refreshToken);
-        Long memberId = jwtTokenProvider.getMemberId(refreshToken);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 없음"));
-
-        RefreshToken oldToken = refreshTokenRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("기존 토큰 없음"));
-
-        oldToken.expire();
-
-        TokenWithExpiry newRefresh = jwtTokenProvider.generateRefreshToken(memberId);
-        RefreshToken newRefreshEntity = RefreshToken.builder()
-                .memberId(memberId)
-                .token(newRefresh.getToken())
-                .expiresAt(newRefresh.getExpiresAt())
-                .build();
-
-        refreshTokenRepository.save(newRefreshEntity);
-
-        return RefreshTokenResponse.builder()
-                .accessToken(jwtTokenProvider.generateAccessToken(memberId, member.getUserName(), member.getRole()))
-                .refreshToken(newRefresh.getToken())
-                .build();
-    }
+//    @Override
+//    public RefreshTokenResponse reissueRefreshToken(String refreshToken) {
+//        validateRefreshToken(refreshToken);
+//        Long memberId = jwtTokenProvider.getMemberId(refreshToken);
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new EntityNotFoundException("회원 없음"));
+//
+//        RefreshToken oldToken = refreshTokenRepository.findByMemberId(memberId)
+//                .orElseThrow(() -> new EntityNotFoundException("기존 토큰 없음"));
+//
+//        oldToken.expire();
+//
+//        TokenWithExpiry newRefresh = jwtTokenProvider.generateRefreshToken(memberId);
+//        RefreshToken newRefreshEntity = RefreshToken.builder()
+//                .memberId(memberId)
+//                .token(newRefresh.getToken())
+//                .expiresAt(newRefresh.getExpiresAt())
+//                .build();
+//
+//        refreshTokenRepository.save(newRefreshEntity);
+//
+//        return RefreshTokenResponse.builder()
+//                .accessToken(jwtTokenProvider.generateAccessToken(memberId, member.getUserName(), member.getRole()))
+//                .refreshToken(newRefresh.getToken())
+//                .build();
+//    }
 
     private void validateRefreshToken(String refreshToken) {
         if (!jwtTokenProvider.validateToken(refreshToken)) {

@@ -28,19 +28,23 @@ public class StudyMember extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StudyRole studyRole;
 
+    @Column(nullable = false)
+    private Integer personalOrderIndex;
+
     private LocalDateTime joinedAt;
 
     private LocalDateTime leftAt;
 
-    private StudyMember(Study study, Member member, StudyRole studyRole, LocalDateTime joinedAt) {
+    private StudyMember(Study study, Member member, StudyRole studyRole, Integer personalOrderIndex, LocalDateTime joinedAt) {
         this.study = study;
         this.member = member;
+        this.personalOrderIndex = personalOrderIndex;
         this.studyRole = studyRole;
         this.joinedAt = joinedAt;
     }
 
-    public static StudyMember of(Study study, Member member, StudyRole role) {
-        return new StudyMember(study, member, role, LocalDateTime.now());
+    public static StudyMember of(Study study, Member member, StudyRole role, Integer personalOrderIndex) {
+        return new StudyMember(study, member, role, personalOrderIndex, LocalDateTime.now());
     }
 
     public void changeRole(StudyRole newRole) {

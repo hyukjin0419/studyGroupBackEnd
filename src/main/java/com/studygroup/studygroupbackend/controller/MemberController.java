@@ -7,13 +7,19 @@ import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
+import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
+import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateListRequest;
+import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
+import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.MemberService;
 import com.studygroup.studygroupbackend.service.StudyMemberService;
+import com.studygroup.studygroupbackend.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,17 +28,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
+//@PreAuthorize("hasRole('ADMIN')")
 public class MemberController {
     private final MemberService memberService;
-    private final StudyMemberService studyMemberService;
-
-
-
-//    @Operation(summary = "로그인 API")
-//    @PostMapping("/login")
-//    public ResponseEntity<MemberLoginResponse> login(@RequestBody MemberLoginRequest request) {
-//        return ResponseEntity.ok(memberService.login(request));
-//    }
+    private final StudyService studyService;
 
     @Operation(summary = "회원 조회 API")
     @GetMapping("/{id}")
@@ -41,9 +40,9 @@ public class MemberController {
     }
 
     @Operation(summary = "회원 업데이트 API")
-    @PostMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
-    public ResponseEntity<MemberDetailResponse> updateMember(@RequestBody MemberUpdateRequest request) {
-        return ResponseEntity.ok(memberService.updateMember(request));
+    @PostMapping("/{id}")
+    public ResponseEntity<MemberDetailResponse> updateMember(@PathVariable Long memberId, @RequestBody MemberUpdateRequest request) {
+        return ResponseEntity.ok(memberService.updateMember(memberId, request));
     }
 
     @Operation(summary = "회원 삭제 API")
@@ -58,9 +57,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getAllMembers());
     }
 
+    @Operation(summary = "회원 아이디로 스터디 목록 조회 API")
     @GetMapping("/{memberId}/studies")
     public ResponseEntity<List<StudyListResponse>> getStudiesByMemberId(@PathVariable Long memberId) {
-        return ResponseEntity.ok(studyMemberService.getStudiesByMemberId(memberId));
+        return ResponseEntity.ok(studyService.getStudiesByMemberId(memberId));
     }
 }
 

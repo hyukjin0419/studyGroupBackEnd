@@ -3,9 +3,11 @@ package com.studygroup.studygroupbackend.service.impl;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
 import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
+import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateRequest;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.domain.Study;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,23 +37,29 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyCreateResponse createStudy(StudyCreateRequest request) {
-        Member leader = memberRepository.findById(request.getLeaderId())
+    public StudyCreateResponse createStudy(Long leaderId, StudyCreateRequest request) {
+        Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디 장을 찾을 수 없습니다."));
 
         Study study = Study.of(request.getName(),request.getDescription());
         studyRepository.save(study);
 
-        StudyMember leaderMember = StudyMember.of(study, leader, StudyRole.LEADER);
+        Integer maxPersonalOrderIndex = studyMemberRepository
+                .findMaxPersonalOrderIndexByMemberId(leader.getId())
+                .orElse(-1);
+
+
+        StudyMember leaderMember = StudyMember.of(
+                study,
+                leader,
+                StudyRole.LEADER,
+                maxPersonalOrderIndex+1
+        );
+
         studyMemberRepository.save(leaderMember);
 
         StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
 
-        /*
-        여기서 memberList넘길건지? -> 화면 생성 후 바로 상세페이지로 들어갈 것이면 필요함
-        +
-        팀 만들때 초대 가능하면 필요함 -> qr로 하는거면 굳이..?
-        */
         return StudyCreateResponse.fromEntity(study, leaderDto);
     }
 
@@ -108,5 +117,31 @@ public class StudyServiceImpl implements StudyService {
         studyRepository.delete(study);
 
         return StudyDeleteResponse.successDelete();
+    }
+
+
+    @Override
+    public List<StudyListResponse> getStudiesByMemberId(Long memberId) {
+        List<StudyMember> studyMembers = studyMemberRepository.findByMemberId(memberId);
+
+        return studyMembers.stream()
+                .map(sm -> StudyListResponse.fromEntity(sm.getStudy()))
+                .toList();
+    }
+
+    @Override
+    public List<MyStudyListResponse> getStudiesByMemberIdAsc(Long memberId) {
+        List<StudyMember> studyMembers = studyMemberRepository.findByMemberIdOrderByPersonalOrderIndexAsc(memberId);
+        return studyMembers.stream()
+                .map(MyStudyListResponse::fromStudyMember)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests) {
+        for (StudyOrderUpdateRequest studyOrderUpdateRequest : requests) {
+            studyMemberRepository.updatePersonalOrderIndex(memberId, studyOrderUpdateRequest.getStudyId(), studyOrderUpdateRequest.getPersonalOrderIndex());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.service.impl;
 
+import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
@@ -45,7 +46,11 @@ public class StudyMemberServiceImpl implements StudyMemberService{
             throw new IllegalStateException("이미 스터디에 가입된 멤버입니다.");
         }
 
-        StudyMember studyMember = StudyMember.of(study, member, StudyRole.FELLOW);
+        Integer maxPersonalOrderIndex = studyMemberRepository
+                .findMaxPersonalOrderIndexByMemberId(member.getId())
+                .orElse(-1);
+
+        StudyMember studyMember = StudyMember.of(study, member, StudyRole.FELLOW, maxPersonalOrderIndex);
         studyMemberRepository.save(studyMember);
 
         return StudyMemberInviteResponse.fromEntity(studyMember);
@@ -68,15 +73,6 @@ public class StudyMemberServiceImpl implements StudyMemberService{
         studyMemberRepository.delete(studyMember);
 
         return StudyMemberRemoveResponse.successDelete(studyId, memberId);
-    }
-
-    @Override
-    public List<StudyListResponse> getStudiesByMemberId(Long memberId) {
-        List<StudyMember> memberships = studyMemberRepository.findByMemberId(memberId);
-
-        return memberships.stream()
-                .map(sm -> StudyListResponse.fromEntity(sm.getStudy()))
-                .collect(Collectors.toList());
     }
 }
 

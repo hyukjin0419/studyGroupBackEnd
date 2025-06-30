@@ -10,6 +10,6 @@ public interface AuthService {
     MemberCreateResponse createMember(MemberCreateRequest request);
     MemberLoginResponse login(MemberLoginRequest request);
     RefreshTokenResponse reissueAccessToken(String refreshToken);
-    RefreshTokenResponse reissueRefreshToken(String refreshToken);
+//    RefreshTokenResponse reissueRefreshToken(String refreshToken);
     void logout(String accessToken, Long memberId);
 }
