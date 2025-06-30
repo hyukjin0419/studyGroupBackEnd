@@ -39,8 +39,8 @@ public class MemberController {
 
     @Operation(summary = "회원 업데이트 API")
     @PostMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
-    public ResponseEntity<MemberDetailResponse> updateMember(@RequestBody MemberUpdateRequest request) {
-        return ResponseEntity.ok(memberService.updateMember(request));
+    public ResponseEntity<MemberDetailResponse> updateMember(@PathVariable Long memberId, @RequestBody MemberUpdateRequest request) {
+        return ResponseEntity.ok(memberService.updateMember(memberId, request));
     }
 
     @Operation(summary = "회원 삭제 API")
@@ -55,27 +55,11 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getAllMembers());
     }
 
+    @Operation(summary = "회원 아이디로 스터디 목록 조회 API")
     @GetMapping("/{memberId}/studies")
     public ResponseEntity<List<StudyListResponse>> getStudiesByMemberId(@PathVariable Long memberId) {
         return ResponseEntity.ok(studyService.getStudiesByMemberId(memberId));
     }
-
-    @GetMapping("/my-studies")
-    public ResponseEntity<List<MyStudyListResponse>> getMyStudyList(@CurrentUser CustomUserDetails userDetails) {
-        Long memberId = userDetails.getMemberId();
-        return ResponseEntity.ok(studyService.getStudiesByMemberIdAsc(memberId));
-    }
-
-    @PostMapping("/my-studies/order-update")
-    public ResponseEntity<Void> updateMyStudyOrder(
-            @CurrentUser CustomUserDetails userDetails,
-            @RequestBody StudyOrderUpdateListRequest request
-    ) {
-        studyService.updateStudyOrder(userDetails.getMemberId(), request.getOrderList());
-
-        return ResponseEntity.ok().build();
-    }
-
 }
 
 

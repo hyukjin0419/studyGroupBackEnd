@@ -23,8 +23,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberDetailResponse getMemberById(Long id) {
-        Member member = memberRepository.findById(id)
+    public MemberDetailResponse getMemberById(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
         return MemberDetailResponse.fromEntity(member);
@@ -32,8 +32,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDetailResponse updateMember(MemberUpdateRequest request) {
-        Member member = memberRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+    public MemberDetailResponse updateMember(Long memberId, MemberUpdateRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
         member.updateProfile(request.getUserName(),request.getEmail());
 
         return MemberDetailResponse.fromEntity(member);
@@ -41,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDeleteResponse deleteMember(Long id) {
-        Member member = memberRepository.findById(id)
+    public MemberDeleteResponse deleteMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
 
         memberRepository.delete(member);

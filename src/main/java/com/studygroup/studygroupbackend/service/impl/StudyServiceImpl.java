@@ -7,7 +7,6 @@ import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
-import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateListRequest;
 import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateRequest;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
