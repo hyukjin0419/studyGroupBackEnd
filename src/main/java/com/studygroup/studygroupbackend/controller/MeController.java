@@ -41,7 +41,7 @@ public class MeController {
     }
 
     @Operation(summary = "본인 회원탈퇴 API")
-    @PostMapping
+    @DeleteMapping
     public ResponseEntity<MemberDeleteResponse> deleteMyAccount(
             @CurrentUser CustomUserDetails userDetails
     ) {

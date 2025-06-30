@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
+//@PreAuthorize("hasRole('ADMIN')")
 public class MemberController {
     private final MemberService memberService;
     private final StudyService studyService;
@@ -38,7 +40,7 @@ public class MemberController {
     }
 
     @Operation(summary = "회원 업데이트 API")
-    @PostMapping("/{id}")//Put 아니라 Patch 써야하는 거 아닌가? 맞다! patch 업데이트 바람.-> patch를 못쓰는 서버도 있다고? 그러면 post 써라!
+    @PostMapping("/{id}")
     public ResponseEntity<MemberDetailResponse> updateMember(@PathVariable Long memberId, @RequestBody MemberUpdateRequest request) {
         return ResponseEntity.ok(memberService.updateMember(memberId, request));
     }

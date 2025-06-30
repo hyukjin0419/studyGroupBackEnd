@@ -13,7 +13,7 @@ import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
 import java.util.List;
 
 public interface StudyService {
-    StudyCreateResponse createStudy(StudyCreateRequest request);
+    StudyCreateResponse createStudy(Long leaderId, StudyCreateRequest request);
     StudyDetailResponse getStudyById(Long studyId);
     List<StudyListResponse> getAllStudies();
     List<StudyListResponse> getStudiesByMemberId(Long memberId);

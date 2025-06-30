@@ -37,8 +37,8 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public StudyCreateResponse createStudy(StudyCreateRequest request) {
-        Member leader = memberRepository.findById(request.getLeaderId())
+    public StudyCreateResponse createStudy(Long leaderId, StudyCreateRequest request) {
+        Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디 장을 찾을 수 없습니다."));
 
         Study study = Study.of(request.getName(),request.getDescription());

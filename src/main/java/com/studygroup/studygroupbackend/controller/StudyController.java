@@ -6,6 +6,8 @@ import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
+import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
+import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +26,10 @@ public class StudyController {
 
     @Operation(summary = "스터디 생성 API", description = "새로운 스터디를 등록합니다.")
     @PostMapping
-    public ResponseEntity<StudyCreateResponse> createStudy(@RequestBody StudyCreateRequest request) {
-        return ResponseEntity.ok(studyService.createStudy(request));
+    public ResponseEntity<StudyCreateResponse> createStudy(
+            @CurrentUser CustomUserDetails userDetails,
+            @RequestBody StudyCreateRequest request) {
+        return ResponseEntity.ok(studyService.createStudy(userDetails.getMemberId(),request));
     }
 
     @Operation(summary = "스터디 단일 조회 API", description = "스터디를 단일 조회합니다.")
@@ -44,16 +48,17 @@ public class StudyController {
     @PostMapping("/{studyId}")
     public ResponseEntity<StudyDetailResponse> updateStudy(
             @PathVariable Long studyId,
-            @RequestHeader("X-Leader_Id") Long leaderId,
+            @CurrentUser CustomUserDetails userDetails,
             @RequestBody StudyUpdateRequest request) {
-        return ResponseEntity.ok(studyService.updateStudy(studyId, leaderId, request));
+        return ResponseEntity.ok(studyService.updateStudy(studyId, userDetails.getMemberId(), request));
     }
 
     @Operation(summary = "스터디 삭제 API")
     @DeleteMapping("/{studyId}")
     public ResponseEntity<StudyDeleteResponse> deleteStudy(
             @PathVariable Long studyId,
-            @RequestHeader("X-Leader_Id") Long leaderId){
-        return ResponseEntity.ok(studyService.deleteStudy(studyId, leaderId));
+            @CurrentUser CustomUserDetails userDetails
+            ){
+        return ResponseEntity.ok(studyService.deleteStudy(studyId, userDetails.getMemberId()));
     }
 }
