@@ -3,6 +3,8 @@ package com.studygroup.studygroupbackend.controller;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberRemoveResponse;
+import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
+import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.StudyMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,8 +23,9 @@ public class StudyMemberController {
     @PostMapping
     public ResponseEntity<StudyMemberInviteResponse> inviteMember(
             @PathVariable Long studyId,
-            @RequestHeader("X-Leader-Id") Long leaderId,
+            @CurrentUser CustomUserDetails userDetails,
             @RequestBody StudyMemberInviteRequest request) {
+        Long leaderId = userDetails.getMemberId();
         return ResponseEntity.ok(studyMemberService.inviteMember(studyId, leaderId, request));
     }
 
@@ -30,8 +33,9 @@ public class StudyMemberController {
     @DeleteMapping("/{memberId}")
     public ResponseEntity<StudyMemberRemoveResponse> removeMember(
             @PathVariable Long studyId,
-            @RequestHeader("X-Leader-Id") Long leaderId,
+            @CurrentUser CustomUserDetails userDetails,
             @PathVariable Long memberId){
+        Long leaderId = userDetails.getMemberId();
         return ResponseEntity.ok(studyMemberService.removeMember(studyId, leaderId, memberId));
     }
 }
