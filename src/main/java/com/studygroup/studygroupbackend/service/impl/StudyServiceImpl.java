@@ -41,7 +41,7 @@ public class StudyServiceImpl implements StudyService {
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디 장을 찾을 수 없습니다."));
 
-        Study study = Study.of(request.getName(),request.getDescription());
+        Study study = Study.of(request.getName(),request.getDescription(), request.getColor());
         studyRepository.save(study);
 
         Integer maxPersonalOrderIndex = studyMemberRepository
@@ -52,6 +52,7 @@ public class StudyServiceImpl implements StudyService {
         StudyMember leaderMember = StudyMember.of(
                 study,
                 leader,
+                request.getColor(),
                 StudyRole.LEADER,
                 maxPersonalOrderIndex+1
         );
@@ -64,11 +65,15 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public StudyDetailResponse getStudyById(Long studyId) {
+    public StudyDetailResponse getStudyByMemberIdAndStudyId(Long memberId, Long studyId) {
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당하는 StudyMember 엔티티를 찾을 수 업습니다."));
+
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
         List<StudyMember> studyMembers = studyMemberRepository.findByStudy(study);
+
         List<StudyMemberSummaryResponse> memberDtos = studyMembers.stream()
                 .map(StudyMemberSummaryResponse::fromEntity)
                 .toList();
@@ -78,30 +83,47 @@ public class StudyServiceImpl implements StudyService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("리더가 존재하지 않습니다."));
 
-        return StudyDetailResponse.fromEntity(study, leaderDto, memberDtos);
+        return StudyDetailResponse.fromEntity(study, studyMember, leaderDto, memberDtos);
     }
 
     @Override
-    public List<StudyListResponse> getAllStudies() {
-        return studyRepository.findAll().stream()
-                .map(StudyListResponse::fromEntity)
+    public List<MyStudyListResponse> getStudiesByMemberIdAsc(Long memberId) {
+        List<StudyMember> studyMembers = studyMemberRepository.findByMemberIdOrderByPersonalOrderIndexAsc(memberId);
+        return studyMembers.stream()
+                .map(MyStudyListResponse::fromStudyMember)
                 .toList();
     }
 
     @Override
     @Transactional
-    public StudyDetailResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request) {
-        Study study = studyRepository.findById(studyId)
-                .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
+    public StudyDetailResponse updateStudy(Long leaderId, StudyUpdateRequest request) {
+        Long studyId = request.getStudyId();
 
         StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
+        Study study = studyRepository.findById(studyId)
+                .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
+
         StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
 
-        study.updateStudyInfo(request.getName(), request.getDescription());
+        study.updateStudyInfo(request.getName(), request.getDescription(), request.getColor());
 
-        return StudyDetailResponse.fromEntity(study, leaderDto, null);
+        return StudyDetailResponse.fromEntity(study, leaderMember, leaderDto, null);
+    }
+
+    @Override
+    @Transactional
+    public List<MyStudyListResponse> updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests) {
+        for (StudyOrderUpdateRequest studyOrderUpdateRequest : requests) {
+            studyMemberRepository.updatePersonalOrderIndex(memberId, studyOrderUpdateRequest.getStudyId(), studyOrderUpdateRequest.getPersonalOrderIndex());
+        }
+
+        List<StudyMember> studyMembers = studyMemberRepository.findByMemberIdOrderByPersonalOrderIndexAsc(memberId);
+
+        return studyMembers.stream()
+                .map(MyStudyListResponse::fromStudyMember)
+                .toList();
     }
 
     @Override
@@ -119,29 +141,59 @@ public class StudyServiceImpl implements StudyService {
         return StudyDeleteResponse.successDelete();
     }
 
+//--------------------------------------ADMIN-------------------------------------------//
 
     @Override
-    public List<StudyListResponse> getStudiesByMemberId(Long memberId) {
-        List<StudyMember> studyMembers = studyMemberRepository.findByMemberId(memberId);
-
-        return studyMembers.stream()
-                .map(sm -> StudyListResponse.fromEntity(sm.getStudy()))
+    public List<StudyListResponse> getAllStudies() {
+        return studyRepository.findAll().stream()
+                .map(StudyListResponse::fromEntity)
                 .toList();
     }
 
-    @Override
-    public List<MyStudyListResponse> getStudiesByMemberIdAsc(Long memberId) {
-        List<StudyMember> studyMembers = studyMemberRepository.findByMemberIdOrderByPersonalOrderIndexAsc(memberId);
-        return studyMembers.stream()
-                .map(MyStudyListResponse::fromStudyMember)
-                .toList();
-    }
 
-    @Override
-    @Transactional
-    public void updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests) {
-        for (StudyOrderUpdateRequest studyOrderUpdateRequest : requests) {
-            studyMemberRepository.updatePersonalOrderIndex(memberId, studyOrderUpdateRequest.getStudyId(), studyOrderUpdateRequest.getPersonalOrderIndex());
-        }
-    }
+//------------------------------------0.1 version----------------------------------------//
+
+    //    @Override
+//    public StudyDetailResponse getStudyById(Long studyId) {
+//        Study study = studyRepository.findById(studyId)
+//                .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
+//
+//        List<StudyMember> studyMembers = studyMemberRepository.findByStudy(study);
+//        List<StudyMemberSummaryResponse> memberDtos = studyMembers.stream()
+//                .map(StudyMemberSummaryResponse::fromEntity)
+//                .toList();
+//
+//        StudyMemberSummaryResponse leaderDto = memberDtos.stream()
+//                .filter(m->m.getRole().equals("Leader"))
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalStateException("리더가 존재하지 않습니다."));
+//
+//        return StudyDetailResponse.fromEntity(study, leaderDto, memberDtos);
+//    }
+
+//
+//    @Override
+//    public List<StudyListResponse> getStudiesByMemberId(Long memberId) {
+//        List<StudyMember> studyMembers = studyMemberRepository.findByMemberId(memberId);
+//
+//        return studyMembers.stream()
+//                .map(sm -> StudyListResponse.fromEntity(sm.getStudy()))
+//                .toList();
+//    }
+
+//    @Override
+//    @Transactional
+//    public StudyDetailResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request) {
+//        Study study = studyRepository.findById(studyId)
+//                .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
+//
+//        StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
+//                .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
+//
+//        StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
+//
+//        study.updateStudyInfo(request.getName(), request.getDescription());
+//
+//        return StudyDetailResponse.fromEntity(study, leaderDto, null);
+//    }
 }

@@ -1,25 +1,15 @@
-package com.studygroup.studygroupbackend.controller;
+package com.studygroup.studygroupbackend.controller.admin;
 
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
-import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
-import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
-import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
-import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateListRequest;
-import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
-import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.MemberService;
-import com.studygroup.studygroupbackend.service.StudyMemberService;
 import com.studygroup.studygroupbackend.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,11 +47,11 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getAllMembers());
     }
 
-    @Operation(summary = "회원 아이디로 스터디 목록 조회 API")
-    @GetMapping("/{memberId}/studies")
-    public ResponseEntity<List<StudyListResponse>> getStudiesByMemberId(@PathVariable Long memberId) {
-        return ResponseEntity.ok(studyService.getStudiesByMemberId(memberId));
-    }
+//    @Operation(summary = "회원 아이디로 스터디 목록 조회 API")
+//    @GetMapping("/{memberId}/studies")
+//    public ResponseEntity<List<StudyListResponse>> getStudiesByMemberId(@PathVariable Long memberId) {
+//        return ResponseEntity.ok(studyService.getStudiesByMemberId(memberId));
+//    }
 }
 
 

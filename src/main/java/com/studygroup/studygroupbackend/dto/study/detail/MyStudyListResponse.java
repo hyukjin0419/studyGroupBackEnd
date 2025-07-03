@@ -17,6 +17,7 @@ public class MyStudyListResponse extends BaseResDto {
     private String name;
     private String description;
     private Integer personalOrderIndex;
+    private String color;
 
     public static MyStudyListResponse fromStudyMember(StudyMember studyMember) {
         Study study = studyMember.getStudy();
@@ -26,6 +27,7 @@ public class MyStudyListResponse extends BaseResDto {
                 .name(study.getName())
                 .description(study.getDescription())
                 .personalOrderIndex(studyMember.getPersonalOrderIndex())
+                .color(study.getColor())
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())
                 .build();

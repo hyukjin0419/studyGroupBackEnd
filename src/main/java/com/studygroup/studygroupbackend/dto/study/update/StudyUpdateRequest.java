@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudyUpdateRequest {
+    private Long studyId;
     private String name;
     private String description;
+    private String color;
 }

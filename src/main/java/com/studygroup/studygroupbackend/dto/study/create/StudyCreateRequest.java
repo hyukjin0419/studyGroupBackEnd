@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class StudyCreateRequest{
     private String name;
     private String description;
-//    private Long leaderId;
+    private String color;
 }

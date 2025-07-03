@@ -30,7 +30,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
 
 
     boolean existsByStudyAndMember(Study study, Member member);
-    Optional<StudyMember> findByStudyAndMember(Study study, Member member);
+    Optional<StudyMember> findByStudyIdAndMemberId(Long studyId, Long memberId);
     Optional<StudyMember> findByStudyIdAndMemberIdAndStudyRole(Long studyId, Long memberId, StudyRole role);
 
 }

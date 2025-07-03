@@ -31,20 +31,24 @@ public class StudyMember extends BaseEntity {
     @Column(nullable = false)
     private Integer personalOrderIndex;
 
+    @Column(nullable = true)
+    private String personalColor = "0xFF8AB4F8";
+
     private LocalDateTime joinedAt;
 
     private LocalDateTime leftAt;
 
-    private StudyMember(Study study, Member member, StudyRole studyRole, Integer personalOrderIndex, LocalDateTime joinedAt) {
+    private StudyMember(Study study, Member member, StudyRole studyRole, String personalColor, Integer personalOrderIndex, LocalDateTime joinedAt) {
         this.study = study;
         this.member = member;
         this.personalOrderIndex = personalOrderIndex;
+        this.personalColor = personalColor;
         this.studyRole = studyRole;
         this.joinedAt = joinedAt;
     }
 
-    public static StudyMember of(Study study, Member member, StudyRole role, Integer personalOrderIndex) {
-        return new StudyMember(study, member, role, personalOrderIndex, LocalDateTime.now());
+    public static StudyMember of(Study study, Member member, String personalColor, StudyRole role, Integer personalOrderIndex) {
+        return new StudyMember(study, member, role, personalColor, personalOrderIndex, LocalDateTime.now());
     }
 
     public void changeRole(StudyRole newRole) {

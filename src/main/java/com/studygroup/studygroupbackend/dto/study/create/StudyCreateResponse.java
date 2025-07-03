@@ -18,6 +18,7 @@ public class StudyCreateResponse extends BaseResDto {
     private String description;
     private Long leaderId;
     private String leaderName;
+    private String personalColor;
 
     public static StudyCreateResponse fromEntity(Study study, StudyMemberSummaryResponse leaderDto) {
         return StudyCreateResponse.builder()
@@ -26,6 +27,7 @@ public class StudyCreateResponse extends BaseResDto {
                 .description(study.getDescription())
                 .leaderId(leaderDto.getId())
                 .leaderName(leaderDto.getUserName())
+                .personalColor(leaderDto.getPersonalColor())
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())
                 .build();

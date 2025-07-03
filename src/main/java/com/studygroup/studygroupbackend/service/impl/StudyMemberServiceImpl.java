@@ -50,7 +50,7 @@ public class StudyMemberServiceImpl implements StudyMemberService{
                 .findMaxPersonalOrderIndexByMemberId(member.getId())
                 .orElse(-1);
 
-        StudyMember studyMember = StudyMember.of(study, member, StudyRole.FELLOW, maxPersonalOrderIndex);
+        StudyMember studyMember = StudyMember.of(study, member, study.getColor(), StudyRole.FELLOW, maxPersonalOrderIndex);
         studyMemberRepository.save(studyMember);
 
         return StudyMemberInviteResponse.fromEntity(studyMember);
@@ -67,10 +67,10 @@ public class StudyMemberServiceImpl implements StudyMemberService{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("멤버를 찾을 수 없습니다."));
 
-        StudyMember studyMember = studyMemberRepository.findByStudyAndMember(study, member)
-                .orElseThrow(() -> new EntityNotFoundException("스터디에 해당 멤버가 없습니다."));
+//        StudyMember studyMember = studyMemberRepository.findByStudyAndMember(study, member)
+//                .orElseThrow(() -> new EntityNotFoundException("스터디에 해당 멤버가 없습니다."));
 
-        studyMemberRepository.delete(studyMember);
+//        studyMemberRepository.delete(studyMember);
 
         return StudyMemberRemoveResponse.successDelete(studyId, memberId);
     }

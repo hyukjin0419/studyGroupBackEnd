@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.dto.study.detail;
 
+import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.dto.BaseResDto;
 import com.studygroup.studygroupbackend.domain.Study;
 import lombok.AllArgsConstructor;
@@ -19,9 +20,10 @@ public class StudyDetailResponse extends BaseResDto {
     private String description;
     private Long leaderId;
     private String leaderName;
+    private String personalColor;
     private List<StudyMemberSummaryResponse> members;
 
-    public static StudyDetailResponse fromEntity(Study study, StudyMemberSummaryResponse leaderDto, List<StudyMemberSummaryResponse> members) {
+    public static StudyDetailResponse fromEntity(Study study, StudyMember studyMember, StudyMemberSummaryResponse leaderDto, List<StudyMemberSummaryResponse> members) {
         return StudyDetailResponse.builder()
                 .id(study.getId())
                 .name(study.getName())
@@ -29,6 +31,7 @@ public class StudyDetailResponse extends BaseResDto {
                 .leaderId(leaderDto.getId())
                 .leaderName(leaderDto.getUserName())
                 .members(members == null ? List.of() : members)
+                .personalColor(studyMember.getPersonalColor())
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())
                 .build();

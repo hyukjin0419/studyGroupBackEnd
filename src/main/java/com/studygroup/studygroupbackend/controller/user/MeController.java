@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.controller;
+package com.studygroup.studygroupbackend.controller.user;
 
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
@@ -27,14 +27,14 @@ public class MeController {
     private final MemberService memberService;
     private final StudyService studyService;
 
-    @Operation(summary = "본인 조회 API")
+    @Operation(summary = "[USER] 본인 조회 API")
     @GetMapping
     public ResponseEntity<MemberDetailResponse> getMyInfo(@CurrentUser CustomUserDetails userDetails){
         log.info("working");
         return ResponseEntity.ok(memberService.getMemberById(userDetails.getMemberId()));
     }
 
-    @Operation(summary = "본인 update API")
+    @Operation(summary = "[USER] 본인 update API")
     @PostMapping
     public ResponseEntity<MemberDetailResponse> updateMyInfo(
             @CurrentUser CustomUserDetails userDetails,
@@ -43,7 +43,7 @@ public class MeController {
         return ResponseEntity.ok(memberService.updateMember(userDetails.getMemberId(), request));
     }
 
-    @Operation(summary = "본인 회원탈퇴 API")
+    @Operation(summary = "[USER] 본인 회원탈퇴 API")
     @DeleteMapping
     public ResponseEntity<MemberDeleteResponse> deleteMyAccount(
             @CurrentUser CustomUserDetails userDetails
@@ -51,14 +51,14 @@ public class MeController {
         return ResponseEntity.ok(memberService.deleteMember(userDetails.getMemberId()));
     }
 
-    @Operation(summary = "본인이 속한 스터디 조회 API")
+    @Operation(summary = "[USER] 본인이 속한 스터디 조회 API")
     @GetMapping("/my-studies")
     public ResponseEntity<List<MyStudyListResponse>> getMyStudyList(@CurrentUser CustomUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         return ResponseEntity.ok(studyService.getStudiesByMemberIdAsc(memberId));
     }
 
-    @Operation(summary = "본인이 속한 스터디 순서 바꾸기 by Drag & Drop")
+    @Operation(summary = "[USER] 본인이 속한 스터디 순서 바꾸기 by Drag & Drop")
     @PostMapping("/my-studies/order-update")
     public ResponseEntity<Void> updateMyStudyOrder(
             @CurrentUser CustomUserDetails userDetails,
