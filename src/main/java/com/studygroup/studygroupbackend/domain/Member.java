@@ -1,14 +1,14 @@
 package com.studygroup.studygroupbackend.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "members")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Member extends BaseEntity {
 
     @Id
@@ -29,14 +29,14 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-    private Member(String userName, String password, String email) {
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-    }
 
     public static Member of(String userName, String password, String email) {
-        return new Member(userName, password, email);
+        return Member.builder()
+            .userName(userName)
+            .password(password)
+            .email(email)
+            .role(Role.USER)
+            .build();
     }
 
     /*

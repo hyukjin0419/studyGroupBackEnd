@@ -12,12 +12,14 @@ import com.studygroup.studygroupbackend.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Tag(name = "Me", description = "사용자 본인 컨트롤러")
+@Slf4j
 @RestController
 @RequestMapping("/me")
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class MeController {
     @Operation(summary = "본인 조회 API")
     @GetMapping
     public ResponseEntity<MemberDetailResponse> getMyInfo(@CurrentUser CustomUserDetails userDetails){
+        log.info("working");
         return ResponseEntity.ok(memberService.getMemberById(userDetails.getMemberId()));
     }
 

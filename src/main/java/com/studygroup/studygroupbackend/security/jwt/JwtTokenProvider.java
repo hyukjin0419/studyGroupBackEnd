@@ -8,29 +8,33 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
     private final TokenBlacklistService tokenBlacklistService;
 
-    @Value("${jwt.secret}")
+//    @Value("${jwt.secret}")
     private String secretKeyString;
 
     private Key secretKey;
@@ -40,8 +44,12 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        this.secretKey = Keys.hmacShaKeyFor(secretKeyString.getBytes());
-        System.out.println("Loaded JWT_SECRET: " + secretKeyString.substring(0, 8) + "...");
+        String rawSecret = "this_is_my_test_secret_key_2025!";
+        this.secretKey = Keys.hmacShaKeyFor(rawSecret.getBytes(StandardCharsets.UTF_8));
+        log.info("직접 하드코딩한 시크릿 키 로딩 완료 (길이: " + rawSecret.length() + ")");
+//        byte[] keyBytes = Decoders.BASE64.decode(secretKeyString);
+//        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+//        log.info("JWT 시크릿 키 로딩 완료 (길이: {})", keyBytes.length);
     }
 
     public String generateAccessToken(Long memberId, String userName, Role role) {
@@ -75,12 +83,13 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             if (tokenBlacklistService.isBlacklisted(token)) {
+                log.info("BlackList에서 JWT 인증 실패");
                 return false;
             }
-
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            log.info("ParserBuilder에서 JWT 인증 실패");
             return false;
         }
     }
@@ -123,6 +132,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         Long memberId = getMemberId(token);
         String username = getUserName(token);
+        log.info("토큰에서 추출 된 userName " + username);
         String role = getRole(token);
         CustomUserDetails userDetails = CustomUserDetails.ofJwt(memberId, username, role);
 
@@ -130,6 +140,12 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        String bearerToken = request.getHeader("Authorization");
+
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+
+        return null;
     }
 }

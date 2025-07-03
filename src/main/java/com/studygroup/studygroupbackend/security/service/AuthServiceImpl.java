@@ -13,6 +13,7 @@ import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.security.repository.RefreshTokenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
@@ -32,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     public MemberCreateResponse createMember(MemberCreateRequest request) {
         validateDuplicateMember(request.getUserName(), request.getEmail());
 
-        String encodedPassword = passwordEncoder.encode(request.getEmail());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         Member member = request.toEntity(encodedPassword);
 
@@ -75,6 +77,7 @@ public class AuthServiceImpl implements AuthService {
         return MemberLoginResponse.builder()
                 .id(member.getId())
                 .userName(member.getUserName())
+                .role(member.getRole())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken.getToken())
                 .build();

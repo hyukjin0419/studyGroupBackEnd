@@ -10,6 +10,7 @@ import com.studygroup.studygroupbackend.security.service.AuthService;;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Auth", description = "로그인/회원가입 관련 API")
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class AuthController {
     @Operation(summary = "회원가입 API")
     @PostMapping("/create_member")
     public ResponseEntity<MemberCreateResponse> createMember(@RequestBody MemberCreateRequest request) {
+        log.info(request.getEmail());
         return ResponseEntity.ok(authService.createMember(request));
     }
 
@@ -42,8 +45,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-//
-
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> logout(
@@ -54,6 +55,4 @@ public class AuthController {
         authService.logout(accessToken, Long.valueOf(userDetails.getUsername()));
         return ResponseEntity.ok().build();
     }
-
-
 }

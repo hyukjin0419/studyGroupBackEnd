@@ -31,6 +31,8 @@ public class RefreshToken {
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
+
+    //이거 of로 만들어야 할 듯.
     @Builder
     public RefreshToken(Long memberId, String token, LocalDateTime expiresAt){
         this.memberId = memberId;

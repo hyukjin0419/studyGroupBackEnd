@@ -10,7 +10,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class TokenBlacklistService {
 
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private static final String BLACKLIST_PREFIX = "blacklist:";
 
     public void blacklistToken(String token, long expirationSeconds) {
