@@ -1,11 +1,10 @@
-package com.studygroup.studygroupbackend.controller;
+package com.studygroup.studygroupbackend.controller.user;
 
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
 import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
-import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateRequest;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;

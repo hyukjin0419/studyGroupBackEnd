@@ -1,9 +1,7 @@
 package com.studygroup.studygroupbackend.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +9,8 @@ import java.time.LocalDateTime;
 @Table(name = "study_members")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class StudyMember extends BaseEntity {
 
     @Id
@@ -31,24 +31,21 @@ public class StudyMember extends BaseEntity {
     @Column(nullable = false)
     private Integer personalOrderIndex;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String personalColor = "0xFF8AB4F8";
 
     private LocalDateTime joinedAt;
 
     private LocalDateTime leftAt;
 
-    private StudyMember(Study study, Member member, StudyRole studyRole, String personalColor, Integer personalOrderIndex, LocalDateTime joinedAt) {
-        this.study = study;
-        this.member = member;
-        this.personalOrderIndex = personalOrderIndex;
-        this.personalColor = personalColor;
-        this.studyRole = studyRole;
-        this.joinedAt = joinedAt;
-    }
-
     public static StudyMember of(Study study, Member member, String personalColor, StudyRole role, Integer personalOrderIndex) {
-        return new StudyMember(study, member, role, personalColor, personalOrderIndex, LocalDateTime.now());
+        return StudyMember.builder()
+                .study(study)
+                .member(member)
+                .personalColor(personalColor)
+                .studyRole(role)
+                .personalOrderIndex(personalOrderIndex)
+                .build();
     }
 
     public void changeRole(StudyRole newRole) {
