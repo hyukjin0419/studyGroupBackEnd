@@ -8,7 +8,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,15 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -34,7 +30,7 @@ public class JwtTokenProvider {
 
     private final TokenBlacklistService tokenBlacklistService;
 
-//    @Value("${jwt.secret}")
+    @Value("${jwt.secret}")
     private String secretKeyString;
 
     private Key secretKey;
@@ -44,12 +40,8 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        String rawSecret = "this_is_my_test_secret_key_2025!";
-        this.secretKey = Keys.hmacShaKeyFor(rawSecret.getBytes(StandardCharsets.UTF_8));
-        log.info("직접 하드코딩한 시크릿 키 로딩 완료 (길이: " + rawSecret.length() + ")");
-//        byte[] keyBytes = Decoders.BASE64.decode(secretKeyString);
-//        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-//        log.info("JWT 시크릿 키 로딩 완료 (길이: {})", keyBytes.length);
+        this.secretKey = Keys.hmacShaKeyFor(secretKeyString.getBytes());
+        log.info("Loaded JWT_SECRET: {}...", secretKeyString.substring(0, 8));
     }
 
     public String generateAccessToken(Long memberId, String userName, Role role) {
@@ -132,7 +124,6 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         Long memberId = getMemberId(token);
         String username = getUserName(token);
-        log.info("토큰에서 추출 된 userName " + username);
         String role = getRole(token);
         CustomUserDetails userDetails = CustomUserDetails.ofJwt(memberId, username, role);
 
