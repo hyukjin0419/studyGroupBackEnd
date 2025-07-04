@@ -1,6 +1,7 @@
 package com.studygroup.studygroupbackend.dto.study.detail;
 
 import com.studygroup.studygroupbackend.domain.StudyMember;
+import com.studygroup.studygroupbackend.domain.status.StudyStatus;
 import com.studygroup.studygroupbackend.dto.BaseResDto;
 import com.studygroup.studygroupbackend.domain.Study;
 import lombok.AllArgsConstructor;
@@ -8,12 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+//개별 화면에 노출 시킬 ==
 public class StudyDetailResponse extends BaseResDto {
     private Long id;
     private String name;
@@ -21,9 +24,17 @@ public class StudyDetailResponse extends BaseResDto {
     private Long leaderId;
     private String leaderName;
     private String personalColor;
+    private LocalDateTime dueDate;
+    private Double progress;
+    private StudyStatus status;
     private List<StudyMemberSummaryResponse> members;
 
-    public static StudyDetailResponse fromEntity(Study study, StudyMember studyMember, StudyMemberSummaryResponse leaderDto, List<StudyMemberSummaryResponse> members) {
+    public static StudyDetailResponse fromEntity(
+            Study study,
+            StudyMember studyMember,
+            StudyMemberSummaryResponse leaderDto,
+            List<StudyMemberSummaryResponse> members
+    ) {
         return StudyDetailResponse.builder()
                 .id(study.getId())
                 .name(study.getName())
@@ -32,6 +43,9 @@ public class StudyDetailResponse extends BaseResDto {
                 .leaderName(leaderDto.getUserName())
                 .members(members == null ? List.of() : members)
                 .personalColor(studyMember.getPersonalColor())
+                .dueDate(study.getDueDate())
+                .progress(study.getProgress())
+                .status(study.getStatus())
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())
                 .build();

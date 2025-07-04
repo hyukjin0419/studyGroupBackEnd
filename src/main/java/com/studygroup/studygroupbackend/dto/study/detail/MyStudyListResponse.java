@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+//전체 팀 화면에 노출 시킬 녀석들
 public class MyStudyListResponse extends BaseResDto {
     private Long studyId;
     private String name;

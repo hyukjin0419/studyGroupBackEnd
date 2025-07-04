@@ -56,17 +56,17 @@ public class Study extends BaseEntity {
                 .build();
     }
 
-    public void updateStudyInfo(String name, String description, String color) {
-        this.name = name;
-        this.description = description;
-        this.color = color;
+    public void updateStudyInfo(
+            String name,
+            String description,
+            String color,
+            LocalDateTime dueDate,
+            StudyStatus status
+    ) {
+        if (name != null) this.name = name;
+        if (description != null) this.description = description;
+        if (color != null) this.color = color;
+        if (dueDate != null) this.dueDate = dueDate;
+        if (status != null) this.status = status;
     }
-
-//    public void changeLeader (Member newLeader) {
-//        this.leader = newLeader;
-//    }
-
-//    public static Study of(String name, String description, Member leader) {
-//        return new Study(name, description, leader);
-//    }
 }

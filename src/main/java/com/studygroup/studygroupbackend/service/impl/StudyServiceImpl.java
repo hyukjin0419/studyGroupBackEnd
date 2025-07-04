@@ -106,7 +106,13 @@ public class StudyServiceImpl implements StudyService {
 
         StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
 
-        study.updateStudyInfo(request.getName(), request.getDescription(), request.getColor());
+        study.updateStudyInfo(
+                request.getName(),
+                request.getDescription(),
+                request.getColor(),
+                request.getDueDate(),
+                request.getStatus()
+        );
 
         return StudyDetailResponse.fromEntity(study, leaderMember, leaderDto, null);
     }
