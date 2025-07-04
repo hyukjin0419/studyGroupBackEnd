@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.domain;
 
+import com.studygroup.studygroupbackend.domain.status.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

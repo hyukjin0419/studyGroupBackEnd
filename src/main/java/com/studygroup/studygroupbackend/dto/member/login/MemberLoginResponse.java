@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.dto.member.login;
 
-import com.studygroup.studygroupbackend.domain.Role;
+import com.studygroup.studygroupbackend.domain.status.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,14 +1,12 @@
 package com.studygroup.studygroupbackend.service.impl;
 
-import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
-import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberRemoveResponse;
 import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.domain.StudyMember;
-import com.studygroup.studygroupbackend.domain.StudyRole;
+import com.studygroup.studygroupbackend.domain.status.StudyRole;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyRepository;
@@ -18,9 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

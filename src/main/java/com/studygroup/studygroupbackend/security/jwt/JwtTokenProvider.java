@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.security.jwt;
 
-import com.studygroup.studygroupbackend.domain.Role;
+import com.studygroup.studygroupbackend.domain.status.Role;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
 import com.studygroup.studygroupbackend.security.service.TokenBlacklistService;

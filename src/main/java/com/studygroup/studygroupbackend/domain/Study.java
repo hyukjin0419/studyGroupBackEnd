@@ -1,7 +1,11 @@
 package com.studygroup.studygroupbackend.domain;
 
+import com.studygroup.studygroupbackend.domain.status.StudyStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "studies")
@@ -24,11 +28,31 @@ public class Study extends BaseEntity {
     @Column(nullable = false)
     private String color = "0xFF8AB4F8";
 
-    public static Study of(String name, String description, String color) {
+    @Column(nullable = true)
+    private LocalDateTime dueDate;
+
+    @Column(nullable = true)
+    private Double progress;
+
+    @Column(nullable = false)
+    private StudyStatus status = StudyStatus.PROGRESSING;
+
+
+    public static Study of(
+            String name,
+            String description,
+            String color,
+            LocalDateTime dueDate,
+            Double progress,
+            StudyStatus status
+            ) {
         return Study.builder()
                 .name(name)
                 .description(description)
-                .color(color)
+                .color(color != null ? color : "0xFF8AB4F8")
+                .dueDate(dueDate != null ? dueDate : LocalDateTime.now().plusDays(30))
+                .progress(progress != null ? progress : 0.0)
+                .status(status != null ? status : StudyStatus.PROGRESSING)
                 .build();
     }
 

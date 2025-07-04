@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+//Not for USERs
 @Getter
 @SuperBuilder
 @AllArgsConstructor

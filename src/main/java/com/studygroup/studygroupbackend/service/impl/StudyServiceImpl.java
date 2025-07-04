@@ -12,7 +12,7 @@ import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.domain.StudyMember;
-import com.studygroup.studygroupbackend.domain.StudyRole;
+import com.studygroup.studygroupbackend.domain.status.StudyRole;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyRepository;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,7 +40,7 @@ public class StudyServiceImpl implements StudyService {
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디 장을 찾을 수 없습니다."));
 
-        Study study = Study.of(request.getName(),request.getDescription(), request.getColor());
+        Study study = request.toEntity();
         studyRepository.save(study);
 
         Integer maxPersonalOrderIndex = studyMemberRepository
