@@ -16,7 +16,6 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-//개별 화면에 노출 시킬 ==
 public class StudyDetailResponse extends BaseResDto {
     private Long id;
     private String name;
@@ -27,6 +26,7 @@ public class StudyDetailResponse extends BaseResDto {
     private LocalDateTime dueDate;
     private Double progress;
     private StudyStatus status;
+    private Integer personalOrderIndex;
     private List<StudyMemberSummaryResponse> members;
 
     public static StudyDetailResponse fromEntity(
@@ -46,6 +46,7 @@ public class StudyDetailResponse extends BaseResDto {
                 .dueDate(study.getDueDate())
                 .progress(study.getProgress())
                 .status(study.getStatus())
+                .personalOrderIndex(studyMember.getPersonalOrderIndex())
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())
                 .build();

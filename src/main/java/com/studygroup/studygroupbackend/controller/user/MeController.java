@@ -3,7 +3,7 @@ package com.studygroup.studygroupbackend.controller.user;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
-import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
+import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateListRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
@@ -53,7 +53,7 @@ public class MeController {
 
     @Operation(summary = "[USER] 본인이 속한 스터디 조회 API")
     @GetMapping("/my-studies")
-    public ResponseEntity<List<MyStudyListResponse>> getMyStudyList(@CurrentUser CustomUserDetails userDetails) {
+    public ResponseEntity<List<StudyDetailResponse>> getMyStudyList(@CurrentUser CustomUserDetails userDetails) {
         Long memberId = userDetails.getMemberId();
         return ResponseEntity.ok(studyService.getStudiesByMemberIdAsc(memberId));
     }

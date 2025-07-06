@@ -15,13 +15,13 @@ import java.util.List;
 public interface StudyService {
     StudyCreateResponse createStudy(Long leaderId, StudyCreateRequest request);
     StudyDetailResponse getStudyByMemberIdAndStudyId(Long memberId, Long studyId);
-    List<MyStudyListResponse> getStudiesByMemberIdAsc(Long memberId);
+    List<StudyDetailResponse> getStudiesByMemberIdAsc(Long memberId);
     StudyDetailResponse updateStudy(Long leaderId, StudyUpdateRequest request);
-    List<MyStudyListResponse> updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests);
+    void updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests);
     StudyDeleteResponse deleteStudy(Long studyId, Long leaderId);
 
-    List<StudyListResponse> getAllStudies();
 
+//    List<StudyListResponse> getAllStudies();
 //    StudyDetailResponse getStudyById(Long studyId);
 //    List<StudyListResponse> getStudiesByMemberId(Long memberId);
 //    StudyDetailResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request);

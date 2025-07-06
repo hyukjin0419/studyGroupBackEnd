@@ -3,7 +3,6 @@ package com.studygroup.studygroupbackend.controller.user;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
 import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
-import com.studygroup.studygroupbackend.dto.study.detail.MyStudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateRequest;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
@@ -39,7 +38,7 @@ public class StudyController {
     //1. 내가 속한 studies 조회
     @Operation(summary = "본인이 속한 스터디 전체 조회 API", description = "[USER] 본인이 속한 스터디 전체를 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<MyStudyListResponse>> getMyStudies(@CurrentUser CustomUserDetails userDetails) {
+    public ResponseEntity<List<StudyDetailResponse>> getMyStudies(@CurrentUser CustomUserDetails userDetails) {
         return ResponseEntity.ok(studyService.getStudiesByMemberIdAsc(userDetails.getMemberId()));
     }
 
@@ -64,11 +63,11 @@ public class StudyController {
     //3.1 [USER] 순서 업데이트
     @Operation(summary = "본인 화면에 팀 카드 순서 업데이트 API", description = "[USER] 본인 팀의 순서를 Drag & Drop을 통해 업데이트 합니다.")
     @PostMapping("/update-order")
-    public ResponseEntity<List<MyStudyListResponse>> updateStudiesOrder(
+    public ResponseEntity<Void> updateStudiesOrder(
             @CurrentUser CustomUserDetails userDetails,
-            @RequestBody List<StudyOrderUpdateRequest> orderList
+            @RequestBody List<StudyOrderUpdateRequest> request
     ) {
-        return ResponseEntity.ok(studyService.updateStudyOrder(userDetails.getMemberId(), orderList));
+        return ResponseEntity.ok().build();
     }
 
     //4. [USER] delete

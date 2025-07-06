@@ -21,12 +21,30 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     @Query("SELECT MAX(sm.personalOrderIndex) FROM StudyMember sm WHERE sm.member.id = :memberId")
     Optional<Integer> findMaxPersonalOrderIndexByMemberId(@Param("memberId") Long memberId);
 
+
     @Modifying
     @Query("UPDATE StudyMember sm SET sm.personalOrderIndex = :orderIndex " +
             "WHERE sm.member.id = :memberId AND sm.study.id = :studyId")
     void updatePersonalOrderIndex(@Param("memberId") Long memberId,
                                   @Param("studyId") Long studyId,
                                   @Param("orderIndex") Integer orderIndex);
+
+    //내가 속한 스터디들 + 스터디 정보
+    @Query("""
+        SELECT sm FROM StudyMember sm
+        JOIN FETCH sm.study
+        WHERE sm.member.id = :memberId
+        ORDER BY sm.personalOrderIndex ASC
+""")
+    List<StudyMember> findStudyMembersByMemberIdOrderByPersonalOrderIndexAsc(@Param("memberId") Long memberId);
+
+    //특정 스터디들에 속한 모든 멤버 + member 정보
+    @Query("""
+        SELECT sm FROM StudyMember sm
+        JOIN FETCH sm.member
+        WHERE sm.study.id IN :studyIds
+""")
+    List<StudyMember> findStudyMembersByStudyIdIn(@Param("studyIds") List<Long> studyIds);
 
 
     boolean existsByStudyAndMember(Study study, Member member);
