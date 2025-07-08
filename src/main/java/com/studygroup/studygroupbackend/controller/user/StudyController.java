@@ -67,6 +67,7 @@ public class StudyController {
             @CurrentUser CustomUserDetails userDetails,
             @RequestBody List<StudyOrderUpdateRequest> request
     ) {
+        studyService.updateStudyOrder(userDetails.getMemberId(),request);
         return ResponseEntity.ok().build();
     }
 

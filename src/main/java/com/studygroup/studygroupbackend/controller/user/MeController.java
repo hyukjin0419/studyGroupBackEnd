@@ -50,22 +50,4 @@ public class MeController {
     ) {
         return ResponseEntity.ok(memberService.deleteMember(userDetails.getMemberId()));
     }
-
-    @Operation(summary = "[USER] 본인이 속한 스터디 조회 API")
-    @GetMapping("/my-studies")
-    public ResponseEntity<List<StudyDetailResponse>> getMyStudyList(@CurrentUser CustomUserDetails userDetails) {
-        Long memberId = userDetails.getMemberId();
-        return ResponseEntity.ok(studyService.getStudiesByMemberIdAsc(memberId));
-    }
-
-    @Operation(summary = "[USER] 본인이 속한 스터디 순서 바꾸기 by Drag & Drop")
-    @PostMapping("/my-studies/order-update")
-    public ResponseEntity<Void> updateMyStudyOrder(
-            @CurrentUser CustomUserDetails userDetails,
-            @RequestBody StudyOrderUpdateListRequest request
-    ) {
-        studyService.updateStudyOrder(userDetails.getMemberId(), request.getOrderList());
-
-        return ResponseEntity.ok().build();
-    }
 }
