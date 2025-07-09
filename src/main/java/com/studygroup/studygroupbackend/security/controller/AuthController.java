@@ -15,17 +15,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Tag(name = "Auth", description = "로그인/회원가입 관련 API")
 @Slf4j
-@RestController
+//@RestController
+@Controller
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
-
     @Operation(summary = "회원가입 API")
     @PostMapping("/create_member")
     public ResponseEntity<MemberCreateResponse> createMember(@RequestBody MemberCreateRequest request) {
