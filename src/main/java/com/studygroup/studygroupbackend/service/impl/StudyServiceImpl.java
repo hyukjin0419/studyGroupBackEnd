@@ -141,15 +141,18 @@ public class StudyServiceImpl implements StudyService {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다."));
 
+
         StudyMemberSummaryResponse leaderDto = StudyMemberSummaryResponse.fromEntity(leaderMember);
 
         study.updateStudyInfo(
                 request.getName(),
                 request.getDescription(),
-                request.getColor(),
+                request.getPersonalColor(),
                 request.getDueDate(),
                 request.getStatus()
         );
+
+        leaderMember.updatePersonalColor(request.getPersonalColor());
 
         return StudyDetailResponse.fromEntity(study, leaderMember, leaderDto, null);
     }

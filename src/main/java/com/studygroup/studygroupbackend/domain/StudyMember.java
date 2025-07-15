@@ -49,6 +49,9 @@ public class StudyMember extends BaseEntity {
                 .build();
     }
 
+    public void updatePersonalColor(String personalColor){
+        this.personalColor = personalColor;
+    }
     public void changeRole(StudyRole newRole) {
         this.studyRole = newRole;
     }

@@ -73,7 +73,7 @@ public class StudyController {
 
     //4. [USER] delete
     @Operation(summary = "본인이 리더로 속한 단일 스터디 삭제 API", description = "[USER] 리더가 스터디를 삭제 합니다.")
-    @PostMapping("/delete/{studyId}")
+    @DeleteMapping("/delete/{studyId}")
     public ResponseEntity<StudyDeleteResponse> deleteStudy(
             @PathVariable Long studyId,
             @CurrentUser CustomUserDetails userDetails
