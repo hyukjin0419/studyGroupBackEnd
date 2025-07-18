@@ -21,11 +21,12 @@ public class StudyMemberController {
 
     /*
     멤버 초대하는 시나리오를 어떻게 할까?
-
-    1. 리더가 아이디를 통해서 멤버 초대
-    2. 푸시 알림 가고
-    3. 멤버가 수락 하면
-    4. 초대 완료
+    -> 초대가 발생한다
+    1. StudyInvite에 초대상태를 저장
+    2. Notification에 알림 메시지 저장
+    3. DeviceToken에서 대상자의 fcmToken 조회
+    4. Firebase 서버로 POST 요청하여 푸시 메시지 전송
+    5. Flutter에서 푸시 수신 -> 유저에게 알림띄움
 
     ------------------------------
     어떻게 구현?
@@ -37,6 +38,7 @@ public class StudyMemberController {
     - inviter (FK, Member)
     - invitee (FK, Member)
     - InviteStatus status (PENDING, ACCEPTED, REJECTED)
+    - createdAt, modifiedAt
 
 --->>>> 여기서 부터 알림에 대해 다시 고민해보쟈
     2. Notification
@@ -45,6 +47,16 @@ public class StudyMemberController {
     - Notification type
     - referencedId...?
     - message
+    - is_read
+    - read_at
+    - created_at
+
+    3.DeviceToken
+    - id
+    - member_id (토큰 주인)
+    - fcm_token (firebase에서 받은 디바이스 고유 토큰)
+    - device_type
+    - created_at & modified_at
 
     public enum NotificationType {
     INVITE,
