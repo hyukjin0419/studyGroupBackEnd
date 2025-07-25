@@ -58,12 +58,13 @@ public class AuthServiceImpl implements AuthService {
         Member member = memberRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다"));
 
+        refreshTokenRepository.deleteByMemberId(member.getId());
+
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())){
             throw new IllegalStateException("비밀번호가 일치하지 않습니다");
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(member.getId(),member.getUserName(), member.getRole());
-
         TokenWithExpiry refreshToken = jwtTokenProvider.generateRefreshToken(member.getId());
 
         RefreshToken refreshTokenEntity = RefreshToken.builder()
