@@ -22,7 +22,7 @@ public class StudyTimeDto {
                 studyTime.getId(),
                 studyTime.getMember().getId(),
                 studyTime.getDate(),
-                studyTime.getTotalMinuets()
+                studyTime.getTotalMinutes()
         );
     }
 }

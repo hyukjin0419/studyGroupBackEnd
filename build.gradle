@@ -45,6 +45,10 @@ dependencies {
 
     //Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //Test
+    testImplementation 'org.mockito:mockito-junit-jupiter' // JUnit5 + Mockito 통합
+    testImplementation 'org.assertj:assertj-core'          // 가독성 높은 fluent assertion
 }
 
 tasks.named('test') {

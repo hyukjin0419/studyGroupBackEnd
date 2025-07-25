@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.controller;
+package com.studygroup.studygroupbackend.controller.user;
 
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteRequest;
 import com.studygroup.studygroupbackend.dto.studymember.StudyMemberInviteResponse;
@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "StudyMember", description = "스터디 멤버에 관한 API")
 @RestController
-@RequestMapping("/studies/{studyId}/members")
+@RequestMapping("/studies/{studyId}/")
 @RequiredArgsConstructor
 public class StudyMemberController {
     private final StudyMemberService studyMemberService;
+
+
 
     @Operation(summary = "스터디에 멤버 초청 API", description = "스터디에 멤버를 초청합니다.")
     @PostMapping

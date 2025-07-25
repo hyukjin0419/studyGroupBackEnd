@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "studies")
@@ -37,6 +38,15 @@ public class Study extends BaseEntity {
     @Column(nullable = false)
     private StudyStatus status = StudyStatus.PROGRESSING;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String joinCode;
+
+    @PrePersist
+    private void initJoinCode() {
+        if (this.joinCode == null){
+            this.joinCode = UUID.randomUUID().toString();
+        }
+    }
 
     public static Study of(
             String name,

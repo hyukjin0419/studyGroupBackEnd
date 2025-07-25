@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Study", description = "스터디 관련 API")
+@Tag(name = "Study", description = "스터디 생성, 수정, 삭제등 스터디 자체에 대한 API")
 @Slf4j
 @RestController
 @RequestMapping("/studies")
