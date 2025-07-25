@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
 public class MemberLoginRequest {
     private String userName;
     private String password;
+    private String deviceToken;
+    private String deviceType;
 }

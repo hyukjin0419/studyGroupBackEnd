@@ -20,7 +20,7 @@ public class DeviceToken extends BaseEntity{
     private Member member;
 
     @Column(nullable = false)
-    private String fomToken;
+    private String fcmToken;
 
     private String deviceType;
 

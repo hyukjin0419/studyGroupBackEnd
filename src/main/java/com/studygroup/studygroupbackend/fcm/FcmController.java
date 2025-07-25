@@ -34,7 +34,7 @@ public class FcmController {
 초대 된다.
 
 --------------------
-1. 우선 login시 device token을 추가해야한다 (중복 처리 포함)
+[완료] 1. 우선 login시 device token을 추가해야한다 (중복 처리 포함)
 2. 팀장 studyinvite api 생성
 - study_invitation에 초대 기록 생성
 - notification에 알림 저장

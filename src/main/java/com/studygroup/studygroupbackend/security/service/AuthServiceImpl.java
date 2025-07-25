@@ -1,10 +1,12 @@
 package com.studygroup.studygroupbackend.security.service;
 
+import com.studygroup.studygroupbackend.domain.DeviceToken;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.repository.DeviceTokenRepository;
 import com.studygroup.studygroupbackend.security.jwt.domain.RefreshToken;
 import com.studygroup.studygroupbackend.security.jwt.JwtTokenProvider;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenResponse;
@@ -29,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenBlacklistService tokenBlacklistService;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     @Override
     public MemberCreateResponse createMember(MemberCreateRequest request) {
@@ -66,6 +69,15 @@ public class AuthServiceImpl implements AuthService {
 
         String accessToken = jwtTokenProvider.generateAccessToken(member.getId(),member.getUserName(), member.getRole());
         TokenWithExpiry refreshToken = jwtTokenProvider.generateRefreshToken(member.getId());
+
+        if(!deviceTokenRepository.existsByMemberIdAndFcmToken(member.getId(),request.getDeviceToken())) {
+            DeviceToken fcmToken = DeviceToken.builder()
+                    .member(member)
+                    .fcmToken(request.getDeviceToken())
+                    .deviceType(request.getDeviceType())
+                    .build();
+            deviceTokenRepository.save(fcmToken);
+        }
 
         RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .memberId(member.getId())
