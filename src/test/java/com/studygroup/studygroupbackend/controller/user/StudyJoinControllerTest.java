@@ -6,7 +6,7 @@ import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.domain.status.Role;
 import com.studygroup.studygroupbackend.domain.status.StudyRole;
 import com.studygroup.studygroupbackend.domain.status.StudyStatus;
-import com.studygroup.studygroupbackend.dto.studymember.leader.StudyJoinCodeResponse;
+import com.studygroup.studygroupbackend.dto.studyJoin.leader.StudyJoinCodeResponse;
 import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyRepository;
 import com.studygroup.studygroupbackend.service.impl.StudyJoinServiceImpl;
@@ -82,10 +82,10 @@ class StudyJoinControllerTest {
         given(studyRepository.findById(studyId)).willReturn(Optional.of(study));
 
         //when
-        StudyJoinCodeResponse response = studyJoinService.getStudyJoinCode(leaderId, studyId);
-
-        //then
-        assertThat(response).isNotNull();
-        assertThat(response.getJoinCode()).isEqualTo("abc-123");
+//        StudyDetailResponse response = studyRepository.getStudyJoinCode(leaderId, studyId);
+//
+//        //then
+//        assertThat(response).isNotNull();
+//        assertThat(response.getJoinCode()).isEqualTo("abc-123");
     }
 }

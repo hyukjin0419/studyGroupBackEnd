@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.dto.studymember.fellower;
+package com.studygroup.studygroupbackend.dto.studyJoin.leader;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudyJoinRequest {
-    private String joinCode;
+public class StudyMemberInvitationRequest {
+    private Long inviteeId;
 }

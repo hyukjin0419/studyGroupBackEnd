@@ -21,7 +21,7 @@ public class FcmController {
     @PostMapping("send")
     public ResponseEntity<String> sendTest(@RequestBody FcmMessageRequest request) {
         log.info("여기 들어옴");
-        fcmService.sendFcmMessage(request);
+        fcmService.sendFcmMessage(request, null);
         return ResponseEntity.ok("푸시 발송 완료");
     }
 }

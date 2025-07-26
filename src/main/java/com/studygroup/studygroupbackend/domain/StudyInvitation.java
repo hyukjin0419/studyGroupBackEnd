@@ -40,4 +40,14 @@ public class StudyInvitation extends BaseEntity{
     @Column
     private LocalDate respondedAt;
 
+    public static StudyInvitation of(
+            Study study, Member inviter, Member invitee, InvitationStatus status
+    ) {
+        return StudyInvitation.builder()
+                .study(study)
+                .inviter(inviter)
+                .invitee(invitee)
+                .status(status != null ? status : InvitationStatus.PENDING)
+                .build();
+    }
 }
