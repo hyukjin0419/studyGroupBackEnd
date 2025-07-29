@@ -74,7 +74,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         Member inviteeMember = memberRepository.findByUuid(inviteeUuid)
                 .orElseThrow(() -> new EntityNotFoundException("초대 대상 멤버가 존재하지 않습니다."));
 
-        if (leaderId.equals(inviteeUuid)) throw new IllegalStateException("자기 자신을 초대할 수 없습니다.");
+        if (inviterMember.getUuid().equals(inviteeUuid)) throw new IllegalStateException("자기 자신을 초대할 수 없습니다.");
 
         boolean isAlreadyMember = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), inviteeMember.getId());
         if (isAlreadyMember) throw new IllegalStateException("이미 해당 스터디에 참여한 사용자입니다.");
