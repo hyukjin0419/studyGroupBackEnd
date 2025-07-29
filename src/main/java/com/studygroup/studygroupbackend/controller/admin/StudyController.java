@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.controller.admin;
+//package com.studygroup.studygroupbackend.controller.admin;
 
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-public class StudyController {
+//public class StudyController {
 
     //우선 담아놓기
 //    @Operation(summary = "스터디 생성 API", description = "[USER] 새로운 스터디를 등록합니다.")
@@ -50,4 +50,4 @@ public class StudyController {
         return ResponseEntity.ok(studyService.deleteStudy(studyId, userDetails.getMemberId()));
     }
      */
-}
+//}

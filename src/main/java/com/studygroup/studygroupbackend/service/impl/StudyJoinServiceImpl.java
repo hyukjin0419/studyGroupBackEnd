@@ -61,7 +61,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     }
 
     @Override
-    public void inviteMember(Long leaderId, Long studyId, Long inviteeId) {
+    public void inviteMember(Long leaderId, Long studyId, String inviteeUuid) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 스터디입니다."));
 
@@ -71,26 +71,28 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         Member inviterMember = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new EntityNotFoundException("리더 멤버가 존재하지 않습니다."));
 
-        Member inviteeMember = memberRepository.findById(inviteeId)
+        Member inviteeMember = memberRepository.findByUuid(inviteeUuid)
                 .orElseThrow(() -> new EntityNotFoundException("초대 대상 멤버가 존재하지 않습니다."));
 
-        if (leaderId.equals(inviteeId)) throw new IllegalStateException("자기 자신을 초대할 수 없습니다.");
+        if (leaderId.equals(inviteeUuid)) throw new IllegalStateException("자기 자신을 초대할 수 없습니다.");
 
-        boolean isAlreadyMember = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), inviteeId);
+        boolean isAlreadyMember = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), inviteeMember.getId());
         if (isAlreadyMember) throw new IllegalStateException("이미 해당 스터디에 참여한 사용자입니다.");
 
         boolean alreadySentInvitation = studyInvitationRepository.existsByStudyIdAndInviteeIdAndStatus(
-                studyId, inviteeId, InvitationStatus.PENDING
+                studyId, inviteeMember.getId(), InvitationStatus.PENDING
         );
         if(alreadySentInvitation) throw new IllegalStateException("이미 초대한 멤버입니다.");
+
+        String notificationMessage = inviterMember.getUserName() + "님이 " + inviteeMember.getUserName() + "님을 " + study.getName() + "에 초대하셨습니다.";
 
         StudyInvitation invitation = StudyInvitation.of(
                 study,inviterMember,
                 inviteeMember,
-                InvitationStatus.PENDING);
+                InvitationStatus.PENDING,
+                notificationMessage
+        );
         studyInvitationRepository.save(invitation);
-
-        String notificationMessage = inviterMember.getUserName() + "님이 " + inviteeMember.getUserName() + "님을 " + study.getName() + "에 초대하셨습니다.";
 
         AppNotification notification = AppNotification.of(
                 inviterMember,
@@ -121,7 +123,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     @Override
     public void inviteMembers(Long leaderId, Long studyId, List<StudyMemberInvitationRequest> requestList) {
         for (StudyMemberInvitationRequest request : requestList) {
-            inviteMember(leaderId,studyId, request.getInviteeId());
+            inviteMember(leaderId,studyId, request.getInviteeUuid());
         }
     }
 }

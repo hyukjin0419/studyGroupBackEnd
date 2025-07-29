@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudyMemberInvitationRequest {
-    private Long inviteeId;
+    private String inviteeUuid; //uuid로 오고 있음
 }

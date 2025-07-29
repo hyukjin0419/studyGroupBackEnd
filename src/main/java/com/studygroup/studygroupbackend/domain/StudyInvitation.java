@@ -41,12 +41,13 @@ public class StudyInvitation extends BaseEntity{
     private LocalDate respondedAt;
 
     public static StudyInvitation of(
-            Study study, Member inviter, Member invitee, InvitationStatus status
+            Study study, Member inviter, Member invitee, InvitationStatus status, String message
     ) {
         return StudyInvitation.builder()
                 .study(study)
                 .inviter(inviter)
                 .invitee(invitee)
+                .message(message)
                 .status(status != null ? status : InvitationStatus.PENDING)
                 .build();
     }
