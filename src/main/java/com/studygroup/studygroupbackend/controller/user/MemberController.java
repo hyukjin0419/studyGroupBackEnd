@@ -20,7 +20,7 @@ public class MemberController {
     @Operation(summary = "실시간 회원 검색", description = "사용자 이름 일부로 멤버를 검색합니다.")
     @GetMapping("{studyId}/search")
     public ResponseEntity<List<MemberSearchResponse>> searchMembers(@PathVariable Long studyId, @RequestParam String keyword){
-        return ResponseEntity.ok(memberService.searchMembersByUserName(keyword, studyId));
+        return ResponseEntity.ok(memberService.searchAvailableMembersByUserName(keyword, studyId));
     }
 }
 

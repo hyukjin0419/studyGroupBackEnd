@@ -12,5 +12,5 @@ public interface MemberService {
     MemberDetailResponse updateMember(Long memberId, MemberUpdateRequest request);
     MemberDeleteResponse deleteMember(Long memberId);
     List<MemberDetailResponse> getAllMembers();
-    List<MemberSearchResponse> searchMembersByUserName(String keyword, Long studyId);
+    List<MemberSearchResponse> searchAvailableMembersByUserName(String keyword, Long studyId);
 }
