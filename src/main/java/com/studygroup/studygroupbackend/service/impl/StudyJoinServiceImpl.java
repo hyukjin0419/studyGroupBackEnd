@@ -114,6 +114,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
                     .title("스터디 초대 알림")
                     .body(notificationMessage)
                     .invitationId(invitation.getId())
+                    .type(notification.getType())
                     .build();
 
             fcmService.sendInvitationPush(fcmInvitationRequest);
@@ -123,7 +124,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
     @Override
     public void inviteMembers(Long leaderId, Long studyId, List<StudyMemberInvitationRequest> requestList) {
         for (StudyMemberInvitationRequest request : requestList) {
-            inviteMember(leaderId,studyId, request.getInviteeUuid());
+            inviteMember(leaderId, studyId, request.getInviteeUuid());
         }
     }
 }

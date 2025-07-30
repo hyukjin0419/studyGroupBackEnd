@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.studygroup.studygroupbackend.domain.status.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +21,10 @@ public class FcmService {
     public void sendInvitationPush(FcmInvitationRequest request) {
         try{
             Map<String, String> data = new HashMap<>();
-            data.put("type", "INVITATION");
-            data.put("InvitationId", String.valueOf(request.getInvitationId()));
+            data.put("type", NotificationType.STUDY_INVITATION.toString());
+            data.put("invitationId", String.valueOf(request.getInvitationId()));
+            data.put("title", request.getTitle());
+            data.put("body", request.getBody());
 
             sendFcmMessage(request, data);
         } catch (Exception e){
