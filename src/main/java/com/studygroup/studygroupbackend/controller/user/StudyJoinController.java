@@ -39,7 +39,7 @@ public class StudyJoinController {
             @RequestBody List<StudyMemberInvitationRequest> requestList
     ) {
         Long leaderId = userDetails.getMemberId();
-        studyJoinService.inviteMembers(studyId, leaderId, requestList);
+        studyJoinService.inviteMembers(leaderId, studyId, requestList);
         return ResponseEntity.ok().build();
     }
 
