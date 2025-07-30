@@ -39,12 +39,13 @@ public class StudyMember extends BaseEntity {
 
     private LocalDateTime leftAt;
 
-    public static StudyMember of(Study study, Member member, String personalColor, StudyRole role, Integer personalOrderIndex) {
+    public static StudyMember of(Study study, Member member, String personalColor, StudyRole role, Integer personalOrderIndex, LocalDateTime joinedAt) {
         return StudyMember.builder()
                 .study(study)
                 .member(member)
                 .personalColor(personalColor)
                 .studyRole(role)
+                .joinedAt(joinedAt)
                 .personalOrderIndex(personalOrderIndex)
                 .build();
     }

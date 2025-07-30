@@ -13,9 +13,11 @@ import com.studygroup.studygroupbackend.service.StudyJoinService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,7 +46,6 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         if (isAlreadyJoined) throw new IllegalStateException("이미 해당 스터디에 참여한 사용자입니다.");
 
 
-
         int newPersonalOrderIndex = studyMemberRepository
                 .findMaxPersonalOrderIndexByMemberId(memberId)
                 .orElse(0) + 1;
@@ -54,7 +55,8 @@ public class StudyJoinServiceImpl implements StudyJoinService {
                 member,
                 study.getColor(),
                 StudyRole.FELLOW,
-                newPersonalOrderIndex
+                newPersonalOrderIndex,
+                LocalDateTime.now()
         );
 
         studyMemberRepository.save(newMember);
@@ -126,6 +128,41 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         for (StudyMemberInvitationRequest request : requestList) {
             inviteMember(leaderId, studyId, request.getInviteeUuid());
         }
+    }
+
+    @Override
+    public Long acceptInvitation(Long invitationId, Long memberId) {
+        StudyInvitation invitation = studyInvitationRepository.findById(invitationId)
+                .orElseThrow(() -> new EntityNotFoundException("초대를 찾을 수 없습니다."));
+
+        Member invitee = invitation.getInvitee();
+        Study study = invitation.getStudy();
+
+        boolean isAlreadyJoined = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), invitee.getId());
+        if (isAlreadyJoined) throw new IllegalStateException("이미 해당 스터디에 참여한 사용자입니다.");
+
+        if(!invitee.getId().equals(memberId)){
+            throw new AccessDeniedException("본인의 초대만 수락할 수 있습니다");
+        }
+
+        invitation.accept();
+
+        int newPersonalOrderIndex = studyMemberRepository
+                .findMaxPersonalOrderIndexByMemberId(invitee.getId())
+                .orElse(0) + 1;
+
+        StudyMember newMember = StudyMember.of(
+                study,
+                invitee,
+                study.getColor(),
+                StudyRole.FELLOW,
+                newPersonalOrderIndex,
+                LocalDateTime.now()
+        );
+
+        studyMemberRepository.save(newMember);
+
+        return study.getId();
     }
 }
 

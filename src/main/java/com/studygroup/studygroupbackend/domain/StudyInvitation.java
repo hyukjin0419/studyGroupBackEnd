@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "study_invitation")
@@ -38,7 +39,7 @@ public class StudyInvitation extends BaseEntity{
     private String message;
 
     @Column
-    private LocalDate respondedAt;
+    private LocalDateTime respondedAt;
 
     public static StudyInvitation of(
             Study study, Member inviter, Member invitee, InvitationStatus status, String message
@@ -50,5 +51,10 @@ public class StudyInvitation extends BaseEntity{
                 .message(message)
                 .status(status != null ? status : InvitationStatus.PENDING)
                 .build();
+    }
+
+    public void accept() {
+        this.status = InvitationStatus.ACCEPTED;
+        this.respondedAt = LocalDateTime.now();
     }
 }

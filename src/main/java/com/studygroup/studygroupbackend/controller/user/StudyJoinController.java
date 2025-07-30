@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.controller.user;
 
+import com.studygroup.studygroupbackend.dto.studyJoin.fellower.StudyInvitationAcceptResponse;
 import com.studygroup.studygroupbackend.dto.studyJoin.fellower.StudyJoinRequest;
 import com.studygroup.studygroupbackend.dto.studyJoin.leader.StudyMemberInvitationRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
@@ -42,6 +43,17 @@ public class StudyJoinController {
         studyJoinService.inviteMembers(leaderId, studyId, requestList);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "스터디 초대 수락", description = "스터디 초대를 수락합니다")
+    @PostMapping("/{invitationId}/accept")
+    public ResponseEntity<StudyInvitationAcceptResponse> acceptInvitation(
+            @PathVariable Long invitationId,
+            @CurrentUser CustomUserDetails userDetails
+    ) {
+        Long studyId = studyJoinService.acceptInvitation(invitationId, userDetails.getMemberId());
+        return ResponseEntity.ok(StudyInvitationAcceptResponse.from(studyId));
+    }
+
 
 
 //    @Operation(summary = "스터디에서 멤버 삭제 API", description = "스터디에서 멤버를 추방합니다.")

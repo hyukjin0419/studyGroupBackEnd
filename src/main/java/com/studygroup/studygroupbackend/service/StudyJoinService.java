@@ -8,4 +8,5 @@ public interface StudyJoinService {
     void joinStudyByCode(Long memberId, String joinCode);
     void inviteMember(Long leaderId, Long studyId, String inviteeUuid);
     void inviteMembers(Long leaderId, Long studyId, List<StudyMemberInvitationRequest> requestList);
+    Long acceptInvitation(Long invitationId, Long memberId);
 }
