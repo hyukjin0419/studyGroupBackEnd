@@ -164,6 +164,25 @@ public class StudyJoinServiceImpl implements StudyJoinService {
 
         return study.getId();
     }
+
+
+    @Override
+    public void declineInvitation(Long invitationId, Long memberId) {
+        StudyInvitation invitation = studyInvitationRepository.findById(invitationId)
+                .orElseThrow(() -> new EntityNotFoundException("초대를 찾을 수 없습니다."));
+
+        Member invitee = invitation.getInvitee();
+        Study study = invitation.getStudy();
+
+        boolean isAlreadyJoined = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), invitee.getId());
+        if (isAlreadyJoined) throw new IllegalStateException("이미 해당 스터디에 참여한 사용자입니다.");
+
+        if(!invitee.getId().equals(memberId)){
+            throw new AccessDeniedException("본인의 초대만 거절할 수 있습니다");
+        }
+
+        invitation.decline();
+    }
 }
 
 

@@ -57,4 +57,9 @@ public class StudyInvitation extends BaseEntity{
         this.status = InvitationStatus.ACCEPTED;
         this.respondedAt = LocalDateTime.now();
     }
+
+    public void decline(){
+        this.status = InvitationStatus.REJECTED;
+        this.respondedAt = LocalDateTime.now();
+    }
 }

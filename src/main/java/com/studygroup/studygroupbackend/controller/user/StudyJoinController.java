@@ -54,6 +54,16 @@ public class StudyJoinController {
         return ResponseEntity.ok(StudyInvitationAcceptResponse.from(studyId));
     }
 
+    @Operation(summary = "스터디 초대 거절", description = "스터디 초대를 거절합니다")
+    @PostMapping("/{invitationId}/decline")
+    public ResponseEntity<Void> declineInvitation(
+            @PathVariable Long invitationId,
+            @CurrentUser CustomUserDetails userDetails
+    ) {
+        studyJoinService.declineInvitation(invitationId, userDetails.getMemberId());
+        return ResponseEntity.ok().build();
+    }
+
 
 
 //    @Operation(summary = "스터디에서 멤버 삭제 API", description = "스터디에서 멤버를 추방합니다.")
