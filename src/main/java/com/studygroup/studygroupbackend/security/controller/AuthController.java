@@ -2,6 +2,7 @@ package com.studygroup.studygroupbackend.security.controller;
 
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
+import com.studygroup.studygroupbackend.dto.member.login.MemberLogoutRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenRequest;
@@ -55,10 +56,11 @@ public class AuthController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> logout(
             @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody MemberLogoutRequest request,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         String accessToken = authorizationHeader.replace("Bearer ", "");
-        authService.logout(accessToken, Long.valueOf(userDetails.getUsername()));
+        authService.logout(accessToken, Long.valueOf(userDetails.getUsername()), request.getDeviceToken());
         return ResponseEntity.ok().build();
     }
 }

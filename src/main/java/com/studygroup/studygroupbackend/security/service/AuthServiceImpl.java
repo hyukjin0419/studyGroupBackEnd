@@ -70,6 +70,8 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtTokenProvider.generateAccessToken(member.getId(),member.getUserName(), member.getRole());
         TokenWithExpiry refreshToken = jwtTokenProvider.generateRefreshToken(member.getId());
 
+        deviceTokenRepository.deleteByFcmTokenAndMemberIdNot(request.getDeviceToken(),member.getId());
+
         if(!deviceTokenRepository.existsByMemberIdAndFcmToken(member.getId(),request.getDeviceToken())) {
             DeviceToken fcmToken = DeviceToken.builder()
                     .member(member)
@@ -97,11 +99,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(String accessToken, Long memberId) {
+    public void logout(String accessToken, Long memberId, String deviceToken) {
         refreshTokenRepository.deleteByMemberId(memberId);
 
         long expiration = jwtTokenProvider.getRemainingExpiration(accessToken);
         tokenBlacklistService.blacklistToken(accessToken,expiration);
+
+        deviceTokenRepository.deleteByMemberIdAndFcmToken(memberId, deviceToken);
     }
 
     @Override
