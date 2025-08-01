@@ -4,6 +4,8 @@ import com.studygroup.studygroupbackend.domain.status.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "members")
 @Getter
@@ -38,6 +40,16 @@ public class Member extends BaseEntity {
             .email(email)
             .role(Role.USER)
             .build();
+    }
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid;
+
+    @PrePersist
+    private void initUuid(){
+        if(this.uuid == null){
+            this.uuid = UUID.randomUUID().toString();
+        }
     }
 
     /*

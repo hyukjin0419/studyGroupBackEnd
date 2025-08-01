@@ -49,6 +49,9 @@ dependencies {
     //Test
     testImplementation 'org.mockito:mockito-junit-jupiter' // JUnit5 + Mockito 통합
     testImplementation 'org.assertj:assertj-core'          // 가독성 높은 fluent assertion
+
+    //fcm
+    implementation 'com.google.firebase:firebase-admin:9.5.0'
 }
 
 tasks.named('test') {

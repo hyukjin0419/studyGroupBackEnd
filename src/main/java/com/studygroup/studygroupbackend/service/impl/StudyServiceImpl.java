@@ -1,10 +1,10 @@
 package com.studygroup.studygroupbackend.service.impl;
 
+import com.studygroup.studygroupbackend.domain.StudyInvitation;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateRequest;
 import com.studygroup.studygroupbackend.dto.study.create.StudyCreateResponse;
 import com.studygroup.studygroupbackend.dto.study.delete.StudyDeleteResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
-import com.studygroup.studygroupbackend.dto.study.detail.StudyListResponse;
 import com.studygroup.studygroupbackend.dto.study.detail.StudyMemberSummaryResponse;
 import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateRequest;
 import com.studygroup.studygroupbackend.dto.study.update.StudyUpdateRequest;
@@ -13,6 +13,7 @@ import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.domain.status.StudyRole;
 import com.studygroup.studygroupbackend.repository.MemberRepository;
+import com.studygroup.studygroupbackend.repository.StudyInvitationRepository;
 import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
 import com.studygroup.studygroupbackend.repository.StudyRepository;
 import com.studygroup.studygroupbackend.service.StudyService;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +37,7 @@ public class StudyServiceImpl implements StudyService {
     private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final StudyInvitationRepository studyInvitationRepository;
 
     @Override
     @Transactional
@@ -55,7 +58,8 @@ public class StudyServiceImpl implements StudyService {
                 leader,
                 request.getColor(),
                 StudyRole.LEADER,
-                maxPersonalOrderIndex+1
+                maxPersonalOrderIndex+1,
+                LocalDateTime.now()
         );
 
         studyMemberRepository.save(leaderMember);
@@ -171,14 +175,19 @@ public class StudyServiceImpl implements StudyService {
     @Override
     @Transactional
     public StudyDeleteResponse deleteStudy(Long studyId, Long leaderId) {
-        Study study = studyRepository.findById(studyId)
+        Study study = studyRepository.findByIdAndDeletedFalse(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
 
         StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
-        studyMemberRepository.deleteByStudy(study);
-        studyRepository.delete(study);
+        study.softDeletion();;
+
+        List<StudyMember> members = studyMemberRepository.findByStudyIdAndDeletedFalse(studyId);
+        members.forEach(StudyMember::softDeletion);
+
+        List<StudyInvitation> invitations = studyInvitationRepository.findByStudyIdAndDeletedFalse(studyId);
+        invitations.forEach(StudyInvitation::softDeletion);
 
         return StudyDeleteResponse.successDelete();
     }

@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.dto.studymember;
+package com.studygroup.studygroupbackend.dto.studyJoin.leader;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudyMemberInviteRequest {
-    private String email;
+public class StudyMemberInvitationRequest {
+    private String inviteeUuid; //uuid로 오고 있음
 }

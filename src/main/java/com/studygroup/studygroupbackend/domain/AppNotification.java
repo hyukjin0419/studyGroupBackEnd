@@ -4,15 +4,15 @@ import com.studygroup.studygroupbackend.domain.status.NotificationType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notificatiopn")
+@Table(name = "notification")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class Notification extends BaseEntity{
+public class AppNotification extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +41,16 @@ public class Notification extends BaseEntity{
     private Boolean isRead;
 
     @Column
-    private LocalDate read_at;
+    private LocalDateTime read_at;
+
+    public static AppNotification of(Member sender, Member recipient, NotificationType type, Long referencedId, String message) {
+        return AppNotification.builder()
+                .sender(sender)
+                .recipient(recipient)
+                .type(type)
+                .referencedId(referencedId)
+                .message(message)
+                .isRead(false)
+                .build();
+    }
 }

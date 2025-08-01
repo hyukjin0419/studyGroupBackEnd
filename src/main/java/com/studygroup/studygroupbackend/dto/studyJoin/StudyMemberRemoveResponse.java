@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.dto.studymember;
+package com.studygroup.studygroupbackend.dto.studyJoin;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

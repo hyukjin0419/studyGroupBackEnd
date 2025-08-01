@@ -11,5 +11,5 @@ public interface AuthService {
     MemberLoginResponse login(MemberLoginRequest request);
     RefreshTokenResponse reissueAccessToken(String refreshToken);
 //    RefreshTokenResponse reissueRefreshToken(String refreshToken);
-    void logout(String accessToken, Long memberId);
+    void logout(String accessToken, Long memberId, String deviceToken);
 }

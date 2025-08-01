@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.dto.studymember.fellower;
+package com.studygroup.studygroupbackend.dto.member.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class StudyJoinRequest {
-    private String joinCode;
+@AllArgsConstructor
+public class MemberLogoutRequest {
+    private String deviceToken;
 }
