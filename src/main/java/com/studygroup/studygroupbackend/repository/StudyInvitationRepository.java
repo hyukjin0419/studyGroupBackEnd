@@ -1,6 +1,7 @@
 package com.studygroup.studygroupbackend.repository;
 
 import com.studygroup.studygroupbackend.domain.StudyInvitation;
+import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface StudyInvitationRepository extends JpaRepository<StudyInvitation
 
     @Query("SELECT si.invitee.id FROM StudyInvitation si WHERE si.study.id = :studyId AND si.status = :status")
     List<Long> findInviteeIdsByStudyIdAndStatus(@Param("studyId") Long studyId, @Param("status") InvitationStatus status);
+
+    List<StudyInvitation> findByStudyIdAndDeletedFalse(Long studyId);
 }

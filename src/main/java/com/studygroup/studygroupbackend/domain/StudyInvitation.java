@@ -3,8 +3,8 @@ package com.studygroup.studygroupbackend.domain;
 import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@SQLRestriction("deleted = false")
 public class StudyInvitation extends BaseEntity{
 
     @Id
@@ -41,6 +42,13 @@ public class StudyInvitation extends BaseEntity{
     @Column
     private LocalDateTime respondedAt;
 
+    @Column(nullable = false)
+    @Builder.Default
+    boolean deleted = false;
+
+    @Column(nullable = true)
+    LocalDateTime deletedAt;
+
     public static StudyInvitation of(
             Study study, Member inviter, Member invitee, InvitationStatus status, String message
     ) {
@@ -61,5 +69,10 @@ public class StudyInvitation extends BaseEntity{
     public void decline(){
         this.status = InvitationStatus.REJECTED;
         this.respondedAt = LocalDateTime.now();
+    }
+
+    public void softDeletion(){
+        this.deleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 }

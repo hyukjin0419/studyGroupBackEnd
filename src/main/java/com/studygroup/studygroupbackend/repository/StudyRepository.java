@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface StudyRepository extends JpaRepository<Study, Long> {
     Optional<Study> findByJoinCode(String joinCode);
+    Optional<Study> findByIdAndDeletedFalse(Long studyId);
 }

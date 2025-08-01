@@ -3,6 +3,7 @@ package com.studygroup.studygroupbackend.domain;
 import com.studygroup.studygroupbackend.domain.status.StudyStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@SQLRestriction("deleted = false")
 public class Study extends BaseEntity {
 
     @Id
@@ -41,11 +43,19 @@ public class Study extends BaseEntity {
     @Column(nullable = false, unique = true, updatable = false)
     private String joinCode;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean deleted = false;
+
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
+
     @PrePersist
-    private void initJoinCode() {
+    private void init() {
         if (this.joinCode == null){
             this.joinCode = UUID.randomUUID().toString();
         }
+        this.deleted = false;
     }
 
     public static Study of(
@@ -78,5 +88,10 @@ public class Study extends BaseEntity {
         if (color != null) this.color = color;
         if (dueDate != null) this.dueDate = dueDate;
         if (status != null) this.status = status;
+    }
+
+    public void softDeletion(){
+        this.deleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 }
