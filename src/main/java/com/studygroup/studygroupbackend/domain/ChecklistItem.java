@@ -28,7 +28,7 @@ public class ChecklistItem extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String content;
 
-    @Column
+    @Column(nullable = true)
     private LocalDateTime dueDate; //null이 기본값
 
     private ChecklistItem(Study study, Member creator, String content){
