@@ -1,33 +1,39 @@
 package com.studygroup.studygroupbackend.domain;
 
-import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
+import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "checklist_item_assignments")
 @Getter
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistItemAssignment extends BaseEntity {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@SQLRestriction("deleted = false")
+public class ChecklistItemAssignment extends SoftDeletableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "checklistItem_id", nullable = false)
+    @JoinColumn(name = "checklist_item_id", nullable = false)
     private ChecklistItem checklistItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "study_member_id", nullable = false)
+    private StudyMember studyMember;
 
     @Column(nullable = false)
-    private boolean isCompleted = false;
+    private boolean completed = false;
 
     private LocalDateTime completedAt;
 
@@ -40,30 +46,27 @@ public class ChecklistItemAssignment extends BaseEntity {
     @Column(nullable = false)
     private int personalOrderIndex;
 
-    private ChecklistItemAssignment(ChecklistItem checklistItem, Member member, Study study, LocalDateTime assignedAt,
-                            int studyOrderIndex, int personalOrderIndex) {
-        this.checklistItem = checklistItem;
-        this.member = member;
-        this.assignedAt = assignedAt;
-        this.studyOrderIndex = studyOrderIndex;
-        this.personalOrderIndex = personalOrderIndex;
-    }
 
-    public static ChecklistItemAssignment assign(ChecklistItem checklistItem, Member member, Study study,
-                                         int studyOrderIndex, int personalOrderIndex) {
-        return new ChecklistItemAssignment(
-                checklistItem,
-                member,
-                study,
-                LocalDateTime.now(),
-                studyOrderIndex,
-                personalOrderIndex
-        );
+    public static ChecklistItemAssignment assign(
+            StudyMember studyMember,
+            ChecklistItem checklistItem,
+            int studyOrderIndex,
+            int personalOrderIndex)
+    {
+        return ChecklistItemAssignment.builder()
+                .studyMember(studyMember)
+                .checklistItem(checklistItem)
+                .assignedAt(LocalDateTime.now())
+                .completed(false)
+                .deleted(false)
+                .studyOrderIndex(studyOrderIndex)
+                .personalOrderIndex(personalOrderIndex)
+                .build();
     }
 
     public void changeStatus() {
-        this.isCompleted = !this.isCompleted;
-        this.completedAt = this.isCompleted ? LocalDateTime.now() : null;
+        this.completed = !this.completed;
+        this.completedAt = this.completed ? LocalDateTime.now() : null;
     }
 
     public void updateStudyOrderIndex(int newIndex){

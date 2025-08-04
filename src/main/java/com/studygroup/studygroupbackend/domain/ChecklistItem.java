@@ -1,18 +1,24 @@
 package com.studygroup.studygroupbackend.domain;
 
-import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
+import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "checklist_items")
 @Getter
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistItem extends BaseEntity {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@SQLRestriction("deleted = false")
+public class ChecklistItem extends SoftDeletableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,26 +36,18 @@ public class ChecklistItem extends BaseEntity {
     private String content;
 
     @Column(nullable = true)
-    private LocalDateTime dueDate; //null이 기본값
-
-    private ChecklistItem(Study study, Member creator, String content){
-        this(study, creator, content, null);
-    }
-
-    private ChecklistItem(Study study, Member creator, String content, LocalDateTime dueDate){
-        this.study = study;
-        this.creator = creator;
-        this.content = content;
-        this.dueDate = dueDate;
-    }
-
-    public static ChecklistItem of(Study study, Member creator, String content) {
-        return new ChecklistItem(study, creator, content);
-    }
+    private LocalDateTime dueDate;
 
     public static ChecklistItem of(Study study, Member creator, String content, LocalDateTime dueDate) {
-        return new ChecklistItem(study, creator, content, dueDate);
+        return ChecklistItem.builder()
+                .study(study)
+                .creator(creator)
+                .content(content)
+                .dueDate(dueDate)
+                .deleted(false)
+                .build();
     }
+
 
     public void updateContent(String content) {
         this.content = content;
