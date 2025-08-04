@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.domain;
 
+import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

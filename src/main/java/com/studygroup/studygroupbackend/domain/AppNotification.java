@@ -1,8 +1,10 @@
 package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.NotificationType;
+import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -11,8 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
-public class AppNotification extends BaseEntity{
+@SuperBuilder
+public class AppNotification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -181,13 +181,18 @@ public class StudyServiceImpl implements StudyService {
         StudyMember leaderMember = studyMemberRepository.findByStudyIdAndMemberIdAndStudyRole(studyId, leaderId, StudyRole.LEADER)
                 .orElseThrow(() -> new IllegalStateException("스터디장만 스터디를 수정할 수 있습니다."));
 
-        study.softDeletion();;
 
         List<StudyMember> members = studyMemberRepository.findByStudyIdAndDeletedFalse(studyId);
-        members.forEach(StudyMember::softDeletion);
-
         List<StudyInvitation> invitations = studyInvitationRepository.findByStudyIdAndDeletedFalse(studyId);
+
+        study.softDeletion();;
+
+        members.forEach(StudyMember::softDeletion);
+//        studyMemberRepository.saveAll(members);
+
+
         invitations.forEach(StudyInvitation::softDeletion);
+//        studyInvitationRepository.saveAll(invitations);
 
         return StudyDeleteResponse.successDelete();
     }

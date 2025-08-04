@@ -1,22 +1,23 @@
 package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.StudyStatus;
+import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "studies")
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SQLRestriction("deleted = false")
-public class Study extends BaseEntity {
+public class Study extends SoftDeletableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,13 +44,6 @@ public class Study extends BaseEntity {
     @Column(nullable = false, unique = true, updatable = false)
     private String joinCode;
 
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean deleted = false;
-
-    @Column(nullable = true)
-    private LocalDateTime deletedAt;
-
     @PrePersist
     private void init() {
         if (this.joinCode == null){
@@ -73,6 +67,7 @@ public class Study extends BaseEntity {
                 .dueDate(dueDate != null ? dueDate : LocalDateTime.now().plusDays(30))
                 .progress(progress != null ? progress : 0.0)
                 .status(status != null ? status : StudyStatus.PROGRESSING)
+                .deleted(false)
                 .build();
     }
 
@@ -88,10 +83,5 @@ public class Study extends BaseEntity {
         if (color != null) this.color = color;
         if (dueDate != null) this.dueDate = dueDate;
         if (status != null) this.status = status;
-    }
-
-    public void softDeletion(){
-        this.deleted = true;
-        this.deletedAt = LocalDateTime.now();
     }
 }

@@ -1,8 +1,10 @@
 package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.Role;
+import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
@@ -11,7 +13,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder
 public class Member extends BaseEntity {
 
     @Id
