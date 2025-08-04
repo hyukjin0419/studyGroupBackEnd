@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.domain;
 
+import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "checklist_item_assignments")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistItemAssignment extends BaseEntity{
+public class ChecklistItemAssignment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

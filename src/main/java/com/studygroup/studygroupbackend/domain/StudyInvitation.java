@@ -1,8 +1,11 @@
 package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
+import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
+import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
@@ -12,9 +15,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder
 @SQLRestriction("deleted = false")
-public class StudyInvitation extends BaseEntity{
+public class StudyInvitation extends SoftDeletableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,13 +45,6 @@ public class StudyInvitation extends BaseEntity{
     @Column
     private LocalDateTime respondedAt;
 
-    @Column(nullable = false)
-    @Builder.Default
-    boolean deleted = false;
-
-    @Column(nullable = true)
-    LocalDateTime deletedAt;
-
     public static StudyInvitation of(
             Study study, Member inviter, Member invitee, InvitationStatus status, String message
     ) {
@@ -58,6 +54,7 @@ public class StudyInvitation extends BaseEntity{
                 .invitee(invitee)
                 .message(message)
                 .status(status != null ? status : InvitationStatus.PENDING)
+                .deleted(false)
                 .build();
     }
 
@@ -69,10 +66,5 @@ public class StudyInvitation extends BaseEntity{
     public void decline(){
         this.status = InvitationStatus.REJECTED;
         this.respondedAt = LocalDateTime.now();
-    }
-
-    public void softDeletion(){
-        this.deleted = true;
-        this.deletedAt = LocalDateTime.now();
     }
 }

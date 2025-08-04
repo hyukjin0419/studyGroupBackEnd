@@ -2,9 +2,13 @@ package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.StudyMemberStatus;
 import com.studygroup.studygroupbackend.domain.status.StudyRole;
+import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLRestriction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
@@ -12,16 +16,17 @@ import java.time.LocalDateTime;
 @Table(name = "study_members",
         uniqueConstraints = @UniqueConstraint(
                 name = "uq_study_member",
-                columnNames = {"study_id, member_id"}
+                columnNames = {"study_id", "member_id"}
         )
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder
 @SQLRestriction("deleted = false")
-public class StudyMember extends BaseEntity {
+public class StudyMember extends SoftDeletableEntity {
 
+    private static final Logger log = LoggerFactory.getLogger(StudyMember.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,12 +57,6 @@ public class StudyMember extends BaseEntity {
     @Builder.Default
     private StudyMemberStatus studyMemberStatus = StudyMemberStatus.ACTIVE;
 
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean deleted = false;
-
-    @Column
-    private LocalDateTime deletedAt;
 
     //============== 생성자 메소드 ==========================
 
@@ -69,6 +68,7 @@ public class StudyMember extends BaseEntity {
                 .studyRole(role)
                 .joinedAt(joinedAt)
                 .personalOrderIndex(personalOrderIndex)
+                .deleted(false)
                 .build();
     }
 
@@ -89,10 +89,5 @@ public class StudyMember extends BaseEntity {
     public void kicked() {
         this.studyMemberStatus = StudyMemberStatus.KICKED;
         this.leftAt = LocalDateTime.now();
-    }
-
-    public void softDeletion() {
-        this.deleted = true;
-        this.deletedAt = LocalDateTime.now();
     }
 }

@@ -1,15 +1,17 @@
 package com.studygroup.studygroupbackend.domain;
 
+import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "device_token")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
-public class DeviceToken extends BaseEntity{
+@SuperBuilder
+public class DeviceToken extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
