@@ -14,11 +14,5 @@ public class ChecklistItemAssignmentController {
 
     private final ChecklistItemAssignmentService checklistItemAssignmentService;
 
-//    @Operation(summary = "본인이 리더로써 스터디 생성 API", description = "[USER] 새로운 스터디를 리더로써 등록합니다.")
-//    @PostMapping("/create")
-//    public ResponseEntity<StudyCreateResponse> createStudy(
-//            @CurrentUser CustomUserDetails userDetails,
-//            @RequestBody StudyCreateRequest request) {
-//        return ResponseEntity.ok(studyService.createStudy(userDetails.getMemberId(),request));
-//    }
+//    @
 }

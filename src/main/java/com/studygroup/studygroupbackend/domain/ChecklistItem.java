@@ -7,12 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "checklist_items")
+//study_id가 있을 땐 member_id가 있으면 안되고
+//member_id가 있을 땐 study_id가 있으면 안된다.
+@Check(constraints = "(study_id IS NOT NULL AND member_id IS NULL) OR (study_id IS NULL AND member_id IS NOT NULL)")
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
