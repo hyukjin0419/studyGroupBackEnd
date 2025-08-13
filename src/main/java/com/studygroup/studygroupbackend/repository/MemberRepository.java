@@ -16,4 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByUserNameContainingIgnoreCaseAndIdNotInOrderByUserNameAsc(String userName, Collection<Long> id);
 
     Optional<Member> findByUuid(String uuid);
+
+    Optional<Member> findByIdAndDeletedFalse(Long id);
 }

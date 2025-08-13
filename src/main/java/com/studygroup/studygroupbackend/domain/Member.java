@@ -2,9 +2,11 @@ package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.Role;
 import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
+import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.UUID;
 
@@ -14,7 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class Member extends BaseEntity {
+@SQLRestriction("deleted = false")
+public class Member extends SoftDeletableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +44,7 @@ public class Member extends BaseEntity {
             .password(password)
             .email(email)
             .role(Role.USER)
+            .deleted(false)
             .build();
     }
 
