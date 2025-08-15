@@ -2,12 +2,15 @@ package com.studygroup.studygroupbackend.service.impl;
 
 import com.studygroup.studygroupbackend.domain.*;
 import com.studygroup.studygroupbackend.domain.status.ChecklistItemType;
+import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemContentUpdateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemCreateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.repository.*;
 import com.studygroup.studygroupbackend.service.ChecklistItemService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ChecklistItemServiceImpl implements ChecklistItemService {
+    private static final Logger log = LoggerFactory.getLogger(ChecklistItemServiceImpl.class);
     private final ChecklistItemRepository checklistItemRepository;
     private final StudyRepository studyRepository;
     private final MemberRepository memberRepository;
@@ -55,54 +59,13 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
                 .map(ChecklistItemDetailResponse::fromEntity)
                 .toList();
     }
+
+    @Override
+    public void updateChecklistItemContent(Long checklistItemId, ChecklistItemContentUpdateRequest request) {
+        ChecklistItem item = checklistItemRepository.findById(checklistItemId)
+                .orElseThrow(() -> new EntityNotFoundException("체크리스트 아이템을 찾을 수 없습니다"));
+
+        log.info("content : {}", request.getContent());
+        item.updateContent(request.getContent());
+    }
 }
-
-
-
-//
-//    @Override
-//    public ChecklistItemCreateResponse createChecklistItemOfStudy(Long createdId, ChecklistItemCreateRequest request) {
-//        Member creator = memberRepository.findById(createdId)
-//                .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다."));
-//
-//        Study study = null;
-//        if (request.getStudyId() != null) {
-//            study = studyRepository.findById(request.getStudyId())
-//                    .orElseThrow(() -> new EntityNotFoundException("스터디가 존재하지 않습니다"));
-//        }
-//
-//        ChecklistItem checklistItem = ChecklistItem.ofGroup(study, creator, request.getContent(), request.getDueDate());
-//        checklistItemRepository.save(checklistItem);
-//        return ChecklistItemCreateResponse.fromEntity(checklistItem);
-//    }
-//
-//    @Override
-//    public void updateChecklistItem(Long id, ChecklistItemUpdateRequest request) {
-//        ChecklistItem item = checklistItemRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("체크리스트 항목이 존재하지 않습니다."));
-//
-//        if (request.getContent() != null) {
-//            item.updateContent(request.getContent());
-//        }
-//
-//        if (request.getDueDate() != null) {
-//            item.updateDueDate(request.getDueDate());
-//        }
-//    }
-//
-//
-//    @Override
-//    @Transactional(readOnly = true)
-//    public ChecklistItemDetailResponse getChecklistItemDetail(Long checklistId) {
-//        ChecklistItem checklistItem = checklistItemRepository.findById(checklistId)
-//                .orElseThrow(() -> new EntityNotFoundException("체크리스트가 존재하지 않습니다."));
-//
-//        return ChecklistItemDetailResponse.fromEntity(checklistItem);
-//    }
-//
-//    @Override
-//    public ChecklistItemDeleteResponse deleteChecklistItem(Long checklistId) {
-//        checklistItemRepository.deleteById(checklistId);
-//        return ChecklistItemDeleteResponse.success(checklistId);
-//    }
-//}
