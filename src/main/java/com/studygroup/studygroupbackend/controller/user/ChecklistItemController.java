@@ -46,7 +46,7 @@ public class ChecklistItemController {
 
     @Operation(summary = "단일 체크리스트 아이템 수정", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 수정")
     @PostMapping("/checklistItem/{checklistItemId}")
-    public ResponseEntity<Void> updateChecklistItemOf(
+    public ResponseEntity<Void> updateChecklistItemContent(
             @PathVariable Long checklistItemId,
             @RequestBody ChecklistItemContentUpdateRequest request
     ) {
@@ -54,7 +54,15 @@ public class ChecklistItemController {
         return ResponseEntity.ok().build();
     }
 
-//    @Operation(summary = "단일 체크리스트 아이템 체크값 변경", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 체크값 변경")
+    @Operation(summary = "단일 체크리스트 아이템 체크값 변경", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 체크값 변경")
+    @PostMapping("/checklistItem/{checklistItemId}/changeCheckStatus")
+    public ResponseEntity<Void> updateCheckItemStatus(
+            @PathVariable Long checklistItemId,
+            @RequestBody ChecklistItemContentUpdateRequest request
+    ) {
+        checklistItemService.updateChecklistItemStatus(checklistItemId, request);
+        return ResponseEntity.ok().build();
+    }
 //
 //    @Operation(summary = "단일 체크리스트 아이템 삭제", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 삭제")
 
