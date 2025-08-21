@@ -57,10 +57,9 @@ public class ChecklistItemController {
     @Operation(summary = "단일 체크리스트 아이템 체크값 변경", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 체크값 변경")
     @PostMapping("/checklistItem/{checklistItemId}/changeCheckStatus")
     public ResponseEntity<Void> updateCheckItemStatus(
-            @PathVariable Long checklistItemId,
-            @RequestBody ChecklistItemContentUpdateRequest request
+            @PathVariable Long checklistItemId
     ) {
-        checklistItemService.updateChecklistItemStatus(checklistItemId, request);
+        checklistItemService.updateChecklistItemStatus(checklistItemId);
         return ResponseEntity.ok().build();
     }
 //

@@ -65,7 +65,16 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
         ChecklistItem item = checklistItemRepository.findById(checklistItemId)
                 .orElseThrow(() -> new EntityNotFoundException("체크리스트 아이템을 찾을 수 없습니다"));
 
-        log.info("content : {}", request.getContent());
+//        log.info("content : {}", request.getContent());
         item.updateContent(request.getContent());
+    }
+
+    @Override
+    public void updateChecklistItemStatus(Long checklistItemId) {
+        ChecklistItem item = checklistItemRepository.findById(checklistItemId)
+                .orElseThrow(() -> new EntityNotFoundException("체크리스트 아이템을 찾을 수 없습니다"));
+
+        boolean status = item.isCompleted();
+        item.updateStatus(!status);
     }
 }

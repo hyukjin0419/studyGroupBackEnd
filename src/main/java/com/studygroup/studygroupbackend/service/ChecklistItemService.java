@@ -12,4 +12,5 @@ public interface ChecklistItemService {
     void createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request);
     List<ChecklistItemDetailResponse> getStudyItemsByDate(Long studyId, LocalDate targetDate);
     void updateChecklistItemContent(Long checklistItemId, ChecklistItemContentUpdateRequest request);
+    void updateChecklistItemStatus(Long checklistItemId);
 }

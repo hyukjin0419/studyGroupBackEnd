@@ -111,6 +111,10 @@ public class ChecklistItem extends SoftDeletableEntity {
         this.content = content;
     }
 
+    public void updateStatus(boolean status) {
+        this.completed = status;
+    }
+
     public void updateDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
