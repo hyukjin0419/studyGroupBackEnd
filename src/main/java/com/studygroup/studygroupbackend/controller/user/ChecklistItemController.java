@@ -3,6 +3,7 @@ package com.studygroup.studygroupbackend.controller.user;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemCreateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemContentUpdateRequest;
+import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemReorderRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.ChecklistItemService;
@@ -60,6 +61,15 @@ public class ChecklistItemController {
             @PathVariable Long checklistItemId
     ) {
         checklistItemService.updateChecklistItemStatus(checklistItemId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "체크리스트 Drag & Drop으로 인한 화면상 순서 변경", description = "체크리스트 Drag & Drop으로 인한 화면상 순서 변경")
+    @PostMapping("/checklistItem/reorder")
+    public ResponseEntity<Void> reorderChecklistItems(
+            @RequestBody List<ChecklistItemReorderRequest> requestList
+    ) {
+        checklistItemService.reorderChecklistItems(requestList);
         return ResponseEntity.ok().build();
     }
 //

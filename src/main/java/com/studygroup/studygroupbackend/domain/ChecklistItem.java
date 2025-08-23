@@ -115,6 +115,14 @@ public class ChecklistItem extends SoftDeletableEntity {
         this.completed = status;
     }
 
+    public void updateOrderIndex(int orderIndex){
+        this.orderIndex = orderIndex;
+    }
+
+    public void updateStudyMemberId(StudyMember studyMember){
+        this.studyMember = studyMember;
+    }
+
     public void updateDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }

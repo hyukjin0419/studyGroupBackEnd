@@ -5,6 +5,7 @@ import com.studygroup.studygroupbackend.domain.status.ChecklistItemType;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemContentUpdateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemCreateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemDetailResponse;
+import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemReorderRequest;
 import com.studygroup.studygroupbackend.repository.*;
 import com.studygroup.studygroupbackend.service.ChecklistItemService;
 import jakarta.persistence.EntityNotFoundException;
@@ -54,6 +55,7 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ChecklistItemDetailResponse> getStudyItemsByDate(Long studyId, LocalDate targetDate){
         return checklistItemRepository.findByStudyIdAndTargetDate(studyId, targetDate).stream()
                 .map(ChecklistItemDetailResponse::fromEntity)
@@ -76,5 +78,19 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
 
         boolean status = item.isCompleted();
         item.updateStatus(!status);
+    }
+
+    @Override
+    public void reorderChecklistItems(List<ChecklistItemReorderRequest> requestList) {
+        for (ChecklistItemReorderRequest req : requestList) {
+            ChecklistItem item = checklistItemRepository.findById(req.getChecklistItemId())
+                    .orElseThrow(() -> new EntityNotFoundException("체크리스트 항목을 찾을 수 없습니다."));
+
+            StudyMember studyMember = studyMemberRepository.findById(req.getStudyMemberId())
+                    .orElseThrow(() -> new EntityNotFoundException("스터디 멤버를 찾을 수 없습니다."));
+
+            item.updateOrderIndex(req.getOrderIndex());
+            item.updateStudyMemberId(studyMember);
+        }
     }
 }
