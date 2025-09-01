@@ -72,7 +72,13 @@ public class ChecklistItemController {
         checklistItemService.reorderChecklistItems(requestList);
         return ResponseEntity.ok().build();
     }
-//
-//    @Operation(summary = "단일 체크리스트 아이템 삭제", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 삭제")
 
+    @Operation(summary = "단일 체크리스트 아이템 삭제", description = "[CHECK_LIST_ITEM] 단일 체크리스트 아이템 삭제")
+    @PostMapping("/checklistItem/{checklistItemId}/delete")
+    public ResponseEntity<Void> softDeleteChecklistItems(
+            @PathVariable Long checklistItemId
+    ) {
+        checklistItemService.softDeleteChecklistItems(checklistItemId);
+        return ResponseEntity.ok().build();
+    }
 }

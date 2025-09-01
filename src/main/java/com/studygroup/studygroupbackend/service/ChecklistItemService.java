@@ -15,4 +15,5 @@ public interface ChecklistItemService {
     void updateChecklistItemContent(Long checklistItemId, ChecklistItemContentUpdateRequest request);
     void updateChecklistItemStatus(Long checklistItemId);
     void reorderChecklistItems(List<ChecklistItemReorderRequest> requestList);
+    void softDeleteChecklistItems(Long checklistItemId);
 }

@@ -93,4 +93,12 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
             item.updateStudyMemberId(studyMember);
         }
     }
+
+    @Override
+    public void softDeleteChecklistItems(Long checklistItemId) {
+        ChecklistItem item = checklistItemRepository.findById(checklistItemId)
+                .orElseThrow(() -> new EntityNotFoundException("체크리스트 아이템을 찾을 수 없습니다"));
+
+        item.softDeletion();
+    }
 }
