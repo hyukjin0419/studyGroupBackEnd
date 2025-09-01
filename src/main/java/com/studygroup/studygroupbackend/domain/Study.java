@@ -65,7 +65,7 @@ public class Study extends SoftDeletableEntity {
                 .description(description)
                 .color(color != null ? color : "0xFF8AB4F8")
                 .dueDate(dueDate != null ? dueDate : LocalDateTime.now().plusDays(30))
-                .progress(progress != null ? progress : 0.0)
+                .progress(progress != null ? progress : 0.7)
                 .status(status != null ? status : StudyStatus.PROGRESSING)
                 .deleted(false)
                 .build();

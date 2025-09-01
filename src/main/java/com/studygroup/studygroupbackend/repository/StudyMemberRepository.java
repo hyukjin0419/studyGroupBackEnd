@@ -58,4 +58,5 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     List<Long> findMemberIdsByStudyId(@Param("studyId") Long studyId);
 
     List<StudyMember> findByStudyIdAndDeletedFalse(Long studyId);
+    Optional<StudyMember> findByIdAndDeletedFalse(Long studyMemberId);
 }

@@ -1,8 +1,24 @@
 package com.studygroup.studygroupbackend.repository;
 
 import com.studygroup.studygroupbackend.domain.ChecklistItem;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Long> {
 
+    @Query("""
+        SELECT ci FROM ChecklistItem ci
+        WHERE ci.study.id = :studyId
+          AND ci.targetDate = :targetDate
+          AND ci.deleted = false
+        ORDER BY ci.orderIndex
+    """)
+    List<ChecklistItem> findByStudyIdAndTargetDate(
+            @Param("studyId") Long studyId,
+            @Param("targetDate") LocalDate targetDate
+    );
 }
