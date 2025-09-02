@@ -6,6 +6,8 @@ import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
 import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
 import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.exception.BusinessException;
+import com.studygroup.studygroupbackend.exception.ErrorCode;
 import com.studygroup.studygroupbackend.repository.DeviceTokenRepository;
 import com.studygroup.studygroupbackend.security.jwt.domain.RefreshToken;
 import com.studygroup.studygroupbackend.security.jwt.JwtTokenProvider;
@@ -16,9 +18,11 @@ import com.studygroup.studygroupbackend.security.repository.RefreshTokenReposito
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -59,12 +63,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserName(request.getUserName())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.AUTH_MEMBER_NOT_FOUND));
 
         refreshTokenRepository.deleteByMemberId(member.getId());
 
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())){
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다");
+            throw new BusinessException(ErrorCode.AUTH_WRONG_PASSWORD);
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(member.getId(),member.getUserName(), member.getRole());
