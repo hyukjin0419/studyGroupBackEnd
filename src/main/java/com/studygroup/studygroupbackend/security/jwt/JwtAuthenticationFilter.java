@@ -42,4 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("[응답] 상태 코드 : {}", response.getStatus());
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request){
+        String p = request.getRequestURI();
+        return p.startsWith("/actuator/")
+                || p.startsWith("/auth/")
+                || p.startsWith("/error");
+
+
+    }
 }
