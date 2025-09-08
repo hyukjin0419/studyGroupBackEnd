@@ -27,7 +27,7 @@ public class FirebaseConfig {
             var credentials = StringUtils.hasText(credsB64)
                     ? GoogleCredentials.fromStream(new ByteArrayInputStream(Base64.getDecoder().decode(credsB64)))
                     // dev만: resources에 둔 파일(깃에 커밋 금지)
-                    : GoogleCredentials.fromStream(new ClassPathResource("src/main/resources/sync-mate-fcm-firebase-adminsdk.json").getInputStream());
+                    : GoogleCredentials.fromStream(new ClassPathResource("sync-mate-fcm-firebase-adminsdk.json").getInputStream());
 
             var options = FirebaseOptions.builder().setCredentials(credentials).build();
             if (FirebaseApp.getApps().isEmpty()) FirebaseApp.initializeApp(options);
