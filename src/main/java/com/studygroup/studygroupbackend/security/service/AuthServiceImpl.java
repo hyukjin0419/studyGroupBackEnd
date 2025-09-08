@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final TokenBlacklistService tokenBlacklistService;
+//    private final TokenBlacklistService tokenBlacklistService;
     private final DeviceTokenRepository deviceTokenRepository;
 
     @Override
@@ -107,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.deleteByMemberId(memberId);
 
         long expiration = jwtTokenProvider.getRemainingExpiration(accessToken);
-        tokenBlacklistService.blacklistToken(accessToken,expiration);
+//        tokenBlacklistService.blacklistToken(accessToken,expiration);
 
         deviceTokenRepository.deleteByMemberIdAndFcmToken(memberId, deviceToken);
     }
