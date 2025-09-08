@@ -47,7 +47,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON serializer
 
     //Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //Test
     testImplementation 'org.mockito:mockito-junit-jupiter' // JUnit5 + Mockito 통합

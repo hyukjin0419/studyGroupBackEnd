@@ -4,7 +4,7 @@ import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.domain.status.StudyRole;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
