@@ -29,11 +29,11 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
     private final StudyMemberRepository studyMemberRepository;
 
     @Override
-    public void createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request){
+    public ChecklistItemDetailResponse createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request){
         Member creator = memberRepository.findByIdAndDeletedFalse(creatorId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 멤버를 찾을 수 없습니다"));
 
-        if (request.getType() != ChecklistItemType.STUDY) return;
+        if (request.getType() != ChecklistItemType.STUDY) return null;
 
         Study study = studyRepository.findByIdAndDeletedFalse(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
@@ -52,6 +52,8 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
         );
 
         checklistItemRepository.save(item);
+
+        return ChecklistItemDetailResponse.fromEntity(item);
     }
 
     @Override

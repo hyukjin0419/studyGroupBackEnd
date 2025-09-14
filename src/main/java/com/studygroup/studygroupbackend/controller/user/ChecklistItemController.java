@@ -26,13 +26,12 @@ public class ChecklistItemController {
 
     @Operation(summary = "단일 체크리스트 아이템 작성 및 단일 할당 API", description = "[CHECK_LIST_ITEM] 새로운 단일 체크리스트를 생성 후 팀내 단일 멤버에게 적용합니다.")
     @PostMapping("/studies/{studyId}/checklistItem/create")
-    public ResponseEntity<Void> createChecklistItemOfStudy(
+    public ResponseEntity<ChecklistItemDetailResponse> createChecklistItemOfStudy(
             @CurrentUser CustomUserDetails userDetails,
             @PathVariable Long studyId,
             @RequestBody ChecklistItemCreateRequest request
     ) {
-        checklistItemService.createChecklistItemOfStudy(userDetails.getMemberId(),studyId,request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(checklistItemService.createChecklistItemOfStudy(userDetails.getMemberId(),studyId,request));
     }
 
     @Operation(summary = "단일 스터디 내부 체크리스트 아이템 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트 조회.")
