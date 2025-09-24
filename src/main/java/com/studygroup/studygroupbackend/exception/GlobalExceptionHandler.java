@@ -2,6 +2,7 @@ package com.studygroup.studygroupbackend.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,11 +23,16 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("status", errorCode.getHttpStatus().value());
         body.put("errorCode", errorCode.getCode());
-        body.put("message", errorCode.getMessage());
         body.put("timestamp", Instant.now().toString());
 
         if (e.getDetails() != null){
             body.put("details", e.getDetails());
+        }
+
+        if(errorCode.isClientVisible()) {
+            body.put("message", errorCode.getMessage());
+        } else {
+            body.put("message", "서버 오류가 발생하였습니다.");
         }
         return ResponseEntity.status(errorCode.getHttpStatus()).body(body);
     }

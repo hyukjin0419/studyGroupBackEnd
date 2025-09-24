@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     private void validateDuplicateMember(String userName, String email) {
         boolean exists = memberRepository.existsByUserNameOrEmail(userName, email);
         if (exists) {
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+            throw new BusinessException(ErrorCode.AUTH_MEMBER_ALREADY_EXISTS);
         }
     }
 
