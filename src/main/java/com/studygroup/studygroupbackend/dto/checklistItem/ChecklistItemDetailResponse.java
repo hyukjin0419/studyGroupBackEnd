@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -18,6 +21,7 @@ public class ChecklistItemDetailResponse {
     private Long studyMemberId;
     private String content;
     private boolean completed;
+    private LocalDate targetDate;
     private Integer orderIndex;
 
     public static ChecklistItemDetailResponse fromEntity(ChecklistItem item){
@@ -28,6 +32,7 @@ public class ChecklistItemDetailResponse {
                 .studyMemberId(item.getStudyMember().getId())
                 .content(item.getContent())
                 .completed(item.isCompleted())
+                .targetDate(item.getTargetDate())
                 .orderIndex(item.getOrderIndex())
                 .build();
     }

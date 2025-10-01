@@ -65,6 +65,16 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<ChecklistItemDetailResponse> getStudyItemsByWeek(Long studyId, LocalDate startDate) {
+        LocalDate endDate = startDate.plusDays(6); // 월요일부터 일요일까지
+        List<ChecklistItem> items = checklistItemRepository.findByStudyIdAndTargetDateBetween(studyId, startDate, endDate);
+        return items.stream()
+                .map(ChecklistItemDetailResponse::fromEntity)
+                .toList();
+    }
+
+    @Override
     public void updateChecklistItemContent(Long checklistItemId, ChecklistItemContentUpdateRequest request) {
         ChecklistItem item = checklistItemRepository.findById(checklistItemId)
                 .orElseThrow(() -> new EntityNotFoundException("체크리스트 아이템을 찾을 수 없습니다"));

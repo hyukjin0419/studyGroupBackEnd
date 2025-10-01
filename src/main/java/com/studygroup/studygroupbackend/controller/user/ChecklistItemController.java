@@ -34,13 +34,23 @@ public class ChecklistItemController {
         return ResponseEntity.ok(checklistItemService.createChecklistItemOfStudy(userDetails.getMemberId(),studyId,request));
     }
 
-    @Operation(summary = "단일 스터디 내부 체크리스트 아이템 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트 조회.")
+    @Operation(summary = "단일 스터디 내부 체크리스트 아이템 일 단위 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트를 일 단위로 조회합니다.")
     @GetMapping("studies/{studyId}/checklists")
     public ResponseEntity<List<ChecklistItemDetailResponse>> getStudyChecklistItemsByDate(
             @PathVariable Long studyId,
             @RequestParam("targetDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate targetDate
     ){
         List<ChecklistItemDetailResponse> items = checklistItemService.getStudyItemsByDate(studyId, targetDate);
+        return ResponseEntity.ok(items);
+    }
+
+    @Operation(summary = "단일 스터디 내부 Date별 체크리스트 아이템 주 단위 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트를 주 단위로 조회합니다.")
+    @GetMapping("studies/{studyId}/checklists/week")
+    public ResponseEntity<List<ChecklistItemDetailResponse>> getStudyChecklistItemsByWeek(
+            @PathVariable Long studyId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
+    ){
+        List<ChecklistItemDetailResponse> items = checklistItemService.getStudyItemsByWeek(studyId, startDate);
         return ResponseEntity.ok(items);
     }
 
