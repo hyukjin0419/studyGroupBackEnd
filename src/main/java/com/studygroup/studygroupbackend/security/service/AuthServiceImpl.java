@@ -53,11 +53,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void validateDuplicateMember(String userName, String email) {
-        boolean exists = memberRepository.existsByUserNameOrEmail(userName, email);
-        if (exists) {
-            throw new BusinessException(ErrorCode.AUTH_MEMBER_ALREADY_EXISTS);
+        if (memberRepository.existsByUserName(userName)) {
+            throw new BusinessException(ErrorCode.AUTH_USERNAME_ALREADY_EXISTS);
+        }
+        if (memberRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.AUTH_EMAIL_ALREADY_EXISTS);
         }
     }
+
 
 
     @Override

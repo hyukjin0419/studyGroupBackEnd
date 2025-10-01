@@ -10,6 +10,8 @@ import java.util.Set;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByUserNameOrEmail(String userName, String email);
+    boolean existsByEmail(String email);
+    boolean existsByUserName(String userName);
     Optional<Member> findByUserName(String userName);
     Optional<Member> findByEmail(String userEmail);
 
