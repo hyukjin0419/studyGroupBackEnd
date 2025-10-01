@@ -58,6 +58,20 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<ChecklistItemDetailResponse> getItemsForMemberStudiesInRange(Long memberId, LocalDate startDate, LocalDate endDate) {
+        List<Long> studyIds = studyMemberRepository.findStudyIdsByMemberId(memberId);
+
+        List<ChecklistItem> items = checklistItemRepository.findByStudyIdInAndTargetDateBetween(
+                studyIds, startDate, endDate
+        );
+
+        return items.stream()
+                .map(ChecklistItemDetailResponse::fromEntity)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<ChecklistItemDetailResponse> getStudyItemsByDate(Long studyId, LocalDate targetDate){
         return checklistItemRepository.findByStudyIdAndTargetDate(studyId, targetDate).stream()
                 .map(ChecklistItemDetailResponse::fromEntity)

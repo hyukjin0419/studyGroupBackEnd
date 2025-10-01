@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.controller.user;
 
+import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemCreateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemContentUpdateRequest;
@@ -32,6 +33,21 @@ public class ChecklistItemController {
             @RequestBody ChecklistItemCreateRequest request
     ) {
         return ResponseEntity.ok(checklistItemService.createChecklistItemOfStudy(userDetails.getMemberId(),studyId,request));
+    }
+
+    @Operation(summary = "멤버 전체 스터디 체크리스트 prefetch", description = "[CHECK_LIST_ITEM] 로그인한 멤버가 속한 모든 스터디의 체크리스트를 오늘 기준 ±15일 범위로 조회")
+    @GetMapping("/me/checklists/prefetch")
+    public ResponseEntity<List<ChecklistItemDetailResponse>> prefetchMyChecklistItems(
+            @CurrentUser Member member
+    ) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.minusDays(15);
+        LocalDate endDate = today.plusDays(15);
+
+        List<ChecklistItemDetailResponse> items = checklistItemService
+                .getItemsForMemberStudiesInRange(member.getId(), startDate, endDate);
+
+        return ResponseEntity.ok(items);
     }
 
     @Operation(summary = "단일 스터디 내부 체크리스트 아이템 일 단위 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트를 일 단위로 조회합니다.")

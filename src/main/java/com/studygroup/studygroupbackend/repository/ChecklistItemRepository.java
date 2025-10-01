@@ -23,5 +23,5 @@ public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Lo
     );
 
     List<ChecklistItem> findByStudyIdAndTargetDateBetween(Long studyId, LocalDate startDate, LocalDate endDate);
-
+    List<ChecklistItem> findByStudyIdInAndTargetDateBetween(List<Long> studyIds, LocalDate startDate, LocalDate endDate);
 }
