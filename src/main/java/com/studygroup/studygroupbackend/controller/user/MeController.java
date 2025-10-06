@@ -3,20 +3,15 @@ package com.studygroup.studygroupbackend.controller.user;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
-import com.studygroup.studygroupbackend.dto.study.detail.StudyDetailResponse;
-import com.studygroup.studygroupbackend.dto.study.update.StudyOrderUpdateListRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.MemberService;
-import com.studygroup.studygroupbackend.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Me", description = "사용자 본인 컨트롤러")
 @Slf4j
@@ -25,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeController {
     private final MemberService memberService;
-    private final StudyService studyService;
 
     @Operation(summary = "[USER] 본인 조회 API")
     @GetMapping

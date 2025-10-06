@@ -20,10 +20,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "ChecklistItem", description = "체크리스트 관련 API")
+@Slf4j
 @RestController
 @RequestMapping("")
 @RequiredArgsConstructor
-@Slf4j
 public class ChecklistItemController {
     private final ChecklistItemService checklistItemService;
 

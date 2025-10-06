@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface ChecklistItemService {
     ChecklistItemDetailResponse createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request);
-    List<ChecklistItemDetailResponse> getItemsForMemberStudiesInRange(Long memberId, LocalDate startDate, LocalDate endDate);
     List<ChecklistItemDetailResponse> getStudyItemsByDate(Long studyId, LocalDate targetDate);
     List<ChecklistItemDetailResponse> getStudyItemsByWeek(Long studyId, LocalDate startDate);
     void updateChecklistItemContent(Long checklistItemId, ChecklistItemContentUpdateRequest request);
