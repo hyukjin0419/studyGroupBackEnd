@@ -18,6 +18,7 @@ public class ChecklistItemDetailResponse {
     private Long id;
     private ChecklistItemType type;
     private Long studyId;
+    private String studyName;
     private Long studyMemberId;
     private String content;
     private boolean completed;
@@ -29,6 +30,7 @@ public class ChecklistItemDetailResponse {
                 .id(item.getId())
                 .type(item.getType())
                 .studyId(item.getStudy().getId())
+                .studyName(item.getStudy().getName())
                 .studyMemberId(item.getStudyMember().getId())
                 .content(item.getContent())
                 .completed(item.isCompleted())

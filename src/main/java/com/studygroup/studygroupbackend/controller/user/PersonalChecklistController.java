@@ -1,6 +1,6 @@
 package com.studygroup.studygroupbackend.controller.user;
 
-import com.studygroup.studygroupbackend.dto.personalChecklist.PersonalChecklistDetailResponse;
+import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.PersonalChecklistService;
@@ -25,7 +25,7 @@ public class PersonalChecklistController {
     private final PersonalChecklistService personalChecklistService;
 
     @GetMapping
-    public List<PersonalChecklistDetailResponse> getStudyChecklistItemsByWeek(
+    public List<ChecklistItemDetailResponse> getStudyChecklistItemsByWeek(
             @CurrentUser CustomUserDetails userDetails,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
     ) {
