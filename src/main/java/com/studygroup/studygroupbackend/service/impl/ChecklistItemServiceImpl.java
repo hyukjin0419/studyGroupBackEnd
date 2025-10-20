@@ -67,7 +67,7 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
     @Override
     @Transactional(readOnly = true)
     public List<ChecklistItemDetailResponse> getStudyItemsByWeek(Long studyId, LocalDate startDate) {
-        LocalDate endDate = startDate.plusDays(6); // 월요일부터 일요일까지
+        LocalDate endDate = startDate.plusDays(6);
         List<ChecklistItem> items = checklistItemRepository.findByStudyIdAndTargetDateBetween(studyId, startDate, endDate);
         return items.stream()
                 .map(ChecklistItemDetailResponse::fromEntity)
