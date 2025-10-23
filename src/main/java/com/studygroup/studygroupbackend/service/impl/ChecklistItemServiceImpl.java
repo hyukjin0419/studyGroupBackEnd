@@ -53,7 +53,7 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
 
         checklistItemRepository.save(item);
 
-        return ChecklistItemDetailResponse.fromEntity(item);
+        return ChecklistItemDetailResponse.fromEntity(item,request.getTempId());
     }
 
     @Override
