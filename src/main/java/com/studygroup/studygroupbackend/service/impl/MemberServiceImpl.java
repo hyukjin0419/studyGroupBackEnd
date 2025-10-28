@@ -6,9 +6,7 @@ import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.search.MemberSearchResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
-import com.studygroup.studygroupbackend.repository.MemberRepository;
-import com.studygroup.studygroupbackend.repository.StudyInvitationRepository;
-import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
+import com.studygroup.studygroupbackend.repository.*;
 import com.studygroup.studygroupbackend.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
     private final StudyInvitationRepository studyInvitationRepository;
+    private final StudyRepository studyRepository;
+    private final ChecklistItemRepository checklistItemRepository;
 
     @Override
     public MemberDetailResponse getMemberById(Long memberId) {
@@ -51,12 +51,22 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberDeleteResponse deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndDeletedFalse(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
 
-        memberRepository.delete(member);
+        member.softDeletion();
 
-        return MemberDeleteResponse.success();
+        //멤버와 연관관계에 있는 studyMember 전부 삭제
+        //이렇게 되면 기존에 속해있던팀은 어떻게 되나?
+        //response 돌려줄 때 delete는 빼고 주어야 한다 -> SQL strict로 해결
+        //여기서 부터는 JPQL로 작성하자
+        //순서가 지켜져야 함. ci와 s가 을 참조하고 있기 때문
+        checklistItemRepository.softDeleteAllByMemberId(memberId);
+        studyRepository.softDeleteAllByLeaderMemberId(memberId);
+        studyMemberRepository.softDeleteAllByMemberId(memberId);
+
+
+        return MemberDeleteResponse.successDelete();
     }
 
     @Override

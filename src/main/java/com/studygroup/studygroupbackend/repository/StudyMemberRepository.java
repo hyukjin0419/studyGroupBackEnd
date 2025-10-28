@@ -14,9 +14,9 @@ import java.util.Optional;
 
 public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> {
     List<StudyMember> findByStudy(Study study);
-    List<StudyMember> findByMemberId(Long memberId);
-    List<StudyMember> findByMemberIdOrderByPersonalOrderIndexAsc(Long memberId);
-    void deleteByStudy(Study study);
+    @Query("SELECT sm FROM StudyMember sm " +
+            "WHERE sm.member.id = :memberId")
+    List<StudyMember> findByMember_Id(@Param("memberId") Long memberId);
 
     @Query("SELECT MAX(sm.personalOrderIndex) FROM StudyMember sm WHERE sm.member.id = :memberId")
     Optional<Integer> findMaxPersonalOrderIndexByMemberId(@Param("memberId") Long memberId);
@@ -47,8 +47,6 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     List<StudyMember> findStudyMembersByStudyIdIn(@Param("studyIds") List<Long> studyIds);
 
 
-    boolean existsByStudyAndMember(Study study, Member member);
-
     boolean existsByStudyIdAndMemberId(Long studyId, Long memberId);
 
     Optional<StudyMember> findByStudyIdAndMemberId(Long studyId, Long memberId);
@@ -60,6 +58,11 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     List<StudyMember> findByStudyIdAndDeletedFalse(Long studyId);
     Optional<StudyMember> findByIdAndDeletedFalse(Long studyMemberId);
 
-    @Query("SELECT sm.study.id FROM StudyMember sm WHERE sm.member.id = :memberId AND sm.studyMemberStatus = 'ACTIVE'")
-    List<Long> findStudyIdsByMemberId(@Param("memberId") Long memberId);
+    @Modifying
+    @Query("""
+        UPDATE StudyMember sm
+        SET sm.deleted = true, sm.deletedAt = CURRENT_TIMESTAMP 
+        WHERE sm.member.id = :memberId
+""")
+    void softDeleteAllByMemberId(Long memberId);
 }

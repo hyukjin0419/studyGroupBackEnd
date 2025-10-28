@@ -168,8 +168,6 @@ public class StudyServiceImpl implements StudyService {
         for (StudyOrderUpdateRequest studyOrderUpdateRequest : requests) {
             studyMemberRepository.updatePersonalOrderIndex(memberId, studyOrderUpdateRequest.getStudyId(), studyOrderUpdateRequest.getPersonalOrderIndex());
         }
-
-        List<StudyMember> updatedStudyMembers = studyMemberRepository.findByMemberIdOrderByPersonalOrderIndexAsc(memberId);
     }
 
     @Override
@@ -185,7 +183,7 @@ public class StudyServiceImpl implements StudyService {
         List<StudyMember> members = studyMemberRepository.findByStudyIdAndDeletedFalse(studyId);
         List<StudyInvitation> invitations = studyInvitationRepository.findByStudyIdAndDeletedFalse(studyId);
 
-        study.softDeletion();;
+        study.softDeletion();
 
         members.forEach(StudyMember::softDeletion);
 //        studyMemberRepository.saveAll(members);
