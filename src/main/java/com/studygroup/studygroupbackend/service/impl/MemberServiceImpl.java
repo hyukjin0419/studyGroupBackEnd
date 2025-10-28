@@ -5,7 +5,7 @@ import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.search.MemberSearchResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberEmailUpdateRequest;
-import com.studygroup.studygroupbackend.dto.member.update.MemberUserNameUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberDisplayNameUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.exception.BusinessException;
 import com.studygroup.studygroupbackend.exception.ErrorCode;
@@ -44,20 +44,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDetailResponse updateMemberUserName(Long memberId, MemberUserNameUpdateRequest request) {
-        validateDuplicateUserName(request.getUserName());
+    public MemberDetailResponse updateMyDisplayName(Long memberId, MemberDisplayNameUpdateRequest request) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
-        member.updateUserName(request.getUserName());
+        member.updateDisplayName(request.getDisplayName());
 
         return MemberDetailResponse.fromEntity(member);
     }
 
-    private void validateDuplicateUserName(String userName) {
-        if (memberRepository.existsByUserName(userName)) {
-            throw new BusinessException(ErrorCode.UPDATE_USERNAME_ALREADY_EXISTS);
-        }
-    }
 
     @Override
     @Transactional

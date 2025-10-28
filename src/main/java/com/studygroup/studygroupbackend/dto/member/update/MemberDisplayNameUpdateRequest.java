@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberUserNameUpdateRequest {
-    private String userName;
+public class MemberDisplayNameUpdateRequest {
+    private String displayName;
 }

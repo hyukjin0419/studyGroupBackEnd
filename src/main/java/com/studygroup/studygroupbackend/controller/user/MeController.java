@@ -3,7 +3,7 @@ package com.studygroup.studygroupbackend.controller.user;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.update.MemberEmailUpdateRequest;
-import com.studygroup.studygroupbackend.dto.member.update.MemberUserNameUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberDisplayNameUpdateRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.MemberService;
@@ -31,11 +31,11 @@ public class MeController {
 
     @Operation(summary = "[USER] 본인 UserName update API")
     @PostMapping("/update-user-name")
-    public ResponseEntity<MemberDetailResponse> updateMyUserName(
+    public ResponseEntity<MemberDetailResponse> updateMyDisplayName(
             @CurrentUser CustomUserDetails userDetails,
-            @RequestBody MemberUserNameUpdateRequest request
+            @RequestBody MemberDisplayNameUpdateRequest request
     ) {
-        return ResponseEntity.ok(memberService.updateMemberUserName(userDetails.getMemberId(), request));
+        return ResponseEntity.ok(memberService.updateMyDisplayName(userDetails.getMemberId(), request));
     }
 
     @Operation(summary = "[USER] 본인 Email update API")

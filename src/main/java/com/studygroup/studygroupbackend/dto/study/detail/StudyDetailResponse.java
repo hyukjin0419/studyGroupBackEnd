@@ -41,7 +41,7 @@ public class StudyDetailResponse extends BaseResDto {
                 .name(study.getName())
                 .description(study.getDescription())
                 .leaderId(leaderDto.getId())
-                .leaderName(leaderDto.getUserName())
+                .leaderName(leaderDto.getDisplayName())
                 .joinCode(study.getJoinCode())
                 .members(members == null ? List.of() : members)
                 .personalColor(studyMember.getPersonalColor())

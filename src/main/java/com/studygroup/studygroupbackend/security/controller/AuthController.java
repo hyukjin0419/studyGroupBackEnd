@@ -3,8 +3,8 @@ package com.studygroup.studygroupbackend.security.controller;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLogoutRequest;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
+import com.studygroup.studygroupbackend.dto.member.create.MemberCreateRequest;
+import com.studygroup.studygroupbackend.dto.member.create.MemberCreateResponse;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenRequest;
@@ -16,15 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Tag(name = "Auth", description = "로그인/회원가입 관련 API")
 @Slf4j
