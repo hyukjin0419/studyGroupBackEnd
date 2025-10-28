@@ -57,7 +57,6 @@ public class AuthServiceImpl implements AuthService {
         if (memberRepository.existsByEmail(email)) {
             throw new BusinessException(ErrorCode.AUTH_EMAIL_ALREADY_EXISTS);
         }
-        System.out.println("working not fine");
     }
 
 

@@ -63,8 +63,11 @@ public class Member extends SoftDeletableEntity {
     setPassword() -> x
     changePassword() -> o
      */
-    public void updateProfile(String userName,String email) {
+    public void updateUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void updateEmail(String email) {
         this.email = email;
     }
 }

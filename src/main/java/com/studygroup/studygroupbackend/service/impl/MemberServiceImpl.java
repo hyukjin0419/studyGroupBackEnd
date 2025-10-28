@@ -4,8 +4,11 @@ import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.search.MemberSearchResponse;
-import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberEmailUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberUserNameUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
+import com.studygroup.studygroupbackend.exception.BusinessException;
+import com.studygroup.studygroupbackend.exception.ErrorCode;
 import com.studygroup.studygroupbackend.repository.*;
 import com.studygroup.studygroupbackend.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
@@ -41,11 +44,36 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDetailResponse updateMember(Long memberId, MemberUpdateRequest request) {
+    public MemberDetailResponse updateMemberUserName(Long memberId, MemberUserNameUpdateRequest request) {
+        validateDuplicateUserName(request.getUserName());
+
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
-        member.updateProfile(request.getUserName(),request.getEmail());
+        member.updateUserName(request.getUserName());
 
         return MemberDetailResponse.fromEntity(member);
+    }
+
+    private void validateDuplicateUserName(String userName) {
+        if (memberRepository.existsByUserName(userName)) {
+            throw new BusinessException(ErrorCode.UPDATE_USERNAME_ALREADY_EXISTS);
+        }
+    }
+
+    @Override
+    @Transactional
+    public MemberDetailResponse updateMemberEmail(Long memberId, MemberEmailUpdateRequest request) {
+        validateDuplicateEmail(request.getEmail());
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+        member.updateEmail(request.getEmail());
+
+        return MemberDetailResponse.fromEntity(member);
+    }
+
+    private void validateDuplicateEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.UPDATE_EMAIL_ALREADY_EXISTS);
+        }
     }
 
     @Override
@@ -56,15 +84,9 @@ public class MemberServiceImpl implements MemberService {
 
         member.softDeletion();
 
-        //멤버와 연관관계에 있는 studyMember 전부 삭제
-        //이렇게 되면 기존에 속해있던팀은 어떻게 되나?
-        //response 돌려줄 때 delete는 빼고 주어야 한다 -> SQL strict로 해결
-        //여기서 부터는 JPQL로 작성하자
-        //순서가 지켜져야 함. ci와 s가 을 참조하고 있기 때문
         checklistItemRepository.softDeleteAllByMemberId(memberId);
         studyRepository.softDeleteAllByLeaderMemberId(memberId);
         studyMemberRepository.softDeleteAllByMemberId(memberId);
-
 
         return MemberDeleteResponse.successDelete();
     }

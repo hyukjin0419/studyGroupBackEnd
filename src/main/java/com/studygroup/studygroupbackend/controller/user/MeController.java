@@ -2,7 +2,8 @@ package com.studygroup.studygroupbackend.controller.user;
 
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
-import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberEmailUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberUserNameUpdateRequest;
 import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.service.MemberService;
@@ -28,13 +29,22 @@ public class MeController {
         return ResponseEntity.ok(memberService.getMemberById(userDetails.getMemberId()));
     }
 
-    @Operation(summary = "[USER] 본인 update API")
-    @PostMapping
-    public ResponseEntity<MemberDetailResponse> updateMyInfo(
+    @Operation(summary = "[USER] 본인 UserName update API")
+    @PostMapping("/update-user-name")
+    public ResponseEntity<MemberDetailResponse> updateMyUserName(
             @CurrentUser CustomUserDetails userDetails,
-            @RequestBody MemberUpdateRequest request
+            @RequestBody MemberUserNameUpdateRequest request
     ) {
-        return ResponseEntity.ok(memberService.updateMember(userDetails.getMemberId(), request));
+        return ResponseEntity.ok(memberService.updateMemberUserName(userDetails.getMemberId(), request));
+    }
+
+    @Operation(summary = "[USER] 본인 Email update API")
+    @PostMapping("/update-email")
+    public ResponseEntity<MemberDetailResponse> updateMyEmail(
+            @CurrentUser CustomUserDetails userDetails,
+            @RequestBody MemberEmailUpdateRequest request
+    ) {
+        return ResponseEntity.ok(memberService.updateMemberEmail(userDetails.getMemberId(), request));
     }
 
     @Operation(summary = "[USER] 본인 회원탈퇴 API")

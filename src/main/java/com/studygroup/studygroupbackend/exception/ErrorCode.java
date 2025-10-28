@@ -13,8 +13,11 @@ public enum ErrorCode {
 
     // === 회원 가입시 (Member) 관련 ===//
     AUTH_USERNAME_ALREADY_EXISTS("AUTH_USERNAME_ALREADY_EXISTS", HttpStatus.CONFLICT, "이미 사용중인 아이디입니다. 다른 아이디로 가입을 도와드릴게요.", true),
-    AUTH_EMAIL_ALREADY_EXISTS("MEMBER_EMAIL_EXISTS", HttpStatus.CONFLICT, "이미 사용중인 이메일입니다. 다른 이메일으로 가입을 도와드릴게요.", true);
+    AUTH_EMAIL_ALREADY_EXISTS("MEMBER_EMAIL_EXISTS", HttpStatus.CONFLICT, "이미 사용중인 이메일입니다. 다른 이메일으로 가입을 도와드릴게요.", true),
 
+    // === 회원 정보 변경시 관련 ===//
+    UPDATE_USERNAME_ALREADY_EXISTS("UPDATE_USERNAME_ALREADY_EXISTS", HttpStatus.CONFLICT, "이미 사용중인 아이디입니다. 다른 아이디로 변경을 도와드릴게요.", true),
+    UPDATE_EMAIL_ALREADY_EXISTS("UPDATE_MEMBER_EMAIL_EXISTS", HttpStatus.CONFLICT, "이미 사용중인 이메일입니다. 다른 이메일으로 변경을 도와드릴게요.", true);
 
 
 

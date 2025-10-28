@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberUpdateRequest {
-//    private Long id;
-    private String userName;
+public class MemberEmailUpdateRequest {
     private String email;
 }
