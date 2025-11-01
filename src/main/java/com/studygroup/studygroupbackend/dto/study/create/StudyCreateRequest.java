@@ -24,7 +24,6 @@ public class StudyCreateRequest{
                 description,
                 color,
                 dueDate,
-                null,
                 null
         );
     }
