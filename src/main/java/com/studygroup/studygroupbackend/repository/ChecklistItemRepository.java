@@ -34,4 +34,5 @@ public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Lo
 """)
     void softDeleteAllByMemberId(Long memberId);
 
+    List<ChecklistItem> findByStudyIdAndDeletedFalse(Long studyId);
 }
