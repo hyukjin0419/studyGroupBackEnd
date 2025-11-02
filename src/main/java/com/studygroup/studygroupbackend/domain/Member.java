@@ -38,6 +38,9 @@ public class Member extends SoftDeletableEntity {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
 
     public static Member of(String userName, String password, String email) {
         return Member.builder()
@@ -46,6 +49,7 @@ public class Member extends SoftDeletableEntity {
             .password(password)
             .email(email)
             .role(Role.USER)
+            .emailVerified(false)
             .deleted(false)
             .build();
     }
@@ -71,5 +75,10 @@ public class Member extends SoftDeletableEntity {
 
     public void updateEmail(String email) {
         this.email = email;
+        this.emailVerified = false;
+    }
+
+    public void verifyEmail() {
+        this.emailVerified = true;
     }
 }

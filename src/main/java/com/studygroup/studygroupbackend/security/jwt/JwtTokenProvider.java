@@ -30,7 +30,7 @@ public class JwtTokenProvider {
 
 //    private final TokenBlacklistService tokenBlacklistService;
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.auth.secret}")
     private String secretKeyString;
 
     private Key secretKey;

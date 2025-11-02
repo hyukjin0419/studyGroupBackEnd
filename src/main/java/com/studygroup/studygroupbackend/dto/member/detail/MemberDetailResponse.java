@@ -17,6 +17,7 @@ public class MemberDetailResponse extends BaseResDto {
     private String userName;
     private String displayName;
     private String email;
+    private boolean emailVerified;
 
     public static MemberDetailResponse fromEntity(Member member) {
         return MemberDetailResponse.builder()
@@ -24,6 +25,7 @@ public class MemberDetailResponse extends BaseResDto {
                 .userName(member.getUserName())
                 .displayName(member.getDisplayName())
                 .email(member.getEmail())
+                .emailVerified(member.isEmailVerified())
                 .createdAt(member.getCreatedAt())
                 .modifiedAt(member.getModifiedAt())
                 .build();

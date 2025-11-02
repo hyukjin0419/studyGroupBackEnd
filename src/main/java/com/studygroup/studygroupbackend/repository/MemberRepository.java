@@ -15,6 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     )
     boolean existsByEmail(String email);
 
+    Optional<Member> findByEmail(String email);
+
     @Query(
         value = "SELECT CASE WHEN COUNT (*) > 0 THEN TRUE ELSE FALSE END FROM MEMBERS WHERE USER_NAME = :userName",
         nativeQuery = true)
