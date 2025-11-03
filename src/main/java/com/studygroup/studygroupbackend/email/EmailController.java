@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
 
     private final EmailService emailService;
-
+    //================이메일 인증================//
     @PostMapping("/send-verification-email")
     public ResponseEntity<String> sendVerificationEmail(@RequestParam String email) {
         emailService.sendVerificationEmail(email);
@@ -32,4 +32,12 @@ public class EmailController {
         }
     }
 
+//    //================아이디 (userName) 찾기================//
+    @PostMapping("/find-username")
+    public ResponseEntity<String> findByEmail(@RequestParam String email) {
+        log.info("아이디 찾기 요청: {}", email);
+
+        emailService.sendIdRemainderEmail(email);
+        return ResponseEntity.ok("인증 메일이 전송되었습니다. 메일함을 확인해주세요.");
+    }
 }
