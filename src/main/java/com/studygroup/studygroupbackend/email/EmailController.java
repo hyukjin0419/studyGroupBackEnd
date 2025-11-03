@@ -3,17 +3,20 @@ package com.studygroup.studygroupbackend.email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/auth/email")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class EmailController {
 
     private final EmailService emailService;
+
     //================이메일 인증================//
-    @PostMapping("/send-verification-email")
+    @PostMapping("email/send-verification-email")
     public ResponseEntity<String> sendVerificationEmail(@RequestParam String email) {
         emailService.sendVerificationEmail(email);
 
@@ -21,7 +24,7 @@ public class EmailController {
         return ResponseEntity.ok("인증 메일이 전송되었습니다. 메일함을 확인해주세요.");
     }
 
-    @GetMapping("/verify")
+    @GetMapping("email/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
         try {
             emailService.verifyEmail(token);
@@ -32,12 +35,24 @@ public class EmailController {
         }
     }
 
-//    //================아이디 (userName) 찾기================//
-    @PostMapping("/find-username")
+    //================아이디 (userName) 찾기================//
+    @PostMapping("email/find-username")
     public ResponseEntity<String> findByEmail(@RequestParam String email) {
         log.info("아이디 찾기 요청: {}", email);
 
         emailService.sendIdRemainderEmail(email);
         return ResponseEntity.ok("인증 메일이 전송되었습니다. 메일함을 확인해주세요.");
+    }
+
+    //================비밀번호 찾기================//
+    @PostMapping("email/password-reset/request")
+    public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
+        log.info("비밀번호 찾기 요청: {}", email);
+        try {
+            emailService.requestReset(email);
+        } catch (Exception e) {
+            log.error("비밀번호 재설정 요청 중 오류: {}", e.getMessage());
+        }
+        return ResponseEntity.ok("비밀번호 재설정 안내 메일을 발송했습니다. 메일함을 확인해주세요.");
     }
 }

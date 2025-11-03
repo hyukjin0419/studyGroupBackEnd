@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -23,14 +24,20 @@ import java.util.Date;
 public class EmailServiceImpl implements EmailService{
     private final JavaMailSender mailSender;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${jwt.verification.secret}")
     private String secretKey;
 
+    @Value("${jwt.password.secrete}")
+    private String resetSecret;
+
     @Value("${app.base-url}")
     private String baseUrl;
 
+    //TODO 나중에 다 환경변수로 교체하기!
     private final long verificationExpiration = 1000L * 60 * 5;
+    private final long passwordExpiration = 1000L * 60 * 5;
 
     //================이메일 인증================//
     @Override
@@ -112,5 +119,70 @@ public class EmailServiceImpl implements EmailService{
 
         mailSender.send(message);
         log.info("✅ 아이디 안내 메일 발송 완료: {}", member.getEmail());
+    }
+
+    //================비밀번호 찾기================//
+
+    @Override
+    public void requestReset(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("해당 이메일의 회원을 찾을 수 없습니다."));
+
+        String token = generatePasswordToken(member.getEmail());
+        String link = baseUrl + "/auth/password/reset?token=" + token;
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(member.getEmail());
+        msg.setSubject("[SyncMate] 비밀번호 재설정 안내");
+        msg.setText("""
+                    안녕하세요, SyncMate입니다.
+
+                    아래 링크를 클릭하여 비밀번호를 재설정해주세요.
+                    (링크는 5분간만 유효합니다)
+
+                    %s
+
+                    본인이 요청하지 않았다면 이 메일을 무시하셔도 됩니다.
+                    """.formatted(link));
+        mailSender.send(msg);
+
+        log.info("✅ 비밀번호 재설정 메일 발송: email={}", email);
+    }
+
+    @Override
+    public void confirmReset(String token, String newPassword) {
+        String email = parseEmail(token);
+        log.info("✅ 비밀번호 변경 요청: email={}", email);
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("해당 이메일의 회원을 찾을 수 없습니다."));
+
+        member.resetPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
+
+        log.info("✅ 비밀번호 변경 완료: email={}", email);
+    }
+
+    private String generatePasswordToken (String email) {
+        var key = Keys.hmacShaKeyFor(resetSecret.getBytes(StandardCharsets.UTF_8));
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + passwordExpiration))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private String parseEmail(String token) {
+        try {
+            var key = Keys.hmacShaKeyFor(resetSecret.getBytes(StandardCharsets.UTF_8));
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않거나 만료된 링크입니다. 다시 시도해주세요.");
+        }
     }
 }

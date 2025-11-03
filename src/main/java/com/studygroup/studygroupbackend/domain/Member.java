@@ -81,4 +81,8 @@ public class Member extends SoftDeletableEntity {
     public void verifyEmail() {
         this.emailVerified = true;
     }
+
+    public void resetPassword(String password) {
+        this.password = password;
+    }
 }
