@@ -80,14 +80,4 @@ public class StudyMember extends SoftDeletableEntity {
     public void changeRole(StudyRole newRole) {
         this.studyRole = newRole;
     }
-
-    public void leave(){
-        this.studyMemberStatus = StudyMemberStatus.LEFT;
-        this.leftAt = LocalDateTime.now();
-    }
-
-    public void kicked() {
-        this.studyMemberStatus = StudyMemberStatus.KICKED;
-        this.leftAt = LocalDateTime.now();
-    }
 }

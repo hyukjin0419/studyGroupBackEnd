@@ -25,7 +25,6 @@ public class StudyDetailResponse extends BaseResDto {
     private String joinCode;
     private String personalColor;
     private LocalDateTime dueDate;
-    private Double progress;
     private StudyStatus status;
     private Integer personalOrderIndex;
     private List<StudyMemberSummaryResponse> members;
@@ -41,12 +40,11 @@ public class StudyDetailResponse extends BaseResDto {
                 .name(study.getName())
                 .description(study.getDescription())
                 .leaderId(leaderDto.getId())
-                .leaderName(leaderDto.getUserName())
+                .leaderName(leaderDto.getDisplayName())
                 .joinCode(study.getJoinCode())
                 .members(members == null ? List.of() : members)
                 .personalColor(studyMember.getPersonalColor())
                 .dueDate(study.getDueDate())
-                .progress(study.getProgress())
                 .status(study.getStatus())
                 .personalOrderIndex(studyMember.getPersonalOrderIndex())
                 .createdAt(study.getCreatedAt())

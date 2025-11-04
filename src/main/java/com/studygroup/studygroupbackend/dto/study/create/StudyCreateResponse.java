@@ -24,7 +24,6 @@ public class StudyCreateResponse extends BaseResDto {
     private String leaderName;
     private String personalColor;
     private LocalDateTime dueDate;
-    private Double progress;
     private StudyStatus status;
 
     public static StudyCreateResponse fromEntity(
@@ -39,7 +38,6 @@ public class StudyCreateResponse extends BaseResDto {
                 .leaderName(leaderDto.getUserName())
                 .personalColor(leaderDto.getPersonalColor())
                 .dueDate(study.getDueDate())
-                .progress(study.getProgress())
                 .status(study.getStatus())
                 .createdAt(study.getCreatedAt())
                 .modifiedAt(study.getModifiedAt())

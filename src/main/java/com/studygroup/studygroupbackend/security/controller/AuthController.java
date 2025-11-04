@@ -3,8 +3,10 @@ package com.studygroup.studygroupbackend.security.controller;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLogoutRequest;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
+import com.studygroup.studygroupbackend.dto.member.create.MemberCreateRequest;
+import com.studygroup.studygroupbackend.dto.member.create.MemberCreateResponse;
+import com.studygroup.studygroupbackend.security.annotation.CurrentUser;
+import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenRequest;
 import com.studygroup.studygroupbackend.security.jwt.dto.RefreshTokenResponse;
 import com.studygroup.studygroupbackend.security.service.AuthService;;
@@ -14,20 +16,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Tag(name = "Auth", description = "로그인/회원가입 관련 API")
 @Slf4j
-//@RestController
-@Controller
+@RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
@@ -55,12 +48,13 @@ public class AuthController {
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> logout(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @CurrentUser CustomUserDetails userDetails,
             @RequestBody MemberLogoutRequest request,
             @RequestHeader("Authorization") String authorizationHeader) {
+        log.info("Lougout: " + authorizationHeader);
 
         String accessToken = authorizationHeader.replace("Bearer ", "");
-        authService.logout(accessToken, Long.valueOf(userDetails.getUsername()), request.getDeviceToken());
+        authService.logout(accessToken, userDetails.getMemberId(), request.getDeviceToken());
         return ResponseEntity.ok().build();
     }
 }

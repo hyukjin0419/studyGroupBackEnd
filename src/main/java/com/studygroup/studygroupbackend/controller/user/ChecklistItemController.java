@@ -1,5 +1,6 @@
 package com.studygroup.studygroupbackend.controller.user;
 
+import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemCreateRequest;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemDetailResponse;
 import com.studygroup.studygroupbackend.dto.checklistItem.ChecklistItemContentUpdateRequest;
@@ -10,6 +11,7 @@ import com.studygroup.studygroupbackend.service.ChecklistItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "ChecklistItem", description = "체크리스트 관련 API")
+@Slf4j
 @RestController
 @RequestMapping("")
 @RequiredArgsConstructor
@@ -26,22 +29,31 @@ public class ChecklistItemController {
 
     @Operation(summary = "단일 체크리스트 아이템 작성 및 단일 할당 API", description = "[CHECK_LIST_ITEM] 새로운 단일 체크리스트를 생성 후 팀내 단일 멤버에게 적용합니다.")
     @PostMapping("/studies/{studyId}/checklistItem/create")
-    public ResponseEntity<Void> createChecklistItemOfStudy(
+    public ResponseEntity<ChecklistItemDetailResponse> createChecklistItemOfStudy(
             @CurrentUser CustomUserDetails userDetails,
             @PathVariable Long studyId,
             @RequestBody ChecklistItemCreateRequest request
     ) {
-        checklistItemService.createChecklistItemOfStudy(userDetails.getMemberId(),studyId,request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(checklistItemService.createChecklistItemOfStudy(userDetails.getMemberId(),studyId,request));
     }
 
-    @Operation(summary = "단일 스터디 내부 체크리스트 아이템 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트 조회.")
+    @Operation(summary = "단일 스터디 내부 체크리스트 아이템 일 단위 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트를 일 단위로 조회합니다.")
     @GetMapping("studies/{studyId}/checklists")
     public ResponseEntity<List<ChecklistItemDetailResponse>> getStudyChecklistItemsByDate(
             @PathVariable Long studyId,
             @RequestParam("targetDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate targetDate
     ){
         List<ChecklistItemDetailResponse> items = checklistItemService.getStudyItemsByDate(studyId, targetDate);
+        return ResponseEntity.ok(items);
+    }
+
+    @Operation(summary = "단일 스터디 내부 Date별 체크리스트 아이템 주 단위 조회", description = "[CHECK_LIST_ITEM] 단일 스터디에 속한 체크리스트를 주 단위로 조회합니다.")
+    @GetMapping("studies/{studyId}/checklists/week")
+    public ResponseEntity<List<ChecklistItemDetailResponse>> getStudyChecklistItemsByWeek(
+            @PathVariable Long studyId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
+    ){
+        List<ChecklistItemDetailResponse> items = checklistItemService.getStudyItemsByWeek(studyId, startDate);
         return ResponseEntity.ok(items);
     }
 

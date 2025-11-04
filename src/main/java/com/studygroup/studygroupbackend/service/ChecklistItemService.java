@@ -10,8 +10,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ChecklistItemService {
-    void createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request);
+    ChecklistItemDetailResponse createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request);
     List<ChecklistItemDetailResponse> getStudyItemsByDate(Long studyId, LocalDate targetDate);
+    List<ChecklistItemDetailResponse> getStudyItemsByWeek(Long studyId, LocalDate startDate);
     void updateChecklistItemContent(Long checklistItemId, ChecklistItemContentUpdateRequest request);
     void updateChecklistItemStatus(Long checklistItemId);
     void reorderChecklistItems(List<ChecklistItemReorderRequest> requestList);

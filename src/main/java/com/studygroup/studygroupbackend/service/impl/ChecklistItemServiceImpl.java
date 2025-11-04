@@ -29,11 +29,11 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
     private final StudyMemberRepository studyMemberRepository;
 
     @Override
-    public void createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request){
+    public ChecklistItemDetailResponse createChecklistItemOfStudy(Long creatorId, Long studyId, ChecklistItemCreateRequest request){
         Member creator = memberRepository.findByIdAndDeletedFalse(creatorId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 멤버를 찾을 수 없습니다"));
 
-        if (request.getType() != ChecklistItemType.STUDY) return;
+        if (request.getType() != ChecklistItemType.STUDY) return null;
 
         Study study = studyRepository.findByIdAndDeletedFalse(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
@@ -52,12 +52,24 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
         );
 
         checklistItemRepository.save(item);
+
+        return ChecklistItemDetailResponse.fromEntity(item,request.getTempId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ChecklistItemDetailResponse> getStudyItemsByDate(Long studyId, LocalDate targetDate){
         return checklistItemRepository.findByStudyIdAndTargetDate(studyId, targetDate).stream()
+                .map(ChecklistItemDetailResponse::fromEntity)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ChecklistItemDetailResponse> getStudyItemsByWeek(Long studyId, LocalDate startDate) {
+        LocalDate endDate = startDate.plusDays(6);
+        List<ChecklistItem> items = checklistItemRepository.findByStudyIdAndTargetDateBetween(studyId, startDate, endDate);
+        return items.stream()
                 .map(ChecklistItemDetailResponse::fromEntity)
                 .toList();
     }

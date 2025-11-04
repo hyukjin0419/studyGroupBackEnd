@@ -31,7 +31,10 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
+
+    runtimeOnly 'com.h2database:h2'                     //dev
+    implementation 'com.mysql:mysql-connector-j'      //prod(mysql)
+
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -44,7 +47,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JSON serializer
 
     //Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //Test
     testImplementation 'org.mockito:mockito-junit-jupiter' // JUnit5 + Mockito 통합
@@ -52,6 +55,12 @@ dependencies {
 
     //fcm
     implementation 'com.google.firebase:firebase-admin:9.5.0'
+
+    //health check
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //Email sender
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

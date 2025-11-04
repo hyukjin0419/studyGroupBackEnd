@@ -15,13 +15,17 @@ import lombok.experimental.SuperBuilder;
 public class MemberDetailResponse extends BaseResDto {
     private Long id;
     private String userName;
+    private String displayName;
     private String email;
+    private boolean emailVerified;
 
     public static MemberDetailResponse fromEntity(Member member) {
         return MemberDetailResponse.builder()
                 .id(member.getId())
                 .userName(member.getUserName())
+                .displayName(member.getDisplayName())
                 .email(member.getEmail())
+                .emailVerified(member.isEmailVerified())
                 .createdAt(member.getCreatedAt())
                 .modifiedAt(member.getModifiedAt())
                 .build();

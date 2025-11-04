@@ -3,7 +3,7 @@ package com.studygroup.studygroupbackend.repository;
 import com.studygroup.studygroupbackend.domain.StudyInvitation;
 import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

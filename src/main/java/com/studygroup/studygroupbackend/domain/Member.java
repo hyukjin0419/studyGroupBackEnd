@@ -1,7 +1,6 @@
 package com.studygroup.studygroupbackend.domain;
 
 import com.studygroup.studygroupbackend.domain.status.Role;
-import com.studygroup.studygroupbackend.domain.superEntity.BaseEntity;
 import com.studygroup.studygroupbackend.domain.superEntity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,9 +25,11 @@ public class Member extends SoftDeletableEntity {
     @Column(nullable = false, unique = true)
     private String userName;
 
+    @Column(nullable = false, unique = false)
+    private String displayName;
+
     @Column(nullable = false)
     private String password;
-
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -37,13 +38,18 @@ public class Member extends SoftDeletableEntity {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
 
     public static Member of(String userName, String password, String email) {
         return Member.builder()
             .userName(userName)
+            .displayName(userName)
             .password(password)
             .email(email)
             .role(Role.USER)
+            .emailVerified(false)
             .deleted(false)
             .build();
     }
@@ -63,8 +69,20 @@ public class Member extends SoftDeletableEntity {
     setPassword() -> x
     changePassword() -> o
      */
-    public void updateProfile(String userName,String email) {
-        this.userName = userName;
+    public void updateDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void updateEmail(String email) {
         this.email = email;
+        this.emailVerified = false;
+    }
+
+    public void verifyEmail() {
+        this.emailVerified = true;
+    }
+
+    public void resetPassword(String password) {
+        this.password = password;
     }
 }

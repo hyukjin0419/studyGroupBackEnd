@@ -19,5 +19,6 @@ public class ChecklistItemCreateRequest {
     private ChecklistItemType type;
     private LocalDate targetDate;
     private Integer orderIndex;
+    private Long tempId;
 }
 

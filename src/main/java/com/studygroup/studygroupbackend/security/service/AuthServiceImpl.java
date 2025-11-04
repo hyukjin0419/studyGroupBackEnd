@@ -3,8 +3,8 @@ package com.studygroup.studygroupbackend.security.service;
 import com.studygroup.studygroupbackend.domain.DeviceToken;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginRequest;
 import com.studygroup.studygroupbackend.dto.member.login.MemberLoginResponse;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateRequest;
-import com.studygroup.studygroupbackend.dto.member.signup.MemberCreateResponse;
+import com.studygroup.studygroupbackend.dto.member.create.MemberCreateRequest;
+import com.studygroup.studygroupbackend.dto.member.create.MemberCreateResponse;
 import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.exception.BusinessException;
 import com.studygroup.studygroupbackend.exception.ErrorCode;
@@ -18,11 +18,9 @@ import com.studygroup.studygroupbackend.security.repository.RefreshTokenReposito
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final TokenBlacklistService tokenBlacklistService;
     private final DeviceTokenRepository deviceTokenRepository;
 
     @Override
@@ -53,11 +50,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void validateDuplicateMember(String userName, String email) {
-        boolean exists = memberRepository.existsByUserNameOrEmail(userName, email);
-        if (exists) {
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+        if (memberRepository.existsByUserName(userName)) {
+            throw new BusinessException(ErrorCode.AUTH_USERNAME_ALREADY_EXISTS);
+        }
+        if (memberRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.AUTH_EMAIL_ALREADY_EXISTS);
         }
     }
+
 
 
     @Override
@@ -107,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.deleteByMemberId(memberId);
 
         long expiration = jwtTokenProvider.getRemainingExpiration(accessToken);
-        tokenBlacklistService.blacklistToken(accessToken,expiration);
+//        tokenBlacklistService.blacklistToken(accessToken,expiration);
 
         deviceTokenRepository.deleteByMemberIdAndFcmToken(memberId, deviceToken);
     }

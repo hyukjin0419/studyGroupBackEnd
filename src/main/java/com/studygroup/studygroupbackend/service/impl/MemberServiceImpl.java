@@ -4,11 +4,12 @@ import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
 import com.studygroup.studygroupbackend.dto.member.delete.MemberDeleteResponse;
 import com.studygroup.studygroupbackend.dto.member.detail.MemberDetailResponse;
 import com.studygroup.studygroupbackend.dto.member.search.MemberSearchResponse;
-import com.studygroup.studygroupbackend.dto.member.update.MemberUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberEmailUpdateRequest;
+import com.studygroup.studygroupbackend.dto.member.update.MemberDisplayNameUpdateRequest;
 import com.studygroup.studygroupbackend.domain.Member;
-import com.studygroup.studygroupbackend.repository.MemberRepository;
-import com.studygroup.studygroupbackend.repository.StudyInvitationRepository;
-import com.studygroup.studygroupbackend.repository.StudyMemberRepository;
+import com.studygroup.studygroupbackend.exception.BusinessException;
+import com.studygroup.studygroupbackend.exception.ErrorCode;
+import com.studygroup.studygroupbackend.repository.*;
 import com.studygroup.studygroupbackend.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
     private final StudyInvitationRepository studyInvitationRepository;
+    private final StudyRepository studyRepository;
+    private final ChecklistItemRepository checklistItemRepository;
 
     @Override
     public MemberDetailResponse getMemberById(Long memberId) {
@@ -41,22 +44,45 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberDetailResponse updateMember(Long memberId, MemberUpdateRequest request) {
+    public MemberDetailResponse updateMyDisplayName(Long memberId, MemberDisplayNameUpdateRequest request) {
+
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
-        member.updateProfile(request.getUserName(),request.getEmail());
+        member.updateDisplayName(request.getDisplayName());
 
         return MemberDetailResponse.fromEntity(member);
+    }
+
+
+    @Override
+    @Transactional
+    public MemberDetailResponse updateMemberEmail(Long memberId, MemberEmailUpdateRequest request) {
+        validateDuplicateEmail(request.getEmail());
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+        member.updateEmail(request.getEmail());
+
+        return MemberDetailResponse.fromEntity(member);
+    }
+
+    private void validateDuplicateEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.UPDATE_EMAIL_ALREADY_EXISTS);
+        }
     }
 
     @Override
     @Transactional
     public MemberDeleteResponse deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndDeletedFalse(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다"));
 
-        memberRepository.delete(member);
+        member.softDeletion();
 
-        return MemberDeleteResponse.success();
+        checklistItemRepository.softDeleteAllByMemberId(memberId);
+        studyRepository.softDeleteAllByLeaderMemberId(memberId);
+        studyMemberRepository.softDeleteAllByMemberId(memberId);
+
+        return MemberDeleteResponse.successDelete();
     }
 
     @Override

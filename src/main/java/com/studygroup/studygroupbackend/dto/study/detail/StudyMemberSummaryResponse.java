@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyMemberSummaryResponse {
     private Long id;
+    private Long memberId;
     private Long studyMemberId;
+    private String displayName;
     private String userName;
     private String role;
     private String personalColor;
@@ -21,6 +23,8 @@ public class StudyMemberSummaryResponse {
         return StudyMemberSummaryResponse.builder()
                 .id(studyMember.getMember().getId())
                 .studyMemberId(studyMember.getId())
+                .displayName(studyMember.getMember().getDisplayName())
+                .memberId(studyMember.getMember().getId())
                 .userName(studyMember.getMember().getUserName())
                 .role(studyMember.getStudyRole().name())
                 .personalColor(studyMember.getPersonalColor())

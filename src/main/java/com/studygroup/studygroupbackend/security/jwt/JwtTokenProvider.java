@@ -3,7 +3,7 @@ package com.studygroup.studygroupbackend.security.jwt;
 import com.studygroup.studygroupbackend.domain.status.Role;
 import com.studygroup.studygroupbackend.security.domain.CustomUserDetails;
 import com.studygroup.studygroupbackend.security.jwt.dto.TokenWithExpiry;
-import com.studygroup.studygroupbackend.security.service.TokenBlacklistService;
+//import com.studygroup.studygroupbackend.security.service.TokenBlacklistService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -28,9 +28,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final TokenBlacklistService tokenBlacklistService;
+//    private final TokenBlacklistService tokenBlacklistService;
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.auth.secret}")
     private String secretKeyString;
 
     private Key secretKey;
@@ -74,10 +74,10 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            if (tokenBlacklistService.isBlacklisted(token)) {
-                log.info("BlackList에서 JWT 인증 실패");
-                return false;
-            }
+//            if (tokenBlacklistService.isBlacklisted(token)) {
+//                log.info("BlackList에서 JWT 인증 실패");
+//                return false;
+//            }
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {

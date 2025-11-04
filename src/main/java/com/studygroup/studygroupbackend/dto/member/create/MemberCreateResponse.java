@@ -1,4 +1,4 @@
-package com.studygroup.studygroupbackend.dto.member.signup;
+package com.studygroup.studygroupbackend.dto.member.create;
 
 import com.studygroup.studygroupbackend.dto.BaseResDto;
 import com.studygroup.studygroupbackend.domain.Member;

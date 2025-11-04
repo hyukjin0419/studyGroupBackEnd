@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# IDE & Editor
+.idea
+.vscode
+*.iml
+
+# Build output
+build/
+out/
+target/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker 자체
+Dockerfile
+docker-compose*.yml
+
+# Test
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar

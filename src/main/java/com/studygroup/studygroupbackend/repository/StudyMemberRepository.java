@@ -4,7 +4,7 @@ import com.studygroup.studygroupbackend.domain.Member;
 import com.studygroup.studygroupbackend.domain.Study;
 import com.studygroup.studygroupbackend.domain.StudyMember;
 import com.studygroup.studygroupbackend.domain.status.StudyRole;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +14,9 @@ import java.util.Optional;
 
 public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> {
     List<StudyMember> findByStudy(Study study);
-    List<StudyMember> findByMemberId(Long memberId);
-    List<StudyMember> findByMemberIdOrderByPersonalOrderIndexAsc(Long memberId);
-    void deleteByStudy(Study study);
+    @Query("SELECT sm FROM StudyMember sm " +
+            "WHERE sm.member.id = :memberId")
+    List<StudyMember> findByMember_Id(@Param("memberId") Long memberId);
 
     @Query("SELECT MAX(sm.personalOrderIndex) FROM StudyMember sm WHERE sm.member.id = :memberId")
     Optional<Integer> findMaxPersonalOrderIndexByMemberId(@Param("memberId") Long memberId);
@@ -47,8 +47,6 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     List<StudyMember> findStudyMembersByStudyIdIn(@Param("studyIds") List<Long> studyIds);
 
 
-    boolean existsByStudyAndMember(Study study, Member member);
-
     boolean existsByStudyIdAndMemberId(Long studyId, Long memberId);
 
     Optional<StudyMember> findByStudyIdAndMemberId(Long studyId, Long memberId);
@@ -59,4 +57,12 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
 
     List<StudyMember> findByStudyIdAndDeletedFalse(Long studyId);
     Optional<StudyMember> findByIdAndDeletedFalse(Long studyMemberId);
+
+    @Modifying
+    @Query("""
+        UPDATE StudyMember sm
+        SET sm.deleted = true, sm.deletedAt = CURRENT_TIMESTAMP 
+        WHERE sm.member.id = :memberId
+""")
+    void softDeleteAllByMemberId(Long memberId);
 }

@@ -38,3 +38,5 @@ out/
 
 /src/main/resources/*
 /src/main/resources/application.yml
+
+/firebase.b64.txt

@@ -35,10 +35,8 @@ public class Study extends SoftDeletableEntity {
     @Column(nullable = true)
     private LocalDateTime dueDate;
 
-    @Column(nullable = true)
-    private Double progress;
-
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StudyStatus status = StudyStatus.PROGRESSING;
 
     @Column(nullable = false, unique = true, updatable = false)
@@ -57,15 +55,13 @@ public class Study extends SoftDeletableEntity {
             String description,
             String color,
             LocalDateTime dueDate,
-            Double progress,
             StudyStatus status
             ) {
         return Study.builder()
                 .name(name)
                 .description(description)
                 .color(color != null ? color : "0xFF8AB4F8")
-                .dueDate(dueDate != null ? dueDate : LocalDateTime.now().plusDays(30))
-                .progress(progress != null ? progress : 0.7)
+                .dueDate(dueDate)
                 .status(status != null ? status : StudyStatus.PROGRESSING)
                 .deleted(false)
                 .build();
