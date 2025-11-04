@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChecklistItemReorderRequest {
     private Long checklistItemId;
+    private Long studyId;
     private Long studyMemberId;
     private Integer orderIndex;
 }

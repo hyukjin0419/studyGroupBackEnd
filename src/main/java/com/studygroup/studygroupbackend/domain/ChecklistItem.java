@@ -119,6 +119,8 @@ public class ChecklistItem extends SoftDeletableEntity {
         this.orderIndex = orderIndex;
     }
 
+    public void updateStudy(Study study) {this.study = study; }
+
     public void updateStudyMemberId(StudyMember studyMember){
         this.studyMember = studyMember;
     }
