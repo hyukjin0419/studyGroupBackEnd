@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Long> {
@@ -35,4 +36,5 @@ public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Lo
     void softDeleteAllByMemberId(Long memberId);
 
     List<ChecklistItem> findByStudyIdAndDeletedFalse(Long studyId);
+
 }
