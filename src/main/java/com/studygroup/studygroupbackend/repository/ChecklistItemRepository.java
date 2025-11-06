@@ -37,4 +37,12 @@ public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Lo
 
     List<ChecklistItem> findByStudyIdAndDeletedFalse(Long studyId);
 
+    @Modifying
+    @Query("""
+        UPDATE ChecklistItem ci
+        SET ci.deleted = true
+        WHERE ci.studyMember.id = :studyMemberId
+            AND ci.deleted = false
+""")
+    void softDeleteByStudyMemberId(Long studyMemberId);
 }

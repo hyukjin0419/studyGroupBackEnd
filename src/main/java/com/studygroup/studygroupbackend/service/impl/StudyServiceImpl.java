@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -186,5 +187,24 @@ public class StudyServiceImpl implements StudyService {
         items.forEach(ChecklistItem::softDeletion);
 
         return StudyDeleteResponse.successDelete();
+    }
+
+    @Override
+    @Transactional
+    public void leaveStudy(Long studyId, Long memberId) {
+        studyRepository.findByIdAndDeletedFalse(studyId)
+                .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
+
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 스터디에 속한 해당 멤버를 찾을 수 없습니다."));
+
+        if (studyMember.getStudyRole() == StudyRole.LEADER) {
+            throw new IllegalStateException("리더는 탈퇴할 수 없습니다.");
+        }
+
+        checklistItemRepository.softDeleteByStudyMemberId(studyMember.getId());
+
+
+        studyMember.softDeletion();
     }
 }

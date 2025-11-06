@@ -82,4 +82,15 @@ public class StudyController {
         return ResponseEntity.ok(studyService.deleteStudy(studyId, userDetails.getMemberId()));
     }
 
+
+    //5. [USER] leave
+    @Operation(summary = "본인이 멤버 속한 단일 스터디에서 탈퇴하기 API", description = "[USER] 멤버가 해당 스터디에서 탈퇴합니다.")
+    @DeleteMapping("/leave/{studyId}")
+    public ResponseEntity<Void> leaveStudy(
+            @PathVariable Long studyId,
+            @CurrentUser CustomUserDetails userDetails
+    ){
+        studyService.leaveStudy(studyId, userDetails.getMemberId());
+        return ResponseEntity.ok().build();
+    }
 }
