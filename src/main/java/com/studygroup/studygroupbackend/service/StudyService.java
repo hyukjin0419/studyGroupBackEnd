@@ -20,11 +20,4 @@ public interface StudyService {
     void updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests);
     StudyDeleteResponse deleteStudy(Long studyId, Long leaderId);
     void leaveStudy(Long studyId, Long memberId);
-
-
-//    List<StudyListResponse> getAllStudies();
-//    StudyDetailResponse getStudyById(Long studyId);
-//    List<StudyListResponse> getStudiesByMemberId(Long memberId);
-//    StudyDetailResponse updateStudy(Long studyId, Long leaderId, StudyUpdateRequest request);
-
 }
