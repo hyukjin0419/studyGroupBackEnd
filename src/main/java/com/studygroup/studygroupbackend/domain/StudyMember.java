@@ -40,6 +40,7 @@ public class StudyMember extends SoftDeletableEntity {
     private Member member;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StudyRole studyRole;
 
     @Column(nullable = false)

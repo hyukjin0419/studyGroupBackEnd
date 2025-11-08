@@ -98,9 +98,13 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
             ChecklistItem item = checklistItemRepository.findById(req.getChecklistItemId())
                     .orElseThrow(() -> new EntityNotFoundException("체크리스트 항목을 찾을 수 없습니다."));
 
+            Study study = studyRepository.findById(req.getStudyId())
+                    .orElseThrow(() -> new EntityNotFoundException("해당 스터디를 찾을 수 없습니다."));
+
             StudyMember studyMember = studyMemberRepository.findById(req.getStudyMemberId())
                     .orElseThrow(() -> new EntityNotFoundException("스터디 멤버를 찾을 수 없습니다."));
 
+            item.updateStudy(study);
             item.updateOrderIndex(req.getOrderIndex());
             item.updateStudyMemberId(studyMember);
         }

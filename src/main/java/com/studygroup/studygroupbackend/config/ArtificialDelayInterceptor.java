@@ -13,7 +13,7 @@ public class ArtificialDelayInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("모든 controller에 딜레이");
-        Thread.sleep(1000); // 0.3초 딜레이
+        Thread.sleep(0); // 0.3초 딜레이
         return true; // 다음 단계 진행
     }
 }

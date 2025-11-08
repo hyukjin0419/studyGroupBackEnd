@@ -80,4 +80,12 @@ public class Study extends SoftDeletableEntity {
         if (dueDate != null) this.dueDate = dueDate;
         if (status != null) this.status = status;
     }
+
+    public void completeStudy(){
+        this.status = StudyStatus.DONE;
+    }
+
+    public void unCompleteStudy(){
+        this.status = StudyStatus.PROGRESSING;
+    }
 }
