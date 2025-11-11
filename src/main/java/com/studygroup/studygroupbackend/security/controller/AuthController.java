@@ -29,7 +29,7 @@ public class AuthController {
     @Operation(summary = "회원가입 API")
     @PostMapping("/create_member")
     public ResponseEntity<MemberCreateResponse> createMember(@RequestBody MemberCreateRequest request) {
-        log.info(request.getEmail());
+//        log.info(request.getEmail());
         return ResponseEntity.ok(authService.createMember(request));
     }
 

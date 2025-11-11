@@ -3,24 +3,20 @@ package com.studygroup.studygroupbackend.repository;
 import com.studygroup.studygroupbackend.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    @Query(
-        value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM MEMBERS WHERE EMAIL = :email",
-        nativeQuery = true
-    )
-    boolean existsByEmail(String email);
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Member m WHERE m.userName = :userName")
+    boolean existsByUserName(@Param("userName") String userName);
+
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Member m WHERE m.email = :email")
+    boolean existsByEmail(@Param("email") String email);
 
     Optional<Member> findByEmail(String email);
-
-    @Query(
-        value = "SELECT CASE WHEN COUNT (*) > 0 THEN TRUE ELSE FALSE END FROM MEMBERS WHERE USER_NAME = :userName",
-        nativeQuery = true)
-    boolean existsByUserName(String userName);
 
     Optional<Member> findByUserName(String userName);
 

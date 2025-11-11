@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ChecklistItemDetailResponse {
     private Long id;
-    private ChecklistItemType type;
+//    private ChecklistItemType type;
     private Long studyId;
     private Long memberId;
     private Long tempId;
@@ -31,7 +31,7 @@ public class ChecklistItemDetailResponse {
         return ChecklistItemDetailResponse.builder()
                 .id(item.getId())
                 .tempId(tempId)
-                .type(item.getType())
+//                .type(item.getType())
                 .studyId(item.getStudy().getId())
                 .memberId(item.getStudyMember().getMember().getId())
                 .studyName(item.getStudy().getName())
@@ -46,7 +46,7 @@ public class ChecklistItemDetailResponse {
         return ChecklistItemDetailResponse.builder()
                 .id(item.getId())
                 .tempId(null)
-                .type(item.getType())
+//                .type(item.getType())
                 .studyId(item.getStudy().getId())
                 .memberId(item.getStudyMember().getMember().getId())
                 .studyName(item.getStudy().getName())

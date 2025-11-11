@@ -22,7 +22,7 @@ public class Member extends SoftDeletableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 191)
     private String userName;
 
     @Column(nullable = false, unique = false)
@@ -31,7 +31,7 @@ public class Member extends SoftDeletableEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 191)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -54,7 +54,7 @@ public class Member extends SoftDeletableEntity {
             .build();
     }
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(nullable = false, unique = true, updatable = false, length = 191)
     private String uuid;
 
     @PrePersist

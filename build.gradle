@@ -61,6 +61,12 @@ dependencies {
 
     //Email sender
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+//
+//    //mysql version confliction resolve
+//    dependencies {
+//        implementation 'org.hibernate.orm:hibernate-community-dialects:6.6.8.Final'
+//    }
+
 }
 
 tasks.named('test') {

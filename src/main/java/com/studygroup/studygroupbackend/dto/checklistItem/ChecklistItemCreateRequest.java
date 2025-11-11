@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class ChecklistItemCreateRequest {
     private String content;
     private Long assigneeId;
-    private ChecklistItemType type;
+//    private ChecklistItemType type;
     private LocalDate targetDate;
     private Integer orderIndex;
     private Long tempId;

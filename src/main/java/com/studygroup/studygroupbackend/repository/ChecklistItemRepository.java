@@ -28,21 +28,34 @@ public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Lo
     List<ChecklistItem> findAllByStudyMember_Member_IdAndTargetDateBetween(Long memberId, LocalDate startDate, LocalDate endDate);
 
     @Modifying
-    @Query("""
-        UPDATE ChecklistItem ci
-        SET ci.deleted = true, ci.deletedAt = CURRENT_TIMESTAMP
-        WHERE ci.studyMember.member.id = :memberId
-""")
-    void softDeleteAllByMemberId(Long memberId);
+    @Query(value = """
+    UPDATE checklist_items ci
+    SET ci.deleted = true, ci.deleted_at = CURRENT_TIMESTAMP
+    WHERE ci.study_member_id IN (
+        SELECT id FROM study_members 
+        WHERE member_id = :memberId AND deleted = false
+    )
+    AND ci.deleted = false
+    """, nativeQuery = true)
+    void softDeleteAllByMemberId(@Param("memberId") Long memberId);
 
     List<ChecklistItem> findByStudyIdAndDeletedFalse(Long studyId);
+//
+//    @Modifying
+//    @Query("""
+//        UPDATE ChecklistItem ci
+//        SET ci.deleted = true
+//        WHERE ci.studyMember.id = :studyMemberId
+//        AND ci.deleted = false
+//""")
+//    void softDeleteByStudyMemberId(Long studyMemberId);
 
     @Modifying
     @Query("""
         UPDATE ChecklistItem ci
-        SET ci.deleted = true
+        SET ci.deleted = true, ci.deletedAt = CURRENT_TIMESTAMP
         WHERE ci.studyMember.id = :studyMemberId
-            AND ci.deleted = false
-""")
-    void softDeleteByStudyMemberId(Long studyMemberId);
+        AND ci.deleted = false
+    """)
+    void softDeleteByStudyMemberId(@Param("studyMemberId") Long studyMemberId);
 }

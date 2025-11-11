@@ -32,8 +32,8 @@ public class ChecklistItem extends SoftDeletableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private ChecklistItemType type;
+//    @Enumerated(EnumType.STRING)
+//    private ChecklistItemType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
@@ -79,7 +79,7 @@ public class ChecklistItem extends SoftDeletableEntity {
             LocalDateTime dueDate
     ) {
         return ChecklistItem.builder()
-                .type(ChecklistItemType.STUDY)
+//                .type(ChecklistItemType.STUDY)
                 .study(study)
                 .creator(creator)
                 .studyMember(assignee)
@@ -99,7 +99,7 @@ public class ChecklistItem extends SoftDeletableEntity {
             LocalDateTime dueDate
     ) {
         return ChecklistItem.builder()
-                .type(ChecklistItemType.PERSONAL)
+//                .type(ChecklistItemType.PERSONAL)
                 .creator(creator)
                 .content(content)
                 .dueDate(dueDate)

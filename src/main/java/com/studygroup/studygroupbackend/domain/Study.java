@@ -39,7 +39,7 @@ public class Study extends SoftDeletableEntity {
     @Enumerated(EnumType.STRING)
     private StudyStatus status = StudyStatus.PROGRESSING;
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(nullable = false, unique = true, updatable = false, length = 191)
     private String joinCode;
 
     @PrePersist

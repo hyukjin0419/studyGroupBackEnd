@@ -33,7 +33,7 @@ public class ChecklistItemServiceImpl implements ChecklistItemService {
         Member creator = memberRepository.findByIdAndDeletedFalse(creatorId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 멤버를 찾을 수 없습니다"));
 
-        if (request.getType() != ChecklistItemType.STUDY) return null;
+//        if (request.getType() != ChecklistItemType.STUDY) return null;
 
         Study study = studyRepository.findByIdAndDeletedFalse(studyId)
                 .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
