@@ -87,11 +87,13 @@ public class StudyMember extends SoftDeletableEntity {
         this.deletedAt = null;
         this.joinedAt = LocalDateTime.now();
         this.leftAt = null;
+        this.studyMemberStatus = StudyMemberStatus.ACTIVE;
     }
 
     @Override
     public void softDeletion() {
         super.softDeletion();
         this.leftAt = LocalDateTime.now();
+        this.studyMemberStatus = StudyMemberStatus.LEFT;
     }
 }
