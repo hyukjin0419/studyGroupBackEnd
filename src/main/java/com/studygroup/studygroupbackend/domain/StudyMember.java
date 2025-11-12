@@ -81,4 +81,17 @@ public class StudyMember extends SoftDeletableEntity {
     public void changeRole(StudyRole newRole) {
         this.studyRole = newRole;
     }
+
+    public void reJoin(){
+        this.deleted = false;
+        this.deletedAt = null;
+        this.joinedAt = LocalDateTime.now();
+        this.leftAt = null;
+    }
+
+    @Override
+    public void softDeletion() {
+        super.softDeletion();
+        this.leftAt = LocalDateTime.now();
+    }
 }

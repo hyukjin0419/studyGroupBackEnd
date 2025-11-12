@@ -19,5 +19,4 @@ public interface StudyService {
     StudyDetailResponse updateStudy(Long leaderId, StudyUpdateRequest request);
     void updateStudyOrder(Long memberId, List<StudyOrderUpdateRequest> requests);
     StudyDeleteResponse deleteStudy(Long studyId, Long leaderId);
-    void leaveStudy(Long studyId, Long memberId);
 }

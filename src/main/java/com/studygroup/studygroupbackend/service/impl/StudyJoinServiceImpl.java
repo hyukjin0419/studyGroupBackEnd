@@ -6,6 +6,8 @@ import com.studygroup.studygroupbackend.domain.status.InvitationStatus;
 import com.studygroup.studygroupbackend.domain.status.NotificationType;
 import com.studygroup.studygroupbackend.domain.status.StudyRole;
 import com.studygroup.studygroupbackend.dto.studyJoin.leader.StudyMemberInvitationRequest;
+import com.studygroup.studygroupbackend.exception.BusinessException;
+import com.studygroup.studygroupbackend.exception.ErrorCode;
 import com.studygroup.studygroupbackend.fcm.FcmInvitationRequest;
 import com.studygroup.studygroupbackend.fcm.FcmService;
 import com.studygroup.studygroupbackend.repository.*;
@@ -13,12 +15,14 @@ import com.studygroup.studygroupbackend.service.StudyJoinService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.cookie.SM;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -28,6 +32,7 @@ public class StudyJoinServiceImpl implements StudyJoinService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final ChecklistItemRepository checklistItemRepository;
     private final MemberRepository memberRepository;
     private final StudyInvitationRepository studyInvitationRepository;
     private final AppNotificationRepository appNotificationRepository;
@@ -42,10 +47,23 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 사용자입니다."));
 
-        boolean isAlreadyJoined = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), memberId);
-        if (isAlreadyJoined) throw new IllegalStateException("이미 해당 스터디에 참여한 사용자입니다.");
+        //여기서 deleted 된 거 있으면 false로 바꿔주어야함
+        Optional<StudyMember> existing = studyMemberRepository.findByStudyIdAndMemberIdIncludingDeleted(study.getId(), memberId);
 
+        if (existing.isPresent()) {
+            StudyMember sm = existing.get();
 
+            //TODO
+            if(!sm.isDeleted()) {
+                throw new BusinessException(ErrorCode.STUDY_MEMBER_ALREADY_EXISTS);
+            }
+
+            sm.reJoin();
+            studyMemberRepository.save(sm);
+            return;
+        }
+
+        //없으면 새로 새로 생성
         int newPersonalOrderIndex = studyMemberRepository
                 .findMaxPersonalOrderIndexByMemberId(memberId)
                 .orElse(0) + 1;
@@ -182,6 +200,24 @@ public class StudyJoinServiceImpl implements StudyJoinService {
         }
 
         invitation.decline();
+    }
+
+    @Override
+    @Transactional
+    public void leaveStudy(Long studyId, Long memberId) {
+        studyRepository.findByIdAndDeletedFalse(studyId)
+                .orElseThrow(() -> new EntityNotFoundException("스터디를 찾을 수 없습니다"));
+
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 스터디에 속한 해당 멤버를 찾을 수 없습니다."));
+
+        if (studyMember.getStudyRole() == StudyRole.LEADER) {
+            throw new IllegalStateException("리더는 탈퇴할 수 없습니다.");
+        }
+
+        checklistItemRepository.softDeleteByStudyMemberId(studyMember.getId());
+
+        studyMember.softDeletion();
     }
 }
 

@@ -65,15 +65,13 @@ public class StudyJoinController {
     }
 
 
-
-//    @Operation(summary = "스터디에서 멤버 삭제 API", description = "스터디에서 멤버를 추방합니다.")
-//    @DeleteMapping("/{memberId}")
-//    public ResponseEntity<StudyMemberRemoveResponse> removeMember(
-//            @PathVariable Long studyId,
-//            @CurrentUser CustomUserDetails userDetails,
-//            @PathVariable Long memberId){
-//        Long leaderId = userDetails.getMemberId();
-//        return ResponseEntity.ok(studyMemberService.removeMember(studyId, leaderId, memberId));
-//    }
-
+    @Operation(summary = "본인이 멤버 속한 단일 스터디에서 탈퇴하기 API", description = "[USER] 멤버가 해당 스터디에서 탈퇴합니다.")
+    @DeleteMapping("/leave/{studyId}")
+    public ResponseEntity<Void> leaveStudy(
+            @PathVariable Long studyId,
+            @CurrentUser CustomUserDetails userDetails
+    ){
+        studyJoinService.leaveStudy(studyId, userDetails.getMemberId());
+        return ResponseEntity.ok().build();
+    }
 }

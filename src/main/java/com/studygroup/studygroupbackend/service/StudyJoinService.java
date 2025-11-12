@@ -10,4 +10,5 @@ public interface StudyJoinService {
     void inviteMembers(Long leaderId, Long studyId, List<StudyMemberInvitationRequest> requestList);
     Long acceptInvitation(Long invitationId, Long memberId);
     void declineInvitation(Long invitationId, Long memberId);
+    void leaveStudy(Long studyId, Long memberId);
 }

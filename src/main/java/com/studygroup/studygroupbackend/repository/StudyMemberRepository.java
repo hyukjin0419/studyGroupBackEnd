@@ -49,6 +49,13 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
 
     boolean existsByStudyIdAndMemberId(Long studyId, Long memberId);
 
+    @Query("""
+        SELECT sm FROM StudyMember sm
+        WHERE sm.study.id = :studyId
+        AND sm.member.id = :memberId
+""")
+    Optional<StudyMember>findByStudyIdAndMemberIdIncludingDeleted(Long studyId, Long memberId);
+
     Optional<StudyMember> findByStudyIdAndMemberId(Long studyId, Long memberId);
     Optional<StudyMember> findByStudyIdAndMemberIdAndStudyRole(Long studyId, Long memberId, StudyRole role);
 

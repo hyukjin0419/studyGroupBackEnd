@@ -20,7 +20,7 @@ public class SoftDeletableEntity extends BaseEntity {
     @Column(nullable = false)
     protected boolean deleted = false;
 
-    @Column
+    @Column(nullable = true)
     protected LocalDateTime deletedAt;
 
     public void softDeletion() {
