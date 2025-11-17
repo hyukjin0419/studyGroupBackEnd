@@ -58,4 +58,8 @@ public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Lo
         AND ci.deleted = false
     """)
     void softDeleteByStudyMemberId(@Param("studyMemberId") Long studyMemberId);
+
+    @Modifying
+    @Query("DELETE FROM ChecklistItem ci WHERE ci.deleted = true AND ci.deletedAt <= :threshold")
+    void deleteExpired(LocalDateTime threshold);
 }
