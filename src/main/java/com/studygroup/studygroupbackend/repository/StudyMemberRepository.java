@@ -74,6 +74,9 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     void softDeleteAllByMemberId(Long memberId);
 
     @Modifying
-    @Query("DELETE FROM StudyMember sm WHERE sm.deleted = true AND sm.deletedAt <= :threshold")
-    void deleteExpired(LocalDateTime threshold);
+    @Query(
+            value = "DELETE FROM study_members WHERE deleted = true AND deleted_at <= :threshold",
+            nativeQuery = true
+    )
+    int deleteExpired(LocalDateTime threshold);
 }

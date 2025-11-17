@@ -22,6 +22,10 @@ public interface StudyInvitationRepository extends JpaRepository<StudyInvitation
     List<StudyInvitation> findByStudyIdAndDeletedFalse(Long studyId);
 
     @Modifying
-    @Query("DELETE FROM StudyInvitation si WHERE si.deleted = true AND si.deletedAt <= :threshold")
-    void deleteExpired(LocalDateTime threshold);
+    @Query(
+            value = "DELETE FROM study_invitations WHERE deleted = true AND deleted_at <= :threshold",
+            nativeQuery = true
+    )
+    int deleteExpired(LocalDateTime threshold);
+
 }

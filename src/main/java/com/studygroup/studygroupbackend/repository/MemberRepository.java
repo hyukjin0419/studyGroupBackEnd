@@ -29,6 +29,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByIdAndDeletedFalse(Long id);
 
     @Modifying
-    @Query("DELETE FROM Member m WHERE m.deleted = true AND m.deletedAt <= :threshold")
-    void deleteExpired(LocalDateTime threshold);
+    @Query(
+            value = "DELETE FROM members WHERE deleted = true AND deleted_at <= :threshold",
+            nativeQuery = true
+    )
+    int deleteExpired(LocalDateTime threshold);
+
 }
