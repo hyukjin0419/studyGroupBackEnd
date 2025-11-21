@@ -4,6 +4,8 @@
 
 [🇺🇸 English](./README.md) | [🇰🇷 한국어](./README.ko.md)
 
+🔹 [Sync Mate – Frontend (Flutter)](https://github.com/hyukjin0419/studyGroupFrontEnd)
+
 **This is the backend API server for _Sync Mate_, a productivity tool designed to help teams and individuals achieve their goals.**  
 The server is optimized for efficient communication with the Flutter mobile client, with a strong focus on data integrity, scalability, and stability.
 
