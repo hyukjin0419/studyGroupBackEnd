@@ -1,9 +1,10 @@
 # <img src="https://github.com/user-attachments/assets/2d9d7414-a8f1-4437-bb01-14a1d6df1089" width="50" height="50" /> Sync Mate - Backend Server
 
-[![App Store](https://img.shields.io/badge/App_Store-Download-0D96F6?logo=apple&logoColor=white)](https://apps.apple.com/kr/app/sync-mate/id6755131308)
-![Java](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-Lightsail-232F3E?logo=amazon-aws&logoColor=white)
+[![App Store](https://img.shields.io/badge/App_Store-Download-0D96F6?style=for-the-badge&logo=apple&logoColor=white)](https://apps.apple.com/kr/app/sync-mate/id6755131308)
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Lightsail-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
+
 
 **팀 및 개인의 목표 달성을 돕는 'Sync Mate' 서비스의 실용적인 API 서버입니다.**
 모바일 클라이언트(Flutter)와의 효율적인 데이터 통신과 안정적인 데이터 무결성 보장을 최우선 목표로 설계되었습니다.
