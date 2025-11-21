@@ -1,9 +1,6 @@
 # <img src="https://github.com/user-attachments/assets/2d9d7414-a8f1-4437-bb01-14a1d6df1089" width="50" height="50" /> Sync Mate - Backend Server
 
 [![App Store](https://img.shields.io/badge/App_Store-Download-0D96F6?style=for-the-badge&logo=apple&logoColor=white)](https://apps.apple.com/kr/app/sync-mate/id6755131308)
-![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-Lightsail-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
 
 **팀 및 개인의 목표 달성을 돕는 'Sync Mate' 서비스의 실용적인 API 서버입니다.**
@@ -55,8 +52,9 @@
 
 | Category | Stack |
 |---------|-------|
-| **Language** | <img src="https://skillicons.dev/icons?i=java" height="40" /> |
-| **Framework & Security** | <img src="https://skillicons.dev/icons?i=spring,hibernate" height="40" /> |
-| **Database** | <img src="https://skillicons.dev/icons?i=mysql" height="40" /> |
-| **Infrastructure & DevOps** | <img src="https://skillicons.dev/icons?i=aws,nginx,linux" height="40" /> |
-| **Authentication** | <img src="https://img.shields.io/badge/JWT-Authentication-000000?logo=jsonwebtokens&logoColor=white" height="25" /> |
+| **Language** | ![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) |
+| **Framework & Security** | ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![Hibernate](https://img.shields.io/badge/Hibernate-ORM-59666C?style=for-the-badge&logo=hibernate&logoColor=white) |
+| **Database** | ![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white) |
+| **Infrastructure & DevOps** | ![AWS](https://img.shields.io/badge/AWS-Lightsail-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white) ![Nginx](https://img.shields.io/badge/Nginx-Server-009639?style=for-the-badge&logo=nginx&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-OS-FCC624?style=for-the-badge&logo=linux&logoColor=black) |
+| **Authentication** | ![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) |
+
