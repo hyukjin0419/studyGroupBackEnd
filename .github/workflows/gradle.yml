@@ -52,6 +52,8 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           cd /home/ubuntu/syncmate
-          mv *.jar syncmate.jar
+          JAR_FILE=$(ls *SNAPSHOT.jar | grep -v plain)
+          mv $JAR_FILE syncmate.jar
           sudo systemctl daemon-reload
           sudo systemctl restart syncmate
+
