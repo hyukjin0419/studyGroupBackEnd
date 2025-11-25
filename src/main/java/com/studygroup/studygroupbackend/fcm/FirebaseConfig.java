@@ -11,32 +11,50 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Base64;
 
 @Slf4j
 @Component
 public class FirebaseConfig {
 
-    // Railway Variables에 넣을 값 (Base64 인코딩된 JSON)
-    @Value("${FIREBASE_CREDENTIALS_BASE64:}")
-    private String credsB64;
+    // Lightsail / EC2 서버에서 사용할 절대 경로
+    private static final String SERVER_KEY_PATH = "/home/ubuntu/syncmate/sync-mate-fcm-firebase-adminsdk.json";
 
     @PostConstruct
     public void initialize() {
         try {
-            var credentials = StringUtils.hasText(credsB64)
-                    ? GoogleCredentials.fromStream(new ByteArrayInputStream(Base64.getDecoder().decode(credsB64)))
-                    // dev만: resources에 둔 파일(깃에 커밋 금지)
-                    : GoogleCredentials.fromStream(new ClassPathResource("sync-mate-fcm-firebase-adminsdk.json").getInputStream());
+            GoogleCredentials credentials;
 
-            var options = FirebaseOptions.builder().setCredentials(credentials).build();
-            if (FirebaseApp.getApps().isEmpty()) FirebaseApp.initializeApp(options);
+            // ️1 서버 환경: 절대 경로에 파일이 있으면 그걸 사용
+            File keyFile = new File(SERVER_KEY_PATH);
+            if (keyFile.exists()) {
+                log.info("Using Firebase key from server path: {}", SERVER_KEY_PATH);
+                credentials = GoogleCredentials.fromStream(new FileInputStream(keyFile));
 
-            log.info("Firebase 초기화 성공");
+            // 2. 로컬 개발 환경: classpath(resources)에서 읽기
+            } else {
+                log.info("Using Firebase key from classpath: sync-mate-fcm-firebase-adminsdk.json");
+                credentials = GoogleCredentials.fromStream(
+                        new ClassPathResource("sync-mate-fcm-firebase-adminsdk.json").getInputStream()
+                );
+            }
+
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(credentials)
+                    .build();
+
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
+
+            log.info("🔥 Firebase 초기화 성공");
+
         } catch (Exception e) {
-            throw new IllegalStateException("Firebase 초기화 실패: ", e);
+            log.error("❌ Firebase 초기화 실패", e);
+            throw new IllegalStateException("Firebase 초기화 실패", e);
         }
     }
 }
-
 
